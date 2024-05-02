@@ -10,6 +10,8 @@ import java.util.Collection;
  */
 public class ChessGame {
 
+    // I think I need a board, the team turn,
+
     public ChessGame() {
 
     }
