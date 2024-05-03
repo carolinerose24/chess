@@ -32,4 +32,18 @@ public class ChessPosition {
     public int getColumn() {
         return col;
     }
+
+
+    // added helper function to see if a position is on the board
+    public boolean checkValidPosition() {
+        // Check if both row and column are within the range 1 to 8
+        if (row >= 1 && row <= 8 && col >= 1 && col <= 8) {
+            return true; // Position is valid
+        } else {
+            return false; // Position is invalid
+        }
+    }
+
+    // helper function to see if a pawn is up for promotion?, no, not a very often occuring case
+
 }

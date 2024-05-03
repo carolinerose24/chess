@@ -65,16 +65,14 @@ public class ChessBoard {
 
         //maybe create some private helper functions for this????
 
-        addPiece(new ChessPosition(0,0),
+        addPiece(new ChessPosition(8,8),
                 new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK));
 
         addPiece(new ChessPosition(7,7),
                 new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK));
 
+        //use loops
 
 
-
-//        throw new RuntimeException("Not implemented");
-        // creates an instance of chess piece
     }
 }

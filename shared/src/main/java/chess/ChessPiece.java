@@ -1,5 +1,7 @@
 package chess;
 
+import chess.pieces.PawnMovesCalculator;
+
 import java.util.Collection;
 
 /**
@@ -53,7 +55,50 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        throw new RuntimeException("Not implemented");
+
+        ChessPiece currentPiece = board.getPiece(myPosition);
+        Collection<ChessMove> possibleMoves;
+
+        switch (currentPiece.getPieceType()) {
+            case KING:
+                KingMovesCalculator KMC = new KingMovesCalculator();
+                possibleMoves = KMC.pieceMoves(board, myPosition);
+                break;
+            case QUEEN:
+                QueenMovesCalculator QMC = new QueenMovesCalculator();
+                possibleMoves = QMC.pieceMoves(board, myPosition);
+                break;
+            case BISHOP:
+                BishopMovesCalculator BMC = new BishopMovesCalculator();
+                possibleMoves = BMC.pieceMoves(board, myPosition);
+                break;
+            case ROOK:
+                RookMovesCalculator RMC = new RookMovesCalculator();
+                possibleMoves = RMC.pieceMoves(board, myPosition);
+                break;
+            case KNIGHT:
+                KnightMovesCalculator KnMC = new KnightMovesCalculator();
+                possibleMoves = KnMC.pieceMoves(board, myPosition);
+                break;
+            case PAWN:
+                PawnMovesCalculator PMC = new PawnMovesCalculator();
+                possibleMoves = PMC.pieceMoves(board, myPosition);
+                break;
+            default: //not sure if I need a default, it should always be one of these
+                System.out.println("Unknown piece type");
+                break;
+        }
+
+
+
+
+
+
+
+
+
+
+
         //returns a COLLECTION - return all the move objects for everywhere the piece can go
         // start position is the same for all, end positions are different for each possible move
         // need to account for where the other pieces on the board are
@@ -75,5 +120,6 @@ public class ChessPiece {
         // EX ---->  getPiece(ChessPosition position) returns a ChessPiece - which has a type and color
         // THEN use the switch case to call the specific move for that PIECE
 
+        return possibleMoves; // returns what we get from the MovesCalculator stuff
     }
 }
