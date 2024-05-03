@@ -1,6 +1,6 @@
 package chess;
 
-import chess.pieces.PawnMovesCalculator;
+import chess.pieces.*;
 
 import java.util.Collection;
 
@@ -57,36 +57,36 @@ public class ChessPiece {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
 
         ChessPiece currentPiece = board.getPiece(myPosition);
-        Collection<ChessMove> possibleMoves;
+//        Collection<ChessMove> possibleMoves;
 
         switch (currentPiece.getPieceType()) {
             case KING:
                 KingMovesCalculator KMC = new KingMovesCalculator();
-                possibleMoves = KMC.pieceMoves(board, myPosition);
-                break;
+                return KMC.pieceMoves(board, myPosition);
+//                break;
             case QUEEN:
                 QueenMovesCalculator QMC = new QueenMovesCalculator();
-                possibleMoves = QMC.pieceMoves(board, myPosition);
-                break;
+                return QMC.pieceMoves(board, myPosition);
+//                break;
             case BISHOP:
                 BishopMovesCalculator BMC = new BishopMovesCalculator();
-                possibleMoves = BMC.pieceMoves(board, myPosition);
-                break;
+                return BMC.pieceMoves(board, myPosition);
+//                break;
             case ROOK:
                 RookMovesCalculator RMC = new RookMovesCalculator();
-                possibleMoves = RMC.pieceMoves(board, myPosition);
-                break;
+                return RMC.pieceMoves(board, myPosition);
+//                break;
             case KNIGHT:
                 KnightMovesCalculator KnMC = new KnightMovesCalculator();
-                possibleMoves = KnMC.pieceMoves(board, myPosition);
-                break;
+                return KnMC.pieceMoves(board, myPosition);
+//                break;
             case PAWN:
                 PawnMovesCalculator PMC = new PawnMovesCalculator();
-                possibleMoves = PMC.pieceMoves(board, myPosition);
-                break;
-            default: //not sure if I need a default, it should always be one of these
-                System.out.println("Unknown piece type");
-                break;
+                return PMC.pieceMoves(board, myPosition);
+//                break;
+//            default: //not sure if I need a default, it should always be one of these
+//                System.out.println("Unknown piece type");
+//                break;
         }
 
 
@@ -95,7 +95,8 @@ public class ChessPiece {
 
 
 
-
+//        PawnMovesCalculator PMC = new PawnMovesCalculator();
+//        possibleMoves = PMC.pieceMoves(board, myPosition);
 
 
 
@@ -120,6 +121,8 @@ public class ChessPiece {
         // EX ---->  getPiece(ChessPosition position) returns a ChessPiece - which has a type and color
         // THEN use the switch case to call the specific move for that PIECE
 
-        return possibleMoves; // returns what we get from the MovesCalculator stuff
+//        return possibleMoves; // returns what we get from the MovesCalculator stuff
+
+        return null; // should never get here
     }
 }

@@ -96,6 +96,70 @@ public class PawnMovesCalculator implements PieceMovesCalculator {
 
 
 
+
+
+
+
+
+    // for WHITE pieces
+    if(currentPiece.getTeamColor() == ChessGame.TeamColor.WHITE){
+
+      // FORWARD 1
+      ChessPosition endPosition_forward1 = new ChessPosition(startingRow+1, startingCol); //1 row up
+      if (endPosition_forward1.checkValidPosition() && board.getPiece(endPosition_forward1) == null){
+        if(endPosition_forward1.getRow() == 8){
+          possMoves.add(new ChessMove(myPosition, endPosition_forward1, ChessPiece.PieceType.QUEEN));
+          possMoves.add(new ChessMove(myPosition, endPosition_forward1, ChessPiece.PieceType.BISHOP));
+          possMoves.add(new ChessMove(myPosition, endPosition_forward1, ChessPiece.PieceType.KNIGHT));
+          possMoves.add(new ChessMove(myPosition, endPosition_forward1, ChessPiece.PieceType.ROOK));
+        } else { // else just move forward one normally
+          possMoves.add(new ChessMove(myPosition, endPosition_forward1, null));
+        }
+      }
+
+      // FORWARD 2
+      ChessPosition endPosition_forward2 = new ChessPosition(startingRow+2, startingCol);
+      if(startingRow == 2 && board.getPiece(endPosition_forward1) == null && board.getPiece(endPosition_forward2) == null){
+        possMoves.add(new ChessMove(myPosition, endPosition_forward2, null));
+      }
+
+      // LEFT KILL (its left)
+      ChessPosition endPosition_leftKill = new ChessPosition(startingRow+1, startingCol-1);
+      if(endPosition_leftKill.checkValidPosition() && board.getPiece(endPosition_leftKill) != null && board.getPiece(endPosition_leftKill).getTeamColor() == ChessGame.TeamColor.BLACK){
+        if(endPosition_leftKill.getRow() == 8){
+          possMoves.add(new ChessMove(myPosition, endPosition_leftKill, ChessPiece.PieceType.QUEEN));
+          possMoves.add(new ChessMove(myPosition, endPosition_leftKill, ChessPiece.PieceType.BISHOP));
+          possMoves.add(new ChessMove(myPosition, endPosition_leftKill, ChessPiece.PieceType.KNIGHT));
+          possMoves.add(new ChessMove(myPosition, endPosition_leftKill, ChessPiece.PieceType.ROOK));
+        } else {
+          possMoves.add(new ChessMove(myPosition, endPosition_leftKill, null));
+        }
+      }
+
+      // RIGHT KILL
+      // if the row+1, col+1 space is not null (AND THAT PIECE IS THE OTHER COLOR)
+      // AND not off the edge of the board that way, it is a possible move
+      // then check if row+1 is at the end, possible promotion
+      ChessPosition endPosition_rightKill = new ChessPosition(startingRow+1, startingCol+1);
+      if(endPosition_rightKill.checkValidPosition() && board.getPiece(endPosition_rightKill) != null && board.getPiece(endPosition_rightKill).getTeamColor() == ChessGame.TeamColor.BLACK){
+        if(endPosition_rightKill.getRow() == 8){
+          possMoves.add(new ChessMove(myPosition, endPosition_rightKill, ChessPiece.PieceType.QUEEN));
+          possMoves.add(new ChessMove(myPosition, endPosition_rightKill, ChessPiece.PieceType.BISHOP));
+          possMoves.add(new ChessMove(myPosition, endPosition_rightKill, ChessPiece.PieceType.KNIGHT));
+          possMoves.add(new ChessMove(myPosition, endPosition_rightKill, ChessPiece.PieceType.ROOK));
+        } else {
+          possMoves.add(new ChessMove(myPosition, endPosition_rightKill, null));
+        }
+      }
+
+
+
+
+
+
+
+    }
+
     return possMoves;
   }
 
