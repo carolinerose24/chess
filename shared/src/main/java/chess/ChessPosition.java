@@ -7,6 +7,7 @@ package chess;
  * signature of the existing methods.
  */
 public class ChessPosition {
+    // these will be numbers 1 - 8 for either
     private final int row;
     private final int col;
 

@@ -36,8 +36,6 @@ public class ChessPiece {
      */
     public ChessGame.TeamColor getTeamColor() {
         return pieceColor;
-//        throw new RuntimeException("Not implemented");
-
     }
 
     /**
@@ -45,7 +43,6 @@ public class ChessPiece {
      */
     public PieceType getPieceType() {
         return type;
-//        throw new RuntimeException("Not implemented");
     }
 
     /**
@@ -57,5 +54,26 @@ public class ChessPiece {
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         throw new RuntimeException("Not implemented");
+        //returns a COLLECTION - return all the move objects for everywhere the piece can go
+        // start position is the same for all, end positions are different for each possible move
+        // need to account for where the other pieces on the board are
+
+        // ignore if it is your turn or not, ignore if you are in check/checkmate - account for somewhere else
+
+
+        // where is the piece, what are legal places to move, which are the actual ones
+        // don't matter what order the moves are returned
+
+
+
+        // find the type of piece from the position and board
+        // then use a switch case for what type of piece it is that then calls the MoveCalculator
+        //new file for each new class then
+        // this function should be shorter
+
+
+        // EX ---->  getPiece(ChessPosition position) returns a ChessPiece - which has a type and color
+        // THEN use the switch case to call the specific move for that PIECE
+
     }
 }

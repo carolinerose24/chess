@@ -41,6 +41,10 @@ public class ChessMove {
      * @return Type of piece to promote a pawn to, or null if no promotion
      */
     public ChessPiece.PieceType getPromotionPiece() {
+        // i think this is all we need here, but there might be more later
         return promotionPiece;
+
+
+        // else return NULL??????
     }
 }
