@@ -31,10 +31,8 @@ public class BishopMovesCalculator implements PieceMovesCalculator {
         // valid spot but a piece IS there, now check color of the piece
         if(currentColor != board.getPiece(newPosition).getTeamColor()){ // different teams
           possMoves.add(new ChessMove(myPosition, newPosition, null));
-          break;
-        } else {
-          break;
         }
+        break;
       }
       new_row = newPosition.getRow() + 1;
       new_col = newPosition.getColumn() + 1;
@@ -51,10 +49,8 @@ public class BishopMovesCalculator implements PieceMovesCalculator {
         // valid spot but a piece IS there, now check color of the piece
         if(currentColor != board.getPiece(newPosition).getTeamColor()){ // different teams
           possMoves.add(new ChessMove(myPosition, newPosition, null));
-          break;
-        } else {
-          break;
         }
+        break;
       }
       new_row = newPosition.getRow() - 1;
       new_col = newPosition.getColumn() -1;
@@ -71,10 +67,8 @@ public class BishopMovesCalculator implements PieceMovesCalculator {
         // valid spot but a piece IS there, now check color of the piece
         if(currentColor != board.getPiece(newPosition).getTeamColor()){ // different teams
           possMoves.add(new ChessMove(myPosition, newPosition, null));
-          break;
-        } else {
-          break;
         }
+        break;
       }
       new_row = newPosition.getRow() - 1;
       new_col = newPosition.getColumn() +1;
@@ -92,15 +86,12 @@ public class BishopMovesCalculator implements PieceMovesCalculator {
       if(board.getPiece(new ChessPosition(new_row, new_col)) == null){
         //when we do get piece at the new position, it needs to be -1 for the 0to7 index
         possMoves.add(new ChessMove(myPosition, newPosition, null)); // add it
-      } else if(board.getPiece(new ChessPosition(new_row, new_col)) != null){ //might need to do the +/- thing here too??
-//      } else if(board.getPiece(newPosition) != null){
+      } else if(board.getPiece(newPosition) != null){
         // valid spot but a piece IS there, now check color of the piece
         if(currentColor != board.getPiece(newPosition).getTeamColor()){ // different teams
           possMoves.add(new ChessMove(myPosition, newPosition, null));
-          break;
-        } else {
-          break;
         }
+        break;
       }
       new_row = newPosition.getRow() + 1;
       new_col = newPosition.getColumn() -1;
