@@ -160,8 +160,10 @@ public class PawnMovesCalculator implements PieceMovesCalculator {
 
     }
 
+//    String debug_string = possMoves[0].toString();
     return possMoves;
   }
+
 
 
 
