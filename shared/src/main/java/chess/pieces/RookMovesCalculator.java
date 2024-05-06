@@ -18,10 +18,6 @@ public class RookMovesCalculator implements PieceMovesCalculator{
 
     ChessPosition newPosition;
 
-//    int new_col;
-//    int new_row;
-
-
 
     // check going right
     newPosition = new ChessPosition(startingRow, startingCol+1);

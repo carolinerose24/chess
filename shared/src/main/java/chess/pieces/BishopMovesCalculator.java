@@ -15,8 +15,6 @@ public class BishopMovesCalculator implements PieceMovesCalculator {
     int startingCol = myPosition.getColumn();
 
     ChessGame.TeamColor currentColor = currentPiece.getTeamColor();
-
-    // declare something to hold the possible moves - what we will return
     Collection<ChessMove> possMoves = new ArrayList<>();
 
 
