@@ -12,7 +12,6 @@ public class PawnMovesCalculator implements PieceMovesCalculator {
   @Override
   public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
 
-    // variables we will use
     ChessPiece currentPiece = board.getPiece(myPosition);
     int startingRow = myPosition.getRow();
     int startingCol = myPosition.getColumn();
@@ -22,25 +21,17 @@ public class PawnMovesCalculator implements PieceMovesCalculator {
 
 
     // FOR BLACK PIECES
-    if(currentPiece.getTeamColor() == ChessGame.TeamColor.BLACK){ //not sure if .equals or == for an enum
-
-      // NEED MAKE 4 IDENTICAL MOVES FOR THE DIFFERENT THINGS THAT CAN BE PROMOTED
-      // promotionalType can be NULL --> if it is not promoting (not in the 1st or last row, return it as NULL)?
-
+    if(currentPiece.getTeamColor() == ChessGame.TeamColor.BLACK){
 
       // FORWARD 1
-      ChessPosition endPosition_forward1 = new ChessPosition(startingRow-1, startingCol); //1 row down
-//      if (endPosition_forward1.getRow() != 0 && board.getPiece(endPosition_forward1) == null){
+      ChessPosition endPosition_forward1 = new ChessPosition(startingRow-1, startingCol);
       if (endPosition_forward1.checkValidPosition() && board.getPiece(endPosition_forward1) == null){
-        //if not going off the board and nothing in front
-
-        // if you are on the first row need to consider promotion
         if(endPosition_forward1.getRow() == 1){
           possMoves.add(new ChessMove(myPosition, endPosition_forward1, ChessPiece.PieceType.QUEEN));
           possMoves.add(new ChessMove(myPosition, endPosition_forward1, ChessPiece.PieceType.BISHOP));
           possMoves.add(new ChessMove(myPosition, endPosition_forward1, ChessPiece.PieceType.KNIGHT));
           possMoves.add(new ChessMove(myPosition, endPosition_forward1, ChessPiece.PieceType.ROOK));
-        } else { // else just move forward one normally
+        } else {
           possMoves.add(new ChessMove(myPosition, endPosition_forward1, null));
         }
       }
@@ -53,52 +44,32 @@ public class PawnMovesCalculator implements PieceMovesCalculator {
       }
 
       // LEFT KILL (its left)
-      // if the row+1, col-1 space is not null (AND THAT PIECE IS THE OTHER COLOR)
-      // AND not off the edge of the board, then it is a possible move
-      // ALSO need to check if it is at the ends of the board (can promote)
       ChessPosition endPosition_leftKill = new ChessPosition(startingRow-1, startingCol+1);
-      // chess piece at leftkill endposition = ___, and then get the TYPE
-      // if a valid position, if a piece at LK, and if the piece is WHITE
       if(endPosition_leftKill.checkValidPosition() && board.getPiece(endPosition_leftKill) != null && board.getPiece(endPosition_leftKill).getTeamColor() == ChessGame.TeamColor.WHITE){
-
-        //check promotion
         if(endPosition_leftKill.getRow() == 1){
           possMoves.add(new ChessMove(myPosition, endPosition_leftKill, ChessPiece.PieceType.QUEEN));
           possMoves.add(new ChessMove(myPosition, endPosition_leftKill, ChessPiece.PieceType.BISHOP));
           possMoves.add(new ChessMove(myPosition, endPosition_leftKill, ChessPiece.PieceType.KNIGHT));
           possMoves.add(new ChessMove(myPosition, endPosition_leftKill, ChessPiece.PieceType.ROOK));
-        } else { // else just move forward one normally
+        } else {
           possMoves.add(new ChessMove(myPosition, endPosition_leftKill, null));
         }
       }
 
 
       // RIGHT KILL
-      // if the row+1, col+1 space is not null (AND THAT PIECE IS THE OTHER COLOR)
-      // AND not off the edge of the board that way, it is a possible move
-      // then check if row+1 is at the end, possible promotion
       ChessPosition endPosition_rightKill = new ChessPosition(startingRow-1, startingCol-1);
       if(endPosition_rightKill.checkValidPosition() && board.getPiece(endPosition_rightKill) != null && board.getPiece(endPosition_rightKill).getTeamColor() == ChessGame.TeamColor.WHITE){
-
-        //check promotion
         if(endPosition_rightKill.getRow() == 1){
           possMoves.add(new ChessMove(myPosition, endPosition_rightKill, ChessPiece.PieceType.QUEEN));
           possMoves.add(new ChessMove(myPosition, endPosition_rightKill, ChessPiece.PieceType.BISHOP));
           possMoves.add(new ChessMove(myPosition, endPosition_rightKill, ChessPiece.PieceType.KNIGHT));
           possMoves.add(new ChessMove(myPosition, endPosition_rightKill, ChessPiece.PieceType.ROOK));
-        } else { // else just move forward one normally
+        } else {
           possMoves.add(new ChessMove(myPosition, endPosition_rightKill, null));
         }
       }
     }
-
-
-
-
-
-
-
-
 
 
     // for WHITE pieces
@@ -112,7 +83,7 @@ public class PawnMovesCalculator implements PieceMovesCalculator {
           possMoves.add(new ChessMove(myPosition, endPosition_forward1, ChessPiece.PieceType.BISHOP));
           possMoves.add(new ChessMove(myPosition, endPosition_forward1, ChessPiece.PieceType.KNIGHT));
           possMoves.add(new ChessMove(myPosition, endPosition_forward1, ChessPiece.PieceType.ROOK));
-        } else { // else just move forward one normally
+        } else {
           possMoves.add(new ChessMove(myPosition, endPosition_forward1, null));
         }
       }
@@ -137,9 +108,6 @@ public class PawnMovesCalculator implements PieceMovesCalculator {
       }
 
       // RIGHT KILL
-      // if the row+1, col+1 space is not null (AND THAT PIECE IS THE OTHER COLOR)
-      // AND not off the edge of the board that way, it is a possible move
-      // then check if row+1 is at the end, possible promotion
       ChessPosition endPosition_rightKill = new ChessPosition(startingRow+1, startingCol+1);
       if(endPosition_rightKill.checkValidPosition() && board.getPiece(endPosition_rightKill) != null && board.getPiece(endPosition_rightKill).getTeamColor() == ChessGame.TeamColor.BLACK){
         if(endPosition_rightKill.getRow() == 8){
@@ -152,20 +120,9 @@ public class PawnMovesCalculator implements PieceMovesCalculator {
         }
       }
 
-
-
-
-
-
-
     }
 
-//    String debug_string = possMoves[0].toString();
     return possMoves;
   }
-
-
-
-
 
 }

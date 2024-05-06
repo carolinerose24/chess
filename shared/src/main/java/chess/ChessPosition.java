@@ -9,7 +9,6 @@ import java.util.Objects;
  * signature of the existing methods.
  */
 public class ChessPosition {
-    // these will be numbers 1 - 8 for either
     private int row;
     private int col;
 
