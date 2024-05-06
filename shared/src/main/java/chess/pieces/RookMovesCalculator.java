@@ -76,19 +76,6 @@ public class RookMovesCalculator implements PieceMovesCalculator{
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     return possMoves;
   }
 }
