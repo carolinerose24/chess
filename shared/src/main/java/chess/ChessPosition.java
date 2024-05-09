@@ -17,6 +17,22 @@ public class ChessPosition {
         this.col = col;
     }
 
+    public ChessPosition(String pos){
+        //A7 or D3
+        //the letter is the column, the number is the row
+        char letter = pos.charAt(0);
+        char number = pos.charAt(1);
+
+        if (Character.isUpperCase(letter)) {
+            // Convert uppercase letter to column number
+            col = letter - 'A' + 1;
+        } else {
+            // Convert lowercase letter to column number
+            col = letter - 'a' + 1;
+        }
+        row = Character.getNumericValue(number);
+    }
+
     /**
      * @return which row this position is in
      * 1 codes for the bottom row
