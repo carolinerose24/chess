@@ -1,6 +1,7 @@
 package chess;
 
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * For a class that can manage a chess game, making moves on a board
@@ -74,6 +75,12 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
+
+
+        // not sure if we need the try/catch block because the method throws the exception
+        // might need to add something to the InvalidMoveException class????
+
+
         throw new RuntimeException("Not implemented");
     }
 
@@ -84,6 +91,9 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
+
+        //check if any of the opposing teams pieces have valid moves that lead to the King spot
+        // if any of them do, return true?
 
         throw new RuntimeException("Not implemented");
     }
@@ -96,6 +106,10 @@ public class ChessGame {
      */
     public boolean isInCheckmate(TeamColor teamColor) {
 
+        // check the current position of the king, if it is in check
+        // check all the places the king can move, if in check
+        // check if you can move any other pieces to stop the check???
+
         throw new RuntimeException("Not implemented");
     }
 
@@ -107,6 +121,8 @@ public class ChessGame {
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
+
+        // call valid moves on a team, and if none, return true
 
         throw new RuntimeException("Not implemented");
     }
@@ -127,5 +143,30 @@ public class ChessGame {
      */
     public ChessBoard getBoard() {
         return board;
+    }
+
+
+
+    // never hurts to have these, not sure if we need them though
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChessGame chessGame=(ChessGame) o;
+        return teamColor == chessGame.teamColor && Objects.equals(board, chessGame.board);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(teamColor, board);
+    }
+
+    @Override
+    public String toString() {
+        return "ChessGame{" +
+                "teamColor=" + teamColor +
+                ", board=" + board +
+                '}';
     }
 }
