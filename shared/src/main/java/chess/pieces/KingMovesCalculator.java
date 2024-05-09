@@ -20,6 +20,7 @@ public class KingMovesCalculator implements PieceMovesCalculator {
     allKingMoves.add(new ChessMove(myPosition, new ChessPosition(startingRow+1, startingCol+1), null));
     allKingMoves.add(new ChessMove(myPosition, new ChessPosition(startingRow, startingCol+1), null));
     allKingMoves.add(new ChessMove(myPosition, new ChessPosition(startingRow-1, startingCol+1), null));
+
     allKingMoves.add(new ChessMove(myPosition, new ChessPosition(startingRow-1, startingCol), null));
     allKingMoves.add(new ChessMove(myPosition, new ChessPosition(startingRow-1, startingCol-1), null));
     allKingMoves.add(new ChessMove(myPosition, new ChessPosition(startingRow, startingCol-1), null));

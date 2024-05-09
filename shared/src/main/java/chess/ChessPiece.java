@@ -79,9 +79,9 @@ public class ChessPiece {
             case PAWN:
                 PawnMovesCalculator PMC = new PawnMovesCalculator();
                 return PMC.pieceMoves(board, myPosition);
-            default:
-                System.out.println("Unknown piece type");
-                break;
+//            default:
+//                System.out.println("Unknown piece type");
+//                break;
         }
 
         return null; // should never get here
