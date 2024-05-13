@@ -17,13 +17,11 @@ public class ChessGame {
 
 
     public ChessGame(){
-
+        // nothing in here, don't have a board to pass in to start, makes a new one
+        // white always goes first
     }
 
-//    public ChessGame(TeamColor teamColor, ChessBoard board) {
-//        this.teamColor = teamColor;
-//        this.board = board;
-//    }
+
 
 
     /**
@@ -63,6 +61,18 @@ public class ChessGame {
         // does this call pieceMoves(ChessBoard board, ChessPosition myPosition) ?
         //get the piece at that location? from the board? call piece Moves on that??
 
+
+        // this calls the isInCheck or checkMate methods inside it
+        // does this by calling make move on a COPIED board, see if it leads to check or mate
+
+
+
+        //first check if WE (the team whose turn it is) is in check, so if we can move
+
+        //if yes, check if it is checkmate?
+        // else
+
+
 //        return pieceMoves(board, startPosition);
 
         throw new RuntimeException("Not implemented");
@@ -95,6 +105,21 @@ public class ChessGame {
         //check if any of the opposing teams pieces have valid moves that lead to the King spot
         // if any of them do, return true?
 
+
+        //iterate over the board
+        // if (get piece) != null and it is the opposite color, see what valid moves it has
+        // then see if any of those moves land them in the square where the king is
+        // if so, return TRUE (break)
+        // else if you iterate through all of it, return FALSE
+
+
+
+
+        // isvalid --> make the move on a COPIED board, see if it goes to check
+
+        // Clone the original board
+        ChessBoard copiedBoard = (ChessBoard) board.clone();
+
         throw new RuntimeException("Not implemented");
     }
 
@@ -123,6 +148,9 @@ public class ChessGame {
     public boolean isInStalemate(TeamColor teamColor) {
 
         // call valid moves on a team, and if none, return true
+
+        //check if it is that teams turn
+        // then check all the pieces, see if any have valid moves
 
         throw new RuntimeException("Not implemented");
     }
