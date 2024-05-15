@@ -1,5 +1,6 @@
 package chess;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -15,13 +16,10 @@ public class ChessGame {
     private TeamColor teamColor;
     private ChessBoard board;
 
-
     public ChessGame(){
-        // nothing in here, don't have a board to pass in to start, makes a new one
-        // white always goes first
+        // white always goes first, not sure if i need this or not
+        teamColor = TeamColor.WHITE;
     }
-
-
 
 
     /**
@@ -87,11 +85,66 @@ public class ChessGame {
     public void makeMove(ChessMove move) throws InvalidMoveException {
 
 
-        // not sure if we need the try/catch block because the method throws the exception
-        // might need to add something to the InvalidMoveException class????
+        ChessPiece currentPiece = board.getPiece(move.getStartPosition());
+        TeamColor currentColor = currentPiece.getTeamColor();
+        ChessPiece.PieceType currentType = currentPiece.getPieceType();
 
 
-        throw new RuntimeException("Not implemented");
+        // if it is not your turn, return false -----> not sure if this is the right way to do it though...
+        /// ACTUALLY THIS MIGHT BE WRONG because this method doesn't pass in a color ???????
+        if(currentColor != getTeamTurn()){
+            throw new InvalidMoveException("It is not your turn.");
+        }
+
+
+
+        // THESE NEXT LINES MIGHT NOT BE NECESSARY IF VALID MOVES CHECKS FOR IT, BUT THE MESSAGE MIGHT BE NICE
+        // if there is no piece at the start position,
+        if(board.getPiece(move.getStartPosition()) == null){
+            throw new InvalidMoveException("There is no piece at the starting position.");
+        }
+        // if the start or end position are not on the board
+        if(!move.getStartPosition().checkValidPosition()){
+            throw new InvalidMoveException("The starting position was not on the board.");
+        } else if(!move.getEndPosition().checkValidPosition()){
+            throw new InvalidMoveException("The ending position was not on the board.");
+        }
+
+
+        // then check if your piece cannot move there
+        // see what valid moves this piece can make
+        Collection<ChessMove> possMoves = validMoves(move.getStartPosition());
+        if(possMoves.isEmpty()){
+            throw new InvalidMoveException("There are no valid moves for this piece.");
+        } else if(!possMoves.contains(move)) {
+            //if it doesn't have that move, it can't move there
+            throw new InvalidMoveException("This isn't a valid move for this piece.");
+        }
+
+
+
+
+        // if you are in check after the move -->
+        // MAKE THE MOVE ON A COPIED BOARD
+        ChessBoard copiedBoard = (ChessBoard) board.clone();
+        copiedBoard.addPiece(move.getStartPosition(), null);
+        copiedBoard.addPiece(move.getEndPosition(), new ChessPiece(currentColor, currentType));
+
+        // now check if this team is in check??
+        // not sure how to call isInCheck on the copied board, not the real board??
+        // NEED TO WORK MORE ON THIS PART @@@@@@@@@@
+
+
+
+
+
+
+
+
+        // IF NONE OF THOSE THINGS THREW AN EXCEPTION
+        // delete piece at start position, move it to end position on the REAL board
+        board.addPiece(move.getStartPosition(), null); // removes the old position
+        board.addPiece(move.getEndPosition(), new ChessPiece(currentColor, currentType));
     }
 
     /**
@@ -101,33 +154,7 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-
-        //check if any of the opposing teams pieces have valid moves that lead to the King spot
-        // if any of them do, return true?
-
-
-        //iterate over the board
-        // if (get piece) != null and it is the opposite color, see what valid moves it has
-        // then see if any of those moves land them in the square where the king is
-        // if so, return TRUE (break)
-        // else if you iterate through all of it, return FALSE
-
-
-
-
-        // isvalid --> make the move on a COPIED board, see if it goes to check
-
-        // Clone the original board
-
-
-
-        ChessBoard copiedBoard = (ChessBoard) board.clone();
         ChessPosition currentKingSpot = findKingPosition(teamColor);
-
-
-        // if current team color is BLACK ---> no, just check if it is the oppostite color during the loop
-        // iterate through the board, get all the possible moves for each piece
-
         for(int i = 1; i < 9; i++){
             for(int j = 1; j < 9; j++){
                 ChessPosition newPos = new ChessPosition(i, j);
@@ -163,9 +190,6 @@ public class ChessGame {
 
 
 
-
-
-
     /**
      * Determines if the given team is in checkmate
      *
@@ -175,8 +199,21 @@ public class ChessGame {
     public boolean isInCheckmate(TeamColor teamColor) {
 
         // check the current position of the king, if it is in check
+        if(isInCheck(teamColor)){
+
+            //code for seeing if we can move out of check
+
+
+
+
+
+        } else {return false;}
+
         // check all the places the king can move, if in check
         // check if you can move any other pieces to stop the check???
+
+        ChessBoard copiedBoard = (ChessBoard) board.clone();
+        // isvalid --> make the move on a COPIED board, see if it goes to check
 
         throw new RuntimeException("Not implemented");
     }
@@ -190,13 +227,43 @@ public class ChessGame {
      */
     public boolean isInStalemate(TeamColor teamColor) {
 
-        // call valid moves on a team, and if none, return true
+        // if it is not your turn, return false -----> not sure if this is the right way to do it though...
+        if(teamColor != getTeamTurn()){
+            return false;
+        }
 
-        //check if it is that teams turn
-        // then check all the pieces, see if any have valid moves
+        // if you are in check, return false
+        if(isInCheck(teamColor)){
+            return false;
+        }
 
-        throw new RuntimeException("Not implemented");
+        // now get all valid moves
+        Collection<ChessMove> currentValidMoves = new ArrayList<ChessMove>();
+        for(int i = 1; i < 9; i++){
+            for(int j = 1; j < 9; j++){
+                //iterate through the board
+                ChessPosition currentPos = new ChessPosition(i,j);
+                if(board.getPiece(currentPos) != null && board.getPiece(currentPos).getTeamColor() == teamColor){
+                    // if there is a piece there, and it is your color
+                    currentValidMoves.addAll(validMoves(currentPos)); // add any valid moves to the list
+                }
+
+            }
+        }
+        // once it iterates, see if the list is empty
+        if(currentValidMoves.isEmpty()){
+            return true;
+        }
+        return false;
     }
+
+
+
+
+
+
+
+
 
     /**
      * Sets this game's chessboard with a given board
@@ -207,6 +274,7 @@ public class ChessGame {
         this.board = board;
     }
 
+
     /**
      * Gets the current chessboard
      *
@@ -215,8 +283,6 @@ public class ChessGame {
     public ChessBoard getBoard() {
         return board;
     }
-
-
 
     // never hurts to have these, not sure if we need them though
 
