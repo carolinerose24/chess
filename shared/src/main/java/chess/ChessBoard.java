@@ -140,4 +140,22 @@ public class ChessBoard implements Cloneable { //// I think we need this here??
         }
         return clone;
     }
+
+
+    // Copy constructor
+    public ChessBoard(ChessBoard other) {
+        if (other.squares != null) {
+            this.squares = new ChessPiece[8][8];
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 8; j++) {
+                    if (other.squares[i][j] != null) {
+                        this.squares[i][j] = new ChessPiece(other.squares[i][j]); // Using ChessPiece copy constructor
+                        // Or use clone: this.squares[i][j] = (ChessPiece) other.squares[i][j].clone();
+                    }
+                }
+            }
+        } else {
+            this.squares = null;
+        }
+    }
 }
