@@ -42,28 +42,6 @@ public class ChessBoard implements Cloneable { //// I think we need this here??
      * (How the game of chess normally starts)
      */
     public void resetBoard() {
-
-        // MIGHT JUST call the add Piece function a bunch of times???
-
-        // BLACK PIECE ON TOP
-        // add rooks at the corners of the board:
-//        for(int i = 1; i < 5; i++){
-//            addPiece();
-//        }
-
-//        ChessPosition topleft = new ChessPosition(1,1);
-//        ChessPiece rook = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK) //fix later??
-//        addPiece(topleft, rook);
-
-
-
-
-
-
-        // not sure if i should use 1-8 or 0-7 @@@@@@@@@@@@@@@@@@
-
-        //maybe create some private helper functions for this????
-
         // add top row
         addPiece(new ChessPosition(8,1), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK));
         addPiece(new ChessPosition(8,2), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KNIGHT));
@@ -74,14 +52,11 @@ public class ChessBoard implements Cloneable { //// I think we need this here??
         addPiece(new ChessPosition(8,7), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KNIGHT));
         addPiece(new ChessPosition(8,8), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK));
 
-
         // PAWNS
         for(int i = 1; i < 9; i++){
             addPiece(new ChessPosition(7,i), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN));
             addPiece(new ChessPosition(2,i), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN));
         }
-
-
 
         // add bottom row
         addPiece(new ChessPosition(1,1), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.ROOK));
@@ -94,8 +69,6 @@ public class ChessBoard implements Cloneable { //// I think we need this here??
         addPiece(new ChessPosition(1,8), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.ROOK));
 
         // code can be condensed to be more efficient, but I am leaving it for now
-
-
     }
 
 
@@ -149,8 +122,13 @@ public class ChessBoard implements Cloneable { //// I think we need this here??
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
                     if (other.squares[i][j] != null) {
-                        this.squares[i][j] = new ChessPiece(other.squares[i][j]); // Using ChessPiece copy constructor
-                        // Or use clone: this.squares[i][j] = (ChessPiece) other.squares[i][j].clone();
+//                        this.squares[i][j] = new ChessPiece(other.squares[i][j]); // Using ChessPiece copy constructor
+                        // Or use clone:
+                      try {
+                        this.squares[i][j] = (ChessPiece) other.squares[i][j].clone();
+                      } catch (CloneNotSupportedException e) {
+                        throw new RuntimeException(e);
+                      }
                     }
                 }
             }

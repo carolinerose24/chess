@@ -118,10 +118,53 @@ public class ChessGame {
         // isvalid --> make the move on a COPIED board, see if it goes to check
 
         // Clone the original board
-        ChessBoard copiedBoard = (ChessBoard) board.clone();
 
-        throw new RuntimeException("Not implemented");
+
+
+        ChessBoard copiedBoard = (ChessBoard) board.clone();
+        ChessPosition currentKingSpot = findKingPosition(teamColor);
+
+
+        // if current team color is BLACK ---> no, just check if it is the oppostite color during the loop
+        // iterate through the board, get all the possible moves for each piece
+
+        for(int i = 1; i < 9; i++){
+            for(int j = 1; j < 9; j++){
+                ChessPosition newPos = new ChessPosition(i, j);
+                if(board.getPiece(newPos) != null && board.getPiece(newPos).getTeamColor() != teamColor){
+                    //if there is a piece there and it is the opposite color
+                    ChessPiece currentPiece = board.getPiece(newPos);
+                    Collection<ChessMove> moves = currentPiece.pieceMoves(board, newPos);
+                    for(ChessMove move : moves){
+                        // now check if any of the moves end in the king spot
+                        if(move.getEndPosition().equals(currentKingSpot)){
+                            return true;
+                        }
+                    }
+
+                }
+            }
+        }
+        return false; // none of the pieces ended in the king spot, so that color is not in check
     }
+
+
+    private ChessPosition findKingPosition(TeamColor teamColor){
+        for(int i = 1; i < 9; i++){
+            for(int j = 1; j < 9; j++){
+                ChessPosition newPos = new ChessPosition(i, j);
+                if(board.getPiece(newPos) != null && board.getPiece(newPos).getPieceType() == ChessPiece.PieceType.KING && board.getPiece(newPos).getTeamColor() == teamColor){
+                    return newPos; // if not null, is a king, and the right color
+                }
+            }
+        }
+        return null; // should never reach here, there will always be a king
+    }
+
+
+
+
+
 
     /**
      * Determines if the given team is in checkmate

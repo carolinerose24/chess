@@ -45,9 +45,6 @@ public class ChessMove {
     public ChessPiece.PieceType getPromotionPiece() {
         // i think this is all we need here, but there might be more later
         return promotionPiece;
-
-
-        // else return NULL??????
     }
 
 
