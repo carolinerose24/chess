@@ -67,7 +67,6 @@ public class ChessGame {
         Collection<ChessMove> validatedMoves = new ArrayList<>();
 
         for(ChessMove move : possMoves){
-            // make the move on a copied board, then see if you are in check after
             ChessBoard copiedBoard = (ChessBoard) board.clone();
             copiedBoard.addPiece(move.getStartPosition(), null);
             copiedBoard.addPiece(move.getEndPosition(), new ChessPiece(currentColor, currentType));
@@ -200,7 +199,7 @@ public class ChessGame {
                 }
             }
         }
-        return null; // should never reach here, there will always be a king
+        return null;
     }
 
 
@@ -231,14 +230,10 @@ public class ChessGame {
                     ChessPosition currentPos = new ChessPosition(i,j);
                     if(board.getPiece(currentPos) != null && board.getPiece(currentPos).getTeamColor() == teamColor){
                         Collection<ChessMove> possMoves = validMoves(currentPos);
-                        if(!possMoves.isEmpty()){
-                            return false;
-                        }
+                        if(!possMoves.isEmpty()){return false;}
                     }
-
                 }
             }
-
             return true;
         } else {return false;}
     }

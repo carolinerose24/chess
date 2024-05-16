@@ -1,4 +1,7 @@
 
-ˆ	java:S112,"FDefine and throw a dedicated exception instead of using a generic one.(Ö–†8å•å²ó1J$89ed144c-b9c5-47d7-9f1a-ca84b7666afe
-Ä
-java:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(¥·8Ã—å²ó1J$18e59f03-62cf-4ba2-af7a-04776ab9bce6
+`	java:S112p"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ
+a	java:S112‚"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ
+h
+java:S2975`"SRemove this "clone" implementation; use a copy constructor or copy factory instead.(­æğ
+m
+java:S3776w"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(•»ÌŸûÿÿÿÿ

@@ -1,4 +1,14 @@
 
-ˆ	java:S112;"FDefine and throw a dedicated exception instead of using a generic one.(ŽÖ–†8Åý¡³ó1J$ae490ade-bd43-4856-acf3-30cf22440706
-~	java:S125'"<This block of commented-out lines of code should be removed.(¸ùÎ8©¢³ó1J$9dc3b166-75e9-4c77-bfbf-ba0be9f56589
-~	java:S1250"<This block of commented-out lines of code should be removed.(¸ùÎ8…ø£³ó1J$472a8057-6b6a-4e7e-8039-e28d5a1c4140
+k	java:S117A"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Êãµþÿÿÿÿ
+e	java:S117D"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(‡œ„
+e	java:S117G"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(®Ä‰c
+k	java:S117J"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÄÞðÀüÿÿÿÿ
+k	java:S117M"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(€Ðþüÿÿÿÿ
+f	java:S117P"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(—ì¹Å
+V	java:S125S"<This block of commented-out lines of code should be removed.(óÏç‚üÿÿÿÿ
+A
+java:S1168W"+Return an empty collection instead of null.(Ñ™ËÀ
+h
+java:S2975r"SRemove this "clone" implementation; use a copy constructor or copy factory instead.(™”” 
+=
+java:S1185r"(Remove this method to simply inherit it.(™”” 
