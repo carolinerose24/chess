@@ -62,29 +62,25 @@ public class ChessPiece implements Cloneable{
         ChessPiece currentPiece = board.getPiece(myPosition);
         switch (currentPiece.getPieceType()) {
             case KING:
-                KingMovesCalculator KMC = new KingMovesCalculator();
-                return KMC.pieceMoves(board, myPosition);
+                KingMovesCalculator kingMC = new KingMovesCalculator();
+                return kingMC.pieceMoves(board, myPosition);
             case QUEEN:
-                QueenMovesCalculator QMC = new QueenMovesCalculator();
-                return QMC.pieceMoves(board, myPosition);
+                QueenMovesCalculator queenMC = new QueenMovesCalculator();
+                return queenMC.pieceMoves(board, myPosition);
             case BISHOP:
-                BishopMovesCalculator BMC = new BishopMovesCalculator();
-                return BMC.pieceMoves(board, myPosition);
+                BishopMovesCalculator bishopMC = new BishopMovesCalculator();
+                return bishopMC.pieceMoves(board, myPosition);
             case ROOK:
-                RookMovesCalculator RMC = new RookMovesCalculator();
-                return RMC.pieceMoves(board, myPosition);
+                RookMovesCalculator rookMC = new RookMovesCalculator();
+                return rookMC.pieceMoves(board, myPosition);
             case KNIGHT:
-                KnightMovesCalculator KnMC = new KnightMovesCalculator();
-                return KnMC.pieceMoves(board, myPosition);
+                KnightMovesCalculator knightMC = new KnightMovesCalculator();
+                return knightMC.pieceMoves(board, myPosition);
             case PAWN:
-                PawnMovesCalculator PMC = new PawnMovesCalculator();
-                return PMC.pieceMoves(board, myPosition);
-//            default:
-//                System.out.println("Unknown piece type");
-//                break;
+                PawnMovesCalculator pawnMC = new PawnMovesCalculator();
+                return pawnMC.pieceMoves(board, myPosition);
         }
-
-        return null; // should never get here
+        return null;
     }
 
 
@@ -112,7 +108,7 @@ public class ChessPiece implements Cloneable{
 
     @Override
     protected Object clone() throws CloneNotSupportedException {
-        return super.clone(); // Just delegate to Object's implementation
+        return super.clone();
     }
 }
 

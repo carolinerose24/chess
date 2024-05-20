@@ -10,17 +10,95 @@ public class RookMovesCalculator implements PieceMovesCalculator{
   @Override
   public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
 
+    Collection<ChessMove> possMoves = new ArrayList<>();
+    possMoves.addAll(getRookMovesHorizontal(board, myPosition, 1));
+    possMoves.addAll(getRookMovesHorizontal(board, myPosition, -1));
+    possMoves.addAll(getRookMovesVertical(board, myPosition, 1));
+    possMoves.addAll(getRookMovesVertical(board, myPosition, -1));
+    return possMoves;
+
+//    return getRookMoves(board, myPosition);
+  }
+
+//
+//  public Collection<ChessMove> getRookMoves(ChessBoard board, ChessPosition myPosition){
+//    ChessPiece currentPiece = board.getPiece(myPosition);
+//    int startingRow = myPosition.getRow();
+//    int startingCol = myPosition.getColumn();
+//    ChessGame.TeamColor currentColor = currentPiece.getTeamColor();
+//    Collection<ChessMove> possMoves = new ArrayList<>();
+//
+//    ChessPosition newPosition;
+//
+//    // check going right
+//    newPosition = new ChessPosition(startingRow, startingCol+1);
+//    while(newPosition.checkValidPosition()){
+//      if(board.getPiece(newPosition) == null){
+//        possMoves.add(new ChessMove(myPosition, newPosition, null));
+//      } else if(board.getPiece(newPosition) != null){ //when we run into a piece
+//        if(currentColor != board.getPiece(newPosition).getTeamColor()){
+//          possMoves.add(new ChessMove(myPosition, newPosition, null));
+//        }
+//        break;
+//      }
+//      newPosition = new ChessPosition(startingRow, newPosition.getColumn() + 1);
+//    }
+//
+//    // check going left
+//    newPosition = new ChessPosition(startingRow, startingCol-1);
+//    while(newPosition.checkValidPosition()){
+//      if(board.getPiece(newPosition) == null){
+//        possMoves.add(new ChessMove(myPosition, newPosition, null));
+//      } else if(board.getPiece(newPosition) != null){ //when we run into a piece
+//        if(currentColor != board.getPiece(newPosition).getTeamColor()){
+//          possMoves.add(new ChessMove(myPosition, newPosition, null));
+//        }
+//        break;
+//      }
+//      newPosition = new ChessPosition(startingRow, newPosition.getColumn() - 1);
+//    }
+//
+//    // check going down
+//    newPosition = new ChessPosition(startingRow -1, startingCol);
+//    while(newPosition.checkValidPosition()){
+//      if(board.getPiece(newPosition) == null){
+//        possMoves.add(new ChessMove(myPosition, newPosition, null));
+//      } else if(board.getPiece(newPosition) != null){ //when we run into a piece
+//        if(currentColor != board.getPiece(newPosition).getTeamColor()){
+//          possMoves.add(new ChessMove(myPosition, newPosition, null));
+//        }
+//        break;
+//      }
+//      newPosition = new ChessPosition(newPosition.getRow() -1, startingCol);
+//    }
+//
+//    // check going up
+//    newPosition = new ChessPosition(startingRow +1, startingCol);
+//    while(newPosition.checkValidPosition()){
+//      if(board.getPiece(newPosition) == null){
+//        possMoves.add(new ChessMove(myPosition, newPosition, null));
+//      } else if(board.getPiece(newPosition) != null){ //when we run into a piece
+//        if(currentColor != board.getPiece(newPosition).getTeamColor()){
+//          possMoves.add(new ChessMove(myPosition, newPosition, null));
+//        }
+//        break;
+//      }
+//      newPosition = new ChessPosition(newPosition.getRow() +1, startingCol);
+//    }
+//
+//    return possMoves;
+//  }
+//
+
+  public Collection<ChessMove> getRookMovesHorizontal(ChessBoard board, ChessPosition myPosition, int colAdvance){
     ChessPiece currentPiece = board.getPiece(myPosition);
     int startingRow = myPosition.getRow();
     int startingCol = myPosition.getColumn();
     ChessGame.TeamColor currentColor = currentPiece.getTeamColor();
     Collection<ChessMove> possMoves = new ArrayList<>();
-
     ChessPosition newPosition;
 
-
-    // check going right
-    newPosition = new ChessPosition(startingRow, startingCol+1);
+    newPosition = new ChessPosition(startingRow, startingCol + colAdvance);
     while(newPosition.checkValidPosition()){
       if(board.getPiece(newPosition) == null){
         possMoves.add(new ChessMove(myPosition, newPosition, null));
@@ -30,11 +108,25 @@ public class RookMovesCalculator implements PieceMovesCalculator{
         }
         break;
       }
-      newPosition = new ChessPosition(startingRow, newPosition.getColumn() + 1);
+      newPosition = new ChessPosition(startingRow, newPosition.getColumn() + colAdvance);
     }
+    return possMoves;
+  }
 
-    // check going left
-    newPosition = new ChessPosition(startingRow, startingCol-1);
+
+
+
+
+
+  public Collection<ChessMove> getRookMovesVertical(ChessBoard board, ChessPosition myPosition, int rowAdvance){
+    ChessPiece currentPiece = board.getPiece(myPosition);
+    int startingRow = myPosition.getRow();
+    int startingCol = myPosition.getColumn();
+    ChessGame.TeamColor currentColor = currentPiece.getTeamColor();
+    Collection<ChessMove> possMoves = new ArrayList<>();
+    ChessPosition newPosition;
+
+    newPosition = new ChessPosition(startingRow + rowAdvance, startingCol);
     while(newPosition.checkValidPosition()){
       if(board.getPiece(newPosition) == null){
         possMoves.add(new ChessMove(myPosition, newPosition, null));
@@ -44,38 +136,8 @@ public class RookMovesCalculator implements PieceMovesCalculator{
         }
         break;
       }
-      newPosition = new ChessPosition(startingRow, newPosition.getColumn() - 1);
+      newPosition = new ChessPosition(newPosition.getRow() + rowAdvance, startingCol);
     }
-
-    // check going down
-    newPosition = new ChessPosition(startingRow -1, startingCol);
-    while(newPosition.checkValidPosition()){
-      if(board.getPiece(newPosition) == null){
-        possMoves.add(new ChessMove(myPosition, newPosition, null));
-      } else if(board.getPiece(newPosition) != null){ //when we run into a piece
-        if(currentColor != board.getPiece(newPosition).getTeamColor()){
-          possMoves.add(new ChessMove(myPosition, newPosition, null));
-        }
-        break;
-      }
-      newPosition = new ChessPosition(newPosition.getRow() -1, startingCol);
-    }
-
-    // check going up
-    newPosition = new ChessPosition(startingRow +1, startingCol);
-    while(newPosition.checkValidPosition()){
-      if(board.getPiece(newPosition) == null){
-        possMoves.add(new ChessMove(myPosition, newPosition, null));
-      } else if(board.getPiece(newPosition) != null){ //when we run into a piece
-        if(currentColor != board.getPiece(newPosition).getTeamColor()){
-          possMoves.add(new ChessMove(myPosition, newPosition, null));
-        }
-        break;
-      }
-      newPosition = new ChessPosition(newPosition.getRow() +1, startingCol);
-    }
-
-
     return possMoves;
   }
 }
