@@ -1,4 +1,4 @@
 package handler;
 
-public class LoginHandler implements  EventHandler{
+public class LoginHandler extends EventHandler{
 }

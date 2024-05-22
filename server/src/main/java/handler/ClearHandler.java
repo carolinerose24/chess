@@ -1,12 +1,20 @@
 package handler;
 
-public class ClearHandler implements EventHandler{
+import spark.Request;
+import spark.Response;
+
+public class ClearHandler extends EventHandler {
+
+  public ClearHandler(){
+
+  }
+
+  @Override
+  public Object handle(Request request, Response response) {
+    return super.handle(request, response);
+  }
 
 
-  // calls some method probably inherited from eventHandler that takes in a ClearRequest
-  // but where is the code that defines what is in a ClearRequest?
-
-  // and is a clear request just empty?? because it doesn't need to pass anything in?????
 
 
 }
