@@ -1,5 +1,5 @@
 package model.requests;
 
-public class ClearRequest {
+public record ClearRequest() {
   // it doesn't pass anything, so should this just be empty??
 }
