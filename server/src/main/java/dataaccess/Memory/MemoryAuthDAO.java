@@ -13,11 +13,13 @@ public class MemoryAuthDAO implements AuthDAO {
   private HashMap<String, AuthData> authTable = new HashMap<>();
 
   @Override
-  public void createAuthToken(AuthData authData) throws DataAccessException {
-//    String newAuth = UUID.randomUUID().toString();
-
-    if(!authTable.containsKey(authData.authToken())) {authTable.put(authData.authToken(), authData);}
-    else {throw new DataAccessException("Auth Token already exists in table");}
+  public String createAndInsertAuthToken(String username) throws DataAccessException {
+    String newAuth = UUID.randomUUID().toString();
+    if(!authTable.containsKey(newAuth)) {
+      authTable.put(newAuth, new AuthData(newAuth, username));
+      return newAuth;
+    }
+    else {throw new DataAccessException("Auth Token already exists in table");} // should never happen???
   }
 
   @Override

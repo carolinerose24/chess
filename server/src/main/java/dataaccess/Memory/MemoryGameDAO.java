@@ -18,7 +18,7 @@ public class MemoryGameDAO implements GameDAO {
   public Integer createGame(GameData gameData) throws DataAccessException {
     // return a STRING OR return the GameData object???
 
-    int highestKey = 0;
+    int highestKey = 1;
     if(!gameTable.isEmpty()){ // if the table isn't empty, then we can loop through it
       highestKey = gameTable.keySet().stream().max(Integer::compare).orElseThrow() + 1;
     }

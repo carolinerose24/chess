@@ -9,7 +9,7 @@ public interface AuthDAO {
   // If they can't access the database, they should throw an exception right??
 
   // create an auth
-  void createAuthToken(AuthData authData) throws DataAccessException;
+  String createAndInsertAuthToken(String username) throws DataAccessException;
 
   // delete an Auth
   void deleteAuthToken(String authToken) throws DataAccessException;

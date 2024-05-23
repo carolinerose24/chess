@@ -7,8 +7,8 @@ import model.AuthData;
 public class SQLAuthDAO implements AuthDAO {
 
   @Override
-  public void createAuthToken(AuthData authData) throws DataAccessException {
-
+  public String createAndInsertAuthToken(String username) throws DataAccessException {
+    return null;
   }
 
   @Override

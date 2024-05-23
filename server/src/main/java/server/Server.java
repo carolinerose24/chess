@@ -7,7 +7,9 @@ import dataaccess.Memory.MemoryGameDAO;
 import dataaccess.Memory.MemoryUserDAO;
 import dataaccess.UserDAO;
 import handler.*;
-import model.requests.ClearRequest;
+import service.AlreadyTakenException;
+import service.BadRequestException;
+import service.UnauthorizedException;
 import spark.*;
 
 public class Server {
@@ -30,33 +32,42 @@ public class Server {
         UserDAO userDAO = new MemoryUserDAO();
 
 
-        // pass these through were needed
-
-
+        // pass these through where needed ---> just pass everything right now because i made them
+        // data members in the extended class, see if it works this way
 
         // DB - clear
         Spark.delete("/db", new ClearHandler(authDAO, gameDAO, userDAO));
 
         // SESSION - login and logout
-        Spark.post("/session", new LoginHandler());
-        Spark.delete("/session", new LogoutHandler());
+        Spark.post("/session", new LoginHandler(authDAO, gameDAO, userDAO));
+        Spark.delete("/session", new LogoutHandler(authDAO, gameDAO, userDAO));
 
         // USER - register
-        Spark.post("/user", new RegisterHandler());
+        Spark.post("/user", new RegisterHandler(authDAO, gameDAO, userDAO));
 
         // GAME - list games, create game, join game
-        Spark.get("/game", new ListGamesHandler());
-        Spark.post("/game", new CreateGameHandler());
-        Spark.put("/game", new JoinGameHandler());
+        Spark.get("/game", new ListGamesHandler(authDAO, gameDAO, userDAO));
+        Spark.post("/game", new CreateGameHandler(authDAO, gameDAO, userDAO));
+        Spark.put("/game", new JoinGameHandler(authDAO, gameDAO, userDAO));
 
 
+        // Handle the Exceptions here, like this?
+        // am I missing any???? like do i need one for DataAccessException??????
 
+        Spark.exception(BadRequestException.class, (exception, request, response) -> {
+            response.status(400); // HTTP 400 Bad Request
+            response.body(exception.getMessage()); // Send the exception message as the response body
+        });
 
+        Spark.exception(UnauthorizedException.class, (exception, request, response) -> {
+            response.status(401);
+            response.body(exception.getMessage());
+        });
 
-        // do I need something here to handle exceptions? does SPARK have something for that?
-
-
-
+        Spark.exception(AlreadyTakenException.class, (exception, request, response) -> {
+            response.status(403);
+            response.body(exception.getMessage());
+        });
 
 
 

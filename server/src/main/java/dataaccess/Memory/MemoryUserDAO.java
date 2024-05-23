@@ -3,7 +3,6 @@ package dataaccess.Memory;
 import dataaccess.DataAccessException;
 import dataaccess.UserDAO;
 import model.UserData;
-import service.AlreadyTakenException;
 
 import java.util.HashMap;
 
@@ -32,7 +31,8 @@ public class MemoryUserDAO implements UserDAO {
     if(usersTable.containsKey(username)) {
       return usersTable.get(username);
     } else {
-      throw new DataAccessException("User doesn't exist");
+//      throw new DataAccessException("User doesn't exist");
+      return null;
     }
   }
 
