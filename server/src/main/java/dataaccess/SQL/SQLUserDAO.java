@@ -16,6 +16,11 @@ public class SQLUserDAO implements UserDAO {
   }
 
   @Override
+  public boolean isUsernameFree(String username) throws DataAccessException {
+    return false;
+  }
+
+  @Override
   public void clear() throws DataAccessException {
 
   }

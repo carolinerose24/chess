@@ -1,12 +1,13 @@
 package service;
 
-public class UnauthorizedException extends Exception{
+public class UnauthorizedException extends ChessException{
   public UnauthorizedException(){}
 
   public UnauthorizedException(String message){
     super(message);
   }
 
-  // not sure if I need more in here...
-
+  public UnauthorizedException(Throwable cause){
+    super(cause);
+  }
 }

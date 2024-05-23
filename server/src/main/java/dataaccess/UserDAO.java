@@ -16,6 +16,8 @@ public interface UserDAO {
   // maybe some more methods like verify user or see if the username is already in the database??
   // return like booleans
 
+  boolean isUsernameFree(String username) throws DataAccessException;
+
 
 
 

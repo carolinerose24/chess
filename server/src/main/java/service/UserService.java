@@ -15,9 +15,4 @@ public class UserService {
 
   } // this takes in an auth Token, so I am not sure why it passes a user object???? should it be a AuthData object???
 
-  public void clear(AuthData authData){
-
-  }
-
-
 }

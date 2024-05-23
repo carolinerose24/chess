@@ -9,8 +9,8 @@ import java.util.List;
 
 public class SQLGameDAO implements GameDAO {
   @Override
-  public String createGame(GameData gameData) throws DataAccessException {
-    return "";
+  public Integer createGame(GameData gameData) throws DataAccessException {
+    return 0;
   }
 
   @Override

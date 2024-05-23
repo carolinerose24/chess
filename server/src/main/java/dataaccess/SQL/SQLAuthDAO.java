@@ -5,13 +5,14 @@ import dataaccess.DataAccessException;
 import model.AuthData;
 
 public class SQLAuthDAO implements AuthDAO {
+
   @Override
-  public void createAuthToken() throws DataAccessException {
+  public void createAuthToken(AuthData authData) throws DataAccessException {
 
   }
 
   @Override
-  public void deleteAuthToken() throws DataAccessException {
+  public void deleteAuthToken(String authToken) throws DataAccessException {
 
   }
 

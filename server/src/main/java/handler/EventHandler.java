@@ -6,7 +6,7 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-public abstract class EventHandler<T> implements Route {
+public abstract class EventHandler implements Route {
 
   // talk in a request and response?
 
@@ -19,6 +19,24 @@ public abstract class EventHandler<T> implements Route {
     // stuff to override the handler here
 
     // GSON STUFF HERE??
+
+    // read in request json to object
+
+    // call the service
+
+    // translate that back into json
+
+    // response.set body = ____
+    // still return response.body
+
+    // empty --> use "" or "{}" or "null"
+
+
+
+
+
+
+
 
     var serializer = new Gson();
 //    // now get the auth token, and the body
