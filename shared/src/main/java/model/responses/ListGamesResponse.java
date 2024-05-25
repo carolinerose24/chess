@@ -4,6 +4,6 @@ import chess.ChessGame;
 
 import java.util.ArrayList;
 
-public record ListGamesResponse(ArrayList<ChessGame> game) {
+public record ListGamesResponse(ArrayList<ChessGame> game, boolean success, String message) {
   // I think this needs to be named as game, not games??
 }

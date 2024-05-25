@@ -4,7 +4,5 @@ import model.AuthData;
 
 public class AuthService {
 
-
-
-  // not sure what other methods would be in THIS ONE, cause login takes auth data but is in USER
+  // I could put a method to check an auth service??
 }

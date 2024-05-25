@@ -11,17 +11,12 @@ public interface UserDAO {
   void createUser(UserData user) throws DataAccessException;
 
   // get the UserData from the username
-  UserData getUser(String username) throws DataAccessException;
+  UserData getUser(String username);
 
   // maybe some more methods like verify user or see if the username is already in the database??
   // return like booleans
 
   boolean isUsernameFree(String username) throws DataAccessException;
-
-
-
-
-
 
 
   // same as the others

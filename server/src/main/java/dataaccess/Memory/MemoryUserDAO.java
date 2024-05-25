@@ -3,6 +3,7 @@ package dataaccess.Memory;
 import dataaccess.DataAccessException;
 import dataaccess.UserDAO;
 import model.UserData;
+import service.BadRequestException;
 
 import java.util.HashMap;
 
@@ -27,7 +28,7 @@ public class MemoryUserDAO implements UserDAO {
   }
 
   @Override
-  public UserData getUser(String username) throws DataAccessException {
+  public UserData getUser(String username) {
     if(usersTable.containsKey(username)) {
       return usersTable.get(username);
     } else {

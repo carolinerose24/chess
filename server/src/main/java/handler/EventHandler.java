@@ -22,9 +22,19 @@ public abstract class EventHandler implements Route {
     this.userDAO = userDAO;
   }
 
+  public EventHandler(AuthDAO authDAO, UserDAO userDAO){
+    this.authDAO = authDAO;
+    this.userDAO = userDAO;
+  } // USE this for the register/login stuff
+
+  public EventHandler(AuthDAO authDAO, GameDAO gameDAO){
+    this.authDAO = authDAO;
+    this.gameDAO = gameDAO;
+  } // use this for the game ones??
+
 
   @Override
-  public Object handle(Request request, Response response) throws ChessGeneralException { // can throw an exception?????
+  public Object handle(Request request, Response response)  { // can throw an exception????? but might not need to???
 
     // get the auth token first, might be empty though...
 //    String authToken = request.headers("Authorization");

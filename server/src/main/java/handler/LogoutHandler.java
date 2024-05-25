@@ -1,7 +1,9 @@
 package handler;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import dataaccess.AuthDAO;
+import dataaccess.DataAccessException;
 import dataaccess.GameDAO;
 import dataaccess.UserDAO;
 import model.AuthData;
@@ -11,6 +13,7 @@ import model.requests.RegisterRequest;
 import model.responses.EmptyResponse;
 import model.responses.UserResponse;
 import service.ChessGeneralException;
+import service.UnauthorizedException;
 import service.UserService;
 import spark.Request;
 import spark.Response;
@@ -25,20 +28,40 @@ public class LogoutHandler extends EventHandler{
 
 
   @Override
-  public Object handle(Request request, Response response) throws ChessGeneralException {
+  public Object handle(Request request, Response response) {
     String authToken = request.headers("Authorization");
     AuthRequest authReq = new AuthRequest(authToken);
-
-    EmptyResponse result = getResponse(authDAO, authReq);
-    response.status(HttpURLConnection.HTTP_OK);
-
     Gson gson = new Gson();
-    return gson.toJson(result);
+    EmptyResponse result = getResponse(authDAO, authReq);
+
+
+    if(result.success()){
+      response.status(HttpURLConnection.HTTP_OK);
+      // NOT SURE WHAT TO RETURN??? @@@@@ might need to change this later
+      return gson.toJson("{}");
+    } else  {
+      JsonObject jsonObject = new JsonObject();
+      jsonObject.addProperty("message", result.message());
+      if (result.message().contains("auth")){
+        response.status(HttpURLConnection.HTTP_UNAUTHORIZED); // 401 - unauthorized
+      } else {
+        response.status(HttpURLConnection.HTTP_INTERNAL_ERROR); // 500 - data access error
+      }
+      return jsonObject;
+    }
   }
 
-  private EmptyResponse getResponse(AuthDAO authDAO, AuthRequest req) throws ChessGeneralException {
-    new UserService(authDAO, userDAO).logout(req);
-    return new EmptyResponse();
+  private EmptyResponse getResponse(AuthDAO authDAO, AuthRequest req)  {
+
+    try{
+      new UserService(authDAO, userDAO).logout(req);
+      return new EmptyResponse(true, "");
+
+    } catch(DataAccessException e){
+      return new EmptyResponse(false, "Error: Couldn't Logout");
+    } catch(UnauthorizedException e){
+      return new EmptyResponse(false, "Error: unauthorized");
+    }
   }
 
 

@@ -10,7 +10,7 @@ import model.responses.ListGamesResponse;
 public class GameService {
 
 
-  public CreateGameResponse createGame(CreateGameRequest req) throws ChessGeneralException {
+  public CreateGameResponse createGame(CreateGameRequest req) throws Exception {
 
 
 
@@ -42,7 +42,7 @@ public class GameService {
   }
 
 
-  public void joinGame(JoinGameRequest req) throws ChessGeneralException {
+  public void joinGame(JoinGameRequest req) throws Exception {
     // takes in an auth token, the game name, and which player color to add
 
   }

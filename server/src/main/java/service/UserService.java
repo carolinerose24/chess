@@ -21,38 +21,31 @@ public class UserService {
   }
 
 
-  public AuthData register(RegisterRequest req) throws ChessGeneralException {
+  public AuthData register(RegisterRequest req) throws DataAccessException, BadRequestException, AlreadyTakenException {
 
-    try{
-      if(userDAO.getUser(req.username()) != null) throw new AlreadyTakenException("User Already Exists");
+    // if any fields are blank --> throw a bad request exception i think???
+    if(req.username() == null || req.username().isBlank() || req.password() == null || req.password().isBlank() || req.email() == null || req.email().isBlank()){
+      throw new BadRequestException("Error: Empty Field");
+      // use isBlank instead of isEmpty because "  " is not a valid field
+    }
+
+      if(userDAO.getUser(req.username()) != null) throw new AlreadyTakenException("Error: User Already Exists");
+
       userDAO.createUser(new UserData(req.username(), req.password(), req.email())); // returns void
       String authToken = authDAO.createAndInsertAuthToken(req.username()); // returns void
       return new AuthData(authToken, req.username());
-    } catch (DataAccessException e) {
-      throw new ChessGeneralException(e);
-    }
   }
 
-
-
-  public AuthData login(LoginRequest req) throws ChessGeneralException{
-
-    try{
+  public AuthData login(LoginRequest req) throws DataAccessException, UnauthorizedException{
       UserData user = userDAO.getUser(req.username());
-      if(user == null) throw new BadRequestException("This user doesn't exist");
-      if(!req.password().equals(user.password())) throw new UnauthorizedException("Wrong password");
+      if(user == null) throw new UnauthorizedException("Error: Invalid Credentials"); // misspelled username
+      if(!req.password().equals(user.password())) throw new UnauthorizedException("Error: Invalid Credentials");
       String authToken = authDAO.createAndInsertAuthToken(req.username()); // returns void
       return new AuthData(authToken, req.username());
-    } catch (DataAccessException e){
-      throw new ChessGeneralException(e);
-    }
   }
 
+  public void logout(AuthRequest req) throws DataAccessException, UnauthorizedException{
 
-
-  public void logout(AuthRequest req) throws ChessGeneralException{
-
-    try{
       // get then delete
       AuthData authData = authDAO.getAuthToken(req.authToken());
       if(authData != null) {authDAO.deleteAuthToken(req.authToken());}
@@ -60,9 +53,6 @@ public class UserService {
         // if it IS null, meaning this is an invalid Auth Token
         throw new UnauthorizedException("Bad Auth Token");
       }
-    } catch (DataAccessException e){
-      throw new ChessGeneralException(e);
-    }
 
   }
 
