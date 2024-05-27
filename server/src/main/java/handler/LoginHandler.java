@@ -4,21 +4,13 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import dataaccess.AuthDAO;
 import dataaccess.DataAccessException;
-import dataaccess.GameDAO;
 import dataaccess.UserDAO;
 import model.AuthData;
-import model.requests.ClearRequest;
 import model.requests.LoginRequest;
-import model.requests.RegisterRequest;
-import model.responses.UserResponse;
-import org.w3c.dom.html.HTMLParagraphElement;
-import service.ChessGeneralException;
 import service.UnauthorizedException;
 import service.UserService;
 import spark.Request;
 import spark.Response;
-
-import java.net.HttpURLConnection;
 
 public class LoginHandler extends EventHandler{
   public LoginHandler(AuthDAO authDAO, UserDAO userDAO) {
@@ -30,35 +22,22 @@ public class LoginHandler extends EventHandler{
   public Object handle(Request request, Response response)  {
     Gson gson = new Gson();
     LoginRequest loginReq = gson.fromJson(request.body(), LoginRequest.class);
-    UserResponse result = getResponse(authDAO, userDAO, loginReq);
     JsonObject jsonObject = new JsonObject();
 
-    if(result.success()){
-      response.status(HttpURLConnection.HTTP_OK);
-      jsonObject.addProperty("username", result.username());
-      jsonObject.addProperty("authToken", result.authToken());
-    } else {
-      jsonObject.addProperty("message", result.message());
-      // now check which type of error (like in register) to set the right status
+    try{
+      AuthData authData = new UserService(authDAO, userDAO).login(loginReq);
+      response.status(200);
+      jsonObject.addProperty("username", authData.username());
+      jsonObject.addProperty("authToken", authData.authToken());
 
-      if(result.message().contains("auth")){
-        response.status(HttpURLConnection.HTTP_UNAUTHORIZED); // 401 - unauthorized
-      } else {
-        response.status(HttpURLConnection.HTTP_INTERNAL_ERROR); // 500 - data access error
-      }
+    } catch(UnauthorizedException e) {
+      response.status(401);
+      jsonObject.addProperty("message", "Error: unauthorized");
+
+    } catch(DataAccessException e){
+      response.status(500);
+      jsonObject.addProperty("message", "Error: Couldn't Login");
     }
     return jsonObject;
-  }
-
-  private UserResponse getResponse(AuthDAO authDAO, UserDAO userDAO, LoginRequest req) {
-
-    try{
-      AuthData authData = new UserService(authDAO, userDAO).login(req);
-      return new UserResponse(authData.username(), authData.authToken(), true, "");
-    } catch(UnauthorizedException e) {
-      return new UserResponse("", "", false, "Error: unauthorized");
-    } catch(DataAccessException e){
-      return new UserResponse("", "", false, "Error: Couldn't Login");
-    }
   }
 }
