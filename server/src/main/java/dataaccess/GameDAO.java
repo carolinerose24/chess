@@ -11,7 +11,7 @@ public interface GameDAO {
   // the methods that need to be called in here are one that manipulate the game database and CLEAR
 
   // create a new game from a name --> but pass it is as a full GameData object
-  Integer createGame(GameData gameData) throws DataAccessException;
+  Integer createGame(String gameName) throws DataAccessException;
 
   // get game from ID
   GameData getGame(int gameID) throws DataAccessException;

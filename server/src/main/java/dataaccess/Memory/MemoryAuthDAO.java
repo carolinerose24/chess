@@ -29,7 +29,7 @@ public class MemoryAuthDAO implements AuthDAO {
 
   @Override
   public AuthData getAuthToken(String authToken) throws DataAccessException {
-    return authTable.get(authToken); // returns empty if not there?
+    return authTable.get(authToken); // returns null if not there?
   }
 
   @Override

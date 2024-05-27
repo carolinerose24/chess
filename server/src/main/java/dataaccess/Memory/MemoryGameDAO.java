@@ -1,5 +1,6 @@
 package dataaccess.Memory;
 
+import chess.ChessGame;
 import dataaccess.DataAccessException;
 import dataaccess.GameDAO;
 import model.AuthData;
@@ -15,34 +16,32 @@ public class MemoryGameDAO implements GameDAO {
   private HashMap<Integer, GameData> gameTable = new HashMap<>();
 
   @Override
-  public Integer createGame(GameData gameData) throws DataAccessException {
-    // return a STRING OR return the GameData object???
-
-    // possible to throw a bad request here? if the game name is empty??
-
-
+  public Integer createGame(String gameName) throws DataAccessException {
+    // leaves throws DAE for now, will need it for later code
 
     int highestKey = 1;
     if(!gameTable.isEmpty()){ // if the table isn't empty, then we can loop through it
       highestKey = gameTable.keySet().stream().max(Integer::compare).orElseThrow() + 1;
     }
 
-    GameData newGame = new GameData(highestKey, gameData.whiteUsername(), gameData.blackUsername(),
-            gameData.gameName(), gameData.game());
+    GameData newGame = new GameData(highestKey, null, null,
+            gameName, new ChessGame());
+
     gameTable.put(newGame.gameID(), newGame);
-    return gameData.gameID();
+    return newGame.gameID();
   }
 
   @Override
   public GameData getGame(int gameID) {
-    if(gameTable.get(gameID) != null) return gameTable.get(gameID);
-//    throw new DataAccessException("Game not found");
-    return null; // just to check if it exists
+    return gameTable.get(gameID); // will return null if there isn't a game of this ID
+
+//    if(gameTable.get(gameID) != null) return gameTable.get(gameID);
+//    return null; // just to check if it exists, return null if it doesn't exist
   }
 
   @Override
   public Collection<GameData> listGames() throws DataAccessException {
-    return gameTable.values();
+    return gameTable.values(); // throws DAE - never here, but maybe later in SQL DAO
   }
 
   @Override
@@ -53,13 +52,17 @@ public class MemoryGameDAO implements GameDAO {
     // then check that they actually passed a non null ChessGame object
     if(game.game() == null) throw new DataAccessException("The Chess Game object is empty");
 
-    // then remove the old map value, and re add it with the new game
+    // then remove the old map value, and re add it with the new game (with the move or updated player
     gameTable.remove(game.gameID());
     gameTable.put(game.gameID(), game);
+
+
+
+    // are these actually bad request exceptions??????
   }
 
   @Override
   public void clear() throws DataAccessException {
-    gameTable.clear();
+    gameTable.clear(); // clears the hash map table
   }
 }

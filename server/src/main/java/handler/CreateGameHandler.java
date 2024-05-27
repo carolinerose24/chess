@@ -40,13 +40,13 @@ public class CreateGameHandler extends EventHandler{
 
     if(result.success()){
       response.status(HttpURLConnection.HTTP_OK);
-      jsonObject.addProperty("message", result.message());
+      jsonObject.addProperty("gameID", result.gameID());
     } else  {
       jsonObject.addProperty("message", result.message());
 
       if (result.message().contains("auth")){
         response.status(HttpURLConnection.HTTP_UNAUTHORIZED); // 401 - unauthorized
-      } else if(result.message().contains("bad request")) {
+      } else if(result.message().contains("Bad")) {
         response.status(HttpURLConnection.HTTP_BAD_REQUEST); // 400 - bad request
       } else {
         response.status(HttpURLConnection.HTTP_INTERNAL_ERROR); // 500 - data access error
@@ -58,26 +58,17 @@ public class CreateGameHandler extends EventHandler{
   }
 
   protected CreateGameResponse getResponse(AuthDAO authDAO, GameDAO gameDAO,  CreateGameRequest req){
-//    try{
-//
-//      String gameID = new GameService(authDAO, gameDAO).createGame(req);
-//      return new CreateGameResponse( , true, "");
-//
-//
-//
-//      CreateGameResponse response = gameDAO.createGame(CreateGameRequest req)
-//
-//
-//    } catch(BadRequestException e) {
-//
-//    } catch(UnauthorizedException e ){
-//
-//    } catch(DataAccessException e){
-//
-//    }
+    try{
 
+      int gameID = new GameService(authDAO, gameDAO).createGame(req);
+      return new CreateGameResponse(gameID, true, "");
 
-
-    return null;
+    } catch(BadRequestException e) {
+      return new CreateGameResponse(0, false, "Error: Bad Request");
+    } catch(UnauthorizedException e ){
+      return new CreateGameResponse(0, false, "Error: Invalid Credentials");
+    } catch(DataAccessException e){
+      return new CreateGameResponse(0, false, "Error: Couldn't Create Game");
+    }
   }
 }
