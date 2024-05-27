@@ -21,8 +21,8 @@ import spark.Response;
 import java.net.HttpURLConnection;
 
 public class LoginHandler extends EventHandler{
-  public LoginHandler(AuthDAO authDAO, GameDAO gameDAO, UserDAO userDAO) {
-    super(authDAO, gameDAO, userDAO);
+  public LoginHandler(AuthDAO authDAO, UserDAO userDAO) {
+    super(authDAO, userDAO);
   }
 
 

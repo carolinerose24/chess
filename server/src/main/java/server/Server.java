@@ -36,18 +36,18 @@ public class Server {
         // data members in the extended class, see if it works this way
 
         // DB - clear
-        Spark.delete("/db", new ClearHandler(authDAO, gameDAO, userDAO));
+        Spark.delete("/db", new ClearHandler(authDAO, gameDAO, userDAO)); // needs all 3
 
         // SESSION - login and logout
-        Spark.post("/session", new LoginHandler(authDAO, gameDAO, userDAO));
-        Spark.delete("/session", new LogoutHandler(authDAO, gameDAO, userDAO));
+        Spark.post("/session", new LoginHandler(authDAO, userDAO)); // doesn't need GameDAO
+        Spark.delete("/session", new LogoutHandler(authDAO)); // just auth
 
         // USER - register
-        Spark.post("/user", new RegisterHandler(authDAO, gameDAO, userDAO));
+        Spark.post("/user", new RegisterHandler(authDAO, userDAO)); // doesn't need GameDAO
 
         // GAME - list games, create game, join game
         Spark.get("/game", new ListGamesHandler(authDAO, gameDAO, userDAO));
-        Spark.post("/game", new CreateGameHandler(authDAO, gameDAO, userDAO));
+        Spark.post("/game", new CreateGameHandler(authDAO, gameDAO)); // just auth and game
         Spark.put("/game", new JoinGameHandler(authDAO, gameDAO, userDAO));
 
 
@@ -60,12 +60,12 @@ public class Server {
         });
 
         Spark.exception(UnauthorizedException.class, (exception, request, response) -> {
-            response.status(401);
+            response.status(401); // unauthorized
             response.body(exception.getMessage());
         });
 
         Spark.exception(AlreadyTakenException.class, (exception, request, response) -> {
-            response.status(403);
+            response.status(403); // already taken
             response.body(exception.getMessage());
         });
 

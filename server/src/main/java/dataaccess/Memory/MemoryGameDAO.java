@@ -18,6 +18,10 @@ public class MemoryGameDAO implements GameDAO {
   public Integer createGame(GameData gameData) throws DataAccessException {
     // return a STRING OR return the GameData object???
 
+    // possible to throw a bad request here? if the game name is empty??
+
+
+
     int highestKey = 1;
     if(!gameTable.isEmpty()){ // if the table isn't empty, then we can loop through it
       highestKey = gameTable.keySet().stream().max(Integer::compare).orElseThrow() + 1;
@@ -30,9 +34,10 @@ public class MemoryGameDAO implements GameDAO {
   }
 
   @Override
-  public GameData getGame(int gameID) throws DataAccessException {
+  public GameData getGame(int gameID) {
     if(gameTable.get(gameID) != null) return gameTable.get(gameID);
-    throw new DataAccessException("Game not found");
+//    throw new DataAccessException("Game not found");
+    return null; // just to check if it exists
   }
 
   @Override

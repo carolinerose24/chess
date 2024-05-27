@@ -1,6 +1,9 @@
 package service;
 
+import dataaccess.AuthDAO;
 import dataaccess.DataAccessException;
+import dataaccess.GameDAO;
+import dataaccess.UserDAO;
 import model.requests.AuthRequest;
 import model.requests.CreateGameRequest;
 import model.requests.JoinGameRequest;
@@ -9,8 +12,28 @@ import model.responses.ListGamesResponse;
 
 public class GameService {
 
+  private final AuthDAO authDAO;
+  private final GameDAO gameDAO;
 
-  public CreateGameResponse createGame(CreateGameRequest req) throws Exception {
+  public GameService(AuthDAO authDAO, GameDAO gameDAO){
+    this.authDAO = authDAO;
+    this.gameDAO = gameDAO;
+  }
+
+
+  public CreateGameResponse createGame(CreateGameRequest req) throws BadRequestException, UnauthorizedException, DataAccessException {
+
+
+    // if empty game name, throw bad request exception
+
+    // check validate auth token, else throw unAUTH exception
+
+    // call create game in memory game DAO
+    // which needs to return the String GameID
+
+
+
+
 
 
 
@@ -42,7 +65,7 @@ public class GameService {
   }
 
 
-  public void joinGame(JoinGameRequest req) throws Exception {
+  public void joinGame(JoinGameRequest req) throws BadRequestException, UnauthorizedException, AlreadyTakenException, DataAccessException {
     // takes in an auth token, the game name, and which player color to add
 
   }
@@ -70,8 +93,5 @@ public class GameService {
 //
 
   }
-
-
-
 
 }

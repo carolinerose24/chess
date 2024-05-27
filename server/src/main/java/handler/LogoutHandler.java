@@ -22,23 +22,18 @@ import java.net.HttpURLConnection;
 
 public class LogoutHandler extends EventHandler{
 
-  public LogoutHandler(AuthDAO authDAO, GameDAO gameDAO, UserDAO userDAO) {
-    super(authDAO, gameDAO, userDAO);
+  public LogoutHandler(AuthDAO authDAO) {
+    super(authDAO);
   }
-
 
   @Override
   public Object handle(Request request, Response response) {
     String authToken = request.headers("Authorization");
     AuthRequest authReq = new AuthRequest(authToken);
-    Gson gson = new Gson();
     EmptyResponse result = getResponse(authDAO, authReq);
-
-
     if(result.success()){
       response.status(HttpURLConnection.HTTP_OK);
-      // NOT SURE WHAT TO RETURN??? @@@@@ might need to change this later
-      return gson.toJson("{}");
+      return "{}";
     } else  {
       JsonObject jsonObject = new JsonObject();
       jsonObject.addProperty("message", result.message());
@@ -56,14 +51,10 @@ public class LogoutHandler extends EventHandler{
     try{
       new UserService(authDAO, userDAO).logout(req);
       return new EmptyResponse(true, "");
-
     } catch(DataAccessException e){
       return new EmptyResponse(false, "Error: Couldn't Logout");
     } catch(UnauthorizedException e){
       return new EmptyResponse(false, "Error: unauthorized");
     }
   }
-
-
-
 }

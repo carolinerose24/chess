@@ -19,8 +19,8 @@ import spark.Response;
 import java.net.HttpURLConnection;
 
 public class RegisterHandler extends EventHandler{
-  public RegisterHandler(AuthDAO authDAO, GameDAO gameDAO, UserDAO userDAO) {
-    super(authDAO, gameDAO, userDAO);
+  public RegisterHandler(AuthDAO authDAO,  UserDAO userDAO) {
+    super(authDAO, userDAO);
   }
 
   @Override
@@ -35,7 +35,6 @@ public class RegisterHandler extends EventHandler{
       jsonObject.addProperty("authToken", result.authToken());
       response.status(HttpURLConnection.HTTP_OK);
     } else {
-//      jsonObject.addProperty("success", result.success()); // I don't know if we need this
       jsonObject.addProperty("message", result.message());
       if(result.message().contains("Empty Field")) {
         response.status(HttpURLConnection.HTTP_BAD_REQUEST); // 400 - bad request
@@ -58,9 +57,6 @@ public class RegisterHandler extends EventHandler{
     } catch(AlreadyTakenException e) {
       return new UserResponse("", "", false, "Error: Username Already Taken");
     }
-
-
-
   }
 
 }

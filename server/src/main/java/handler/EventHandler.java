@@ -32,6 +32,10 @@ public abstract class EventHandler implements Route {
     this.gameDAO = gameDAO;
   } // use this for the game ones??
 
+  public EventHandler(AuthDAO authDAO){
+    this.authDAO = authDAO;
+  } // logout
+
 
   @Override
   public Object handle(Request request, Response response)  { // can throw an exception????? but might not need to???
