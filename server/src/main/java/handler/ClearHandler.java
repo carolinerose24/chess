@@ -9,8 +9,6 @@ import service.ClearService;
 import spark.Request;
 import spark.Response;
 
-
-
 public class ClearHandler extends EventHandler {
 
   public ClearHandler(AuthDAO authDAO, GameDAO gameDAO, UserDAO userDAO) {
@@ -19,7 +17,6 @@ public class ClearHandler extends EventHandler {
 
   @Override
   public Object handle(Request request, Response response) {
-
     try{
       new ClearService(authDAO, gameDAO, userDAO).clear();
       response.status(200);
