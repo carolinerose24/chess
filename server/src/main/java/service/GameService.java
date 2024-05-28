@@ -69,15 +69,11 @@ public class GameService {
     }
 
   }
-
-
-
-  public ListGamesResponse listGames(AuthRequest authReq){
-    // just GameData or a collection of game data???? not sure how to handle more than I record/row
-
-//    Collection<ChessGame> games =
-
-    return null;
+  
+  public ListGamesResponse listGames(AuthRequest req) throws UnauthorizedException, DataAccessException{
+    AuthData auth = authDAO.getAuthToken(req.authToken());
+    if(auth == null) throw new UnauthorizedException("Error: Invalid Credentials");
+    return new ListGamesResponse(gameDAO.listGames());
   }
 
 }

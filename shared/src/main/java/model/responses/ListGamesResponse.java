@@ -1,9 +1,9 @@
 package model.responses;
 
-import chess.ChessGame;
+import model.GameData;
 
-import java.util.ArrayList;
+import java.util.Collection;
 
-public record ListGamesResponse(ArrayList<ChessGame> game) {
+public record ListGamesResponse(Collection<GameData> game) {
   // I think this needs to be named as game, not games??
 }

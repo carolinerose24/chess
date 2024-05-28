@@ -1,6 +1,7 @@
 package handler;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import dataaccess.AuthDAO;
 import dataaccess.DataAccessException;
 import dataaccess.GameDAO;
@@ -21,6 +22,9 @@ public class ListGamesHandler extends EventHandler{
     AuthRequest authReq = new AuthRequest(request.headers("Authorization"));
     ListGamesResponse listResponse = new GameService(authDAO, gameDAO).listGames(authReq);
     response.status(200);
-    return new Gson().toJson(listResponse.game());
+
+    JsonObject jsonObject = new JsonObject();
+    jsonObject.add("games", new Gson().toJsonTree(listResponse.game()));
+    return new Gson().toJson(jsonObject);
   }
 }
