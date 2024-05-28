@@ -69,7 +69,7 @@ public class GameService {
     }
 
   }
-  
+
   public ListGamesResponse listGames(AuthRequest req) throws UnauthorizedException, DataAccessException{
     AuthData auth = authDAO.getAuthToken(req.authToken());
     if(auth == null) throw new UnauthorizedException("Error: Invalid Credentials");
