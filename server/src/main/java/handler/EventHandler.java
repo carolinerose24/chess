@@ -37,7 +37,7 @@ public abstract class EventHandler implements Route {
 
 
   @Override
-  public Object handle(Request request, Response response)  {
+  public Object handle(Request request, Response response)  throws Exception{
     return null;
   }
 }

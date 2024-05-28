@@ -1,6 +1,9 @@
 package server;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import dataaccess.AuthDAO;
+import dataaccess.DataAccessException;
 import dataaccess.GameDAO;
 import dataaccess.Memory.MemoryAuthDAO;
 import dataaccess.Memory.MemoryGameDAO;
@@ -48,28 +51,30 @@ public class Server {
         // GAME - list games, create game, join game
         Spark.get("/game", new ListGamesHandler(authDAO, gameDAO, userDAO));
         Spark.post("/game", new CreateGameHandler(authDAO, gameDAO)); // just auth and game
-        Spark.put("/game", new JoinGameHandler(authDAO, gameDAO, userDAO));
+        Spark.put("/game", new JoinGameHandler(authDAO, gameDAO)); // just auth and game
 
 
-        // Handle the Exceptions here, like this?
-        // am I missing any???? like do i need one for DataAccessException??????
-
+        // Handle the Exceptions here
         Spark.exception(BadRequestException.class, (exception, request, response) -> {
-            response.status(400); // HTTP 400 Bad Request
-            response.body(exception.getMessage()); // Send the exception message as the response body
+            response.status(400);
+            response.body(new Gson().toJson(createJsonError("Error: Bad Request")));
         });
 
         Spark.exception(UnauthorizedException.class, (exception, request, response) -> {
             response.status(401); // unauthorized
-            response.body(exception.getMessage());
+            response.body(new Gson().toJson(createJsonError("Error: Unauthorized")));
         });
 
         Spark.exception(AlreadyTakenException.class, (exception, request, response) -> {
             response.status(403); // already taken
-            response.body(exception.getMessage());
+            response.body(new Gson().toJson(createJsonError("Error: Already Taken")));
         });
 
-
+        Spark.exception(DataAccessException.class, (exception, request, response) -> {
+            response.status(500); // Data Access Error
+            response.body(new Gson().toJson(createJsonError("Error: Couldn't Perform Action")));
+        });
+        
 
         Spark.awaitInitialization();
         return Spark.port();
@@ -78,5 +83,11 @@ public class Server {
     public void stop() {
         Spark.stop();
         Spark.awaitStop();
+    }
+
+    private static JsonObject createJsonError(String message) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("message", message);
+        return jsonObject;
     }
 }

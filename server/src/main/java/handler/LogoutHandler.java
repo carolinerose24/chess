@@ -16,25 +16,13 @@ public class LogoutHandler extends EventHandler{
   }
 
   @Override
-  public Object handle(Request request, Response response) {
+  public Object handle(Request request, Response response) throws UnauthorizedException, DataAccessException {
     String authToken = request.headers("Authorization");
     AuthRequest authReq = new AuthRequest(authToken);
     JsonObject jsonObject = new JsonObject();
 
-    try{
-      new UserService(authDAO, userDAO).logout(authReq);
-      response.status(200);
-      return "{}";
-
-    } catch(DataAccessException e){
-      response.status(500);
-      jsonObject.addProperty("message", "Error: Couldn't Logout");
-      return jsonObject;
-
-    } catch(UnauthorizedException e){
-      response.status(401);
-      jsonObject.addProperty("message", "Error: unauthorized");
-      return jsonObject;
-    }
+    new UserService(authDAO, userDAO).logout(authReq);
+    response.status(200);
+    return "{}";
   }
 }

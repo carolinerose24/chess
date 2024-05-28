@@ -16,17 +16,9 @@ public class ClearHandler extends EventHandler {
   }
 
   @Override
-  public Object handle(Request request, Response response) {
-    try{
-      new ClearService(authDAO, gameDAO, userDAO).clear();
-      response.status(200);
-      return "{}";
-
-    } catch (DataAccessException e){
-      response.status(500);
-      JsonObject jsonObject = new JsonObject();
-      jsonObject.addProperty("message", "Error: Couldn't Clear Database");
-      return jsonObject;
-    }
+  public Object handle(Request request, Response response) throws DataAccessException {
+    new ClearService(authDAO, gameDAO, userDAO).clear();
+    response.status(200);
+    return "{}";
   }
 }

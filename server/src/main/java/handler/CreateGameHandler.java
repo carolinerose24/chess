@@ -17,7 +17,7 @@ public class CreateGameHandler extends EventHandler{
 
 
   @Override
-  public Object handle(Request request, Response response) {
+  public Object handle(Request request, Response response) throws BadRequestException, UnauthorizedException, DataAccessException {
 
     Gson gson = new Gson();
     String authToken = request.headers("Authorization");
@@ -25,23 +25,9 @@ public class CreateGameHandler extends EventHandler{
     CreateGameRequest createReq = new CreateGameRequest(authToken, gameName);
     JsonObject jsonObject = new JsonObject();
 
-    try{
-      int gameID = new GameService(authDAO, gameDAO).createGame(createReq);
-      response.status(200);
-      jsonObject.addProperty("gameID", gameID);
-
-    } catch(BadRequestException e) {
-      response.status(400);
-      jsonObject.addProperty("message", "Error: Bad Request");
-
-    } catch(UnauthorizedException e ){
-      response.status(401);
-      jsonObject.addProperty("message", "Error: unauthorized");
-
-    } catch(DataAccessException e){
-      response.status(500);
-      jsonObject.addProperty("message", "Error: Couldn't Create Game");
-    }
+    int gameID = new GameService(authDAO, gameDAO).createGame(createReq);
+    response.status(200);
+    jsonObject.addProperty("gameID", gameID);
     return jsonObject;
   }
 }
