@@ -4,7 +4,6 @@ import chess.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 public class KnightMovesCalculator implements PieceMovesCalculator{
   @Override
@@ -13,16 +12,21 @@ public class KnightMovesCalculator implements PieceMovesCalculator{
     ChessPiece currentPiece = board.getPiece(myPosition);
     int startingRow = myPosition.getRow();
     int startingCol = myPosition.getColumn();
+
+
     ChessGame.TeamColor currentColor = currentPiece.getTeamColor();
     Collection<ChessMove> possMoves = new ArrayList<>();
 
     Collection<ChessMove> allKnightMoves = new ArrayList<>();
     allKnightMoves.add(new ChessMove(myPosition, new ChessPosition(startingRow+2, startingCol+1), null));
     allKnightMoves.add(new ChessMove(myPosition, new ChessPosition(startingRow+2, startingCol-1), null));
+
     allKnightMoves.add(new ChessMove(myPosition, new ChessPosition(startingRow+1, startingCol+2), null));
     allKnightMoves.add(new ChessMove(myPosition, new ChessPosition(startingRow+1, startingCol-2), null));
+
     allKnightMoves.add(new ChessMove(myPosition, new ChessPosition(startingRow-2, startingCol+1), null));
     allKnightMoves.add(new ChessMove(myPosition, new ChessPosition(startingRow-2, startingCol-1), null));
+
     allKnightMoves.add(new ChessMove(myPosition, new ChessPosition(startingRow-1, startingCol+2), null));
     allKnightMoves.add(new ChessMove(myPosition, new ChessPosition(startingRow-1, startingCol-2), null));
 
@@ -35,6 +39,7 @@ public class KnightMovesCalculator implements PieceMovesCalculator{
 
         } else if(board.getPiece(move.getEndPosition()) != null){
           // valid spot but a piece IS there, now check color of the piece
+
           if(currentColor != board.getPiece(move.getEndPosition()).getTeamColor()){ // different teams
             possMoves.add(new ChessMove(myPosition, move.getEndPosition(), null));
           }

@@ -1,4 +1,4 @@
-package dataaccess.SQL;
+package dataaccess.sql;
 
 import dataaccess.DataAccessException;
 import dataaccess.UserDAO;
@@ -13,11 +13,6 @@ public class SQLUserDAO implements UserDAO {
   @Override
   public UserData getUser(String username) {
     return null;
-  }
-
-  @Override
-  public boolean isUsernameFree(String username) throws DataAccessException {
-    return false;
   }
 
   @Override

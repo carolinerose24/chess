@@ -13,12 +13,6 @@ public interface UserDAO {
   // get the UserData from the username
   UserData getUser(String username);
 
-  // maybe some more methods like verify user or see if the username is already in the database??
-  // return like booleans
-
-  boolean isUsernameFree(String username) throws DataAccessException;
-
-
   // same as the others
   void clear() throws DataAccessException;
 

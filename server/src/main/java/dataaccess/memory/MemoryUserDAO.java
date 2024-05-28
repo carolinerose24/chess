@@ -1,4 +1,4 @@
-package dataaccess.Memory;
+package dataaccess.memory;
 
 import dataaccess.DataAccessException;
 import dataaccess.UserDAO;
@@ -28,14 +28,6 @@ public class MemoryUserDAO implements UserDAO {
     if(usersTable.containsKey(username)) {
       return usersTable.get(username);
     } else {return null;}
-  }
-
-
-
-  @Override
-  public boolean isUsernameFree(String username){
-    if(usersTable.containsKey(username)) return false;
-    return true; // it doesn't contain it
   }
 
 }

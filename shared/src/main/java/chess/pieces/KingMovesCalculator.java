@@ -10,8 +10,10 @@ public class KingMovesCalculator implements PieceMovesCalculator {
   @Override
   public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
     ChessPiece currentPiece = board.getPiece(myPosition);
+
     int startingRow = myPosition.getRow();
     int startingCol = myPosition.getColumn();
+
     ChessGame.TeamColor currentColor = currentPiece.getTeamColor();
     Collection<ChessMove> possMoves = new ArrayList<>();
 

@@ -1,4 +1,4 @@
-package dataaccess.Memory;
+package dataaccess.memory;
 
 import dataaccess.AuthDAO;
 import dataaccess.DataAccessException;
@@ -22,13 +22,13 @@ public class MemoryAuthDAO implements AuthDAO {
   }
 
   @Override
-  public void deleteAuthToken(String authToken) throws DataAccessException {
+  public void deleteAuthToken(String authToken)  {
     authTable.remove(authToken); // should do nothing if that auth token isn't in the table??
     // will return null if there wasn't that key to remove
   }
 
   @Override
-  public AuthData getAuthToken(String authToken) throws DataAccessException {
+  public AuthData getAuthToken(String authToken)  {
     return authTable.get(authToken); // returns null if not there?
   }
 

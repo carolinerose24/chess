@@ -1,7 +1,7 @@
 package service;
 
 import dataaccess.*;
-import dataaccess.Memory.*;
+import dataaccess.memory.*;
 import model.UserData;
 import model.requests.*;
 import org.junit.jupiter.api.*;
@@ -11,14 +11,6 @@ public class ServiceTests {
   AuthDAO authDAO = new MemoryAuthDAO();
   GameDAO gameDAO = new MemoryGameDAO();
   UserDAO userDAO = new MemoryUserDAO();
-
-//  @BeforeEach
-//  public void setup() {
-//    AuthDAO authDAO = new MemoryAuthDAO();
-//    GameDAO gameDAO = new MemoryGameDAO();
-//    UserDAO userDAO = new MemoryUserDAO();
-//  }
-
 
   @Test
   @Order(1)
