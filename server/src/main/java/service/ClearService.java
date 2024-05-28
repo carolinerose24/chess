@@ -18,26 +18,8 @@ public class ClearService {
   }
 
   public void clear() throws DataAccessException {
-
-    // or just have it throw a data access exception???????
-    authDAO.clear(); //just auth not memory
+    authDAO.clear(); //just auth not memory or SQL
     gameDAO.clear();
     userDAO.clear();
-
-
-
-
-
-//    try{
-      // try to clear all the data from EACH table
-//      authDAO.clear(); //just auth not memory
-//      gameDAO.clear();
-//      userDAO.clear();
-//    } catch(DataAccessException e){ // this turns the DataAccessException into a ChessException, which I can handle???
-//      throw new ChessGeneralException(e);
-//    }
-
-
   }
-
 }

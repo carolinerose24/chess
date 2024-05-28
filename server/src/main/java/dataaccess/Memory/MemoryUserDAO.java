@@ -3,7 +3,6 @@ package dataaccess.Memory;
 import dataaccess.DataAccessException;
 import dataaccess.UserDAO;
 import model.UserData;
-import service.BadRequestException;
 
 import java.util.HashMap;
 
@@ -20,11 +19,7 @@ public class MemoryUserDAO implements UserDAO {
 
   @Override
   public void createUser(UserData user) throws DataAccessException {
-    String username = user.username();
-
-    // if username is already in the table, throw an exception?? a userAlreadyFound exception????
-    if(usersTable.containsKey(username)) throw new DataAccessException("Username is already taken"); //Error: already taken
-    usersTable.put(username, user);
+    usersTable.put(user.username(), user);
   }
 
   @Override
@@ -32,7 +27,6 @@ public class MemoryUserDAO implements UserDAO {
     if(usersTable.containsKey(username)) {
       return usersTable.get(username);
     } else {
-//      throw new DataAccessException("User doesn't exist");
       return null;
     }
   }

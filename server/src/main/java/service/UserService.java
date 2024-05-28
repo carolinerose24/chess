@@ -24,16 +24,14 @@ public class UserService {
 
   public UserResponse register(RegisterRequest req) throws DataAccessException, BadRequestException, AlreadyTakenException {
 
-    // if any fields are blank --> throw a bad request exception i think???
+    // if any fields are blank --> throw a bad request exception
+    // use isBlank instead of isEmpty because "  " is not a valid field
     if(req.username() == null || req.username().isBlank() || req.password() == null || req.password().isBlank() || req.email() == null || req.email().isBlank()){
       throw new BadRequestException("Error: Empty Field");
-      // use isBlank instead of isEmpty because "  " is not a valid field
     }
-
-      if(userDAO.getUser(req.username()) != null) throw new AlreadyTakenException("Error: User Already Exists");
-
+      if(userDAO.getUser(req.username()) != null) throw new AlreadyTakenException("Error: Username Already Exists");
       userDAO.createUser(new UserData(req.username(), req.password(), req.email())); // returns void
-      String authToken = authDAO.createAndInsertAuthToken(req.username()); // returns void
+      String authToken = authDAO.createAndInsertAuthToken(req.username());
       return new UserResponse(authToken, req.username());
   }
 
@@ -46,15 +44,10 @@ public class UserService {
   }
 
   public void logout(AuthRequest req) throws DataAccessException, UnauthorizedException{
-
       // get then delete
       AuthData authData = authDAO.getAuthToken(req.authToken());
       if(authData != null) {authDAO.deleteAuthToken(req.authToken());}
-      else {
-        // if it IS null, meaning this is an invalid Auth Token
-        throw new UnauthorizedException("Bad Auth Token");
-      }
-
+      else {throw new UnauthorizedException("Error: Bad Auth Token");}
   }
 
 }

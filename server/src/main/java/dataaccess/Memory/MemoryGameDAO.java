@@ -3,12 +3,10 @@ package dataaccess.Memory;
 import chess.ChessGame;
 import dataaccess.DataAccessException;
 import dataaccess.GameDAO;
-import model.AuthData;
 import model.GameData;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 
 public class MemoryGameDAO implements GameDAO {
 
@@ -34,9 +32,6 @@ public class MemoryGameDAO implements GameDAO {
   @Override
   public GameData getGame(int gameID) {
     return gameTable.get(gameID); // will return null if there isn't a game of this ID
-
-//    if(gameTable.get(gameID) != null) return gameTable.get(gameID);
-//    return null; // just to check if it exists, return null if it doesn't exist
   }
 
   @Override
@@ -46,19 +41,8 @@ public class MemoryGameDAO implements GameDAO {
 
   @Override
   public void updateGame(GameData game) throws DataAccessException {
-    // check if there is a game of this ID
-    if(!gameTable.containsKey(game.gameID())) throw new DataAccessException("No game with this ID");
-
-    // then check that they actually passed a non null ChessGame object
-    if(game.game() == null) throw new DataAccessException("The Chess Game object is empty");
-
-    // then remove the old map value, and re add it with the new game (with the move or updated player
     gameTable.remove(game.gameID());
     gameTable.put(game.gameID(), game);
-
-
-
-    // are these actually bad request exceptions??????
   }
 
   @Override

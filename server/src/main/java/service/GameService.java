@@ -43,16 +43,30 @@ public class GameService {
 
 
   public void joinGame(JoinGameRequest req) throws BadRequestException, UnauthorizedException, AlreadyTakenException, DataAccessException {
-    // takes in an auth token, the game name, and which player color to add
+
+    // check auth token, see if valid, or throw unAUTH
+    AuthData auth = authDAO.getAuthToken(req.authToken());
+    if(auth == null) throw new UnauthorizedException("Error: Invalid Credentials");
+    String username = auth.username();
+
+    // check gameID, if empty or not in database, throw badRequest
+    GameData game = gameDAO.getGame(req.gameID());
+    if(game == null) throw new BadRequestException("Error: Game Doesn't Exist"); // wrong gameID
 
 
+    String playerColor = req.playerColor();
+    // now check if that color is taken already
+    if(playerColor != null && playerColor.equals("WHITE")){
+      if(game.whiteUsername() != null) throw new AlreadyTakenException("Error: White is already taken");
+      gameDAO.updateGame(new GameData(game.gameID(), username, game.blackUsername(), game.gameName(), game.game()));
 
+    } else if(playerColor != null && playerColor.equals("BLACK")){
+      if(game.blackUsername() != null) throw new AlreadyTakenException("Error: Black is already taken");
+      gameDAO.updateGame(new GameData(game.gameID(), game.whiteUsername(), username, game.gameName(), game.game()));
 
-
-
-
-
-
+    } else { // if it is null or not B/W
+      throw new BadRequestException("Error: Invalid Color");
+    }
 
   }
 

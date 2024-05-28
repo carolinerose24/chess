@@ -3,7 +3,6 @@ package dataaccess.Memory;
 import dataaccess.AuthDAO;
 import dataaccess.DataAccessException;
 import model.AuthData;
-import model.UserData;
 
 import java.util.HashMap;
 import java.util.UUID;
