@@ -28,30 +28,24 @@ public class Server {
         Spark.staticFiles.location("web");
 
         // Register your endpoints and handle exceptions here.
-
-        // SOME OF THE HANDLERS WILL NEED PARAMETERS???
         AuthDAO authDAO = new MemoryAuthDAO();
         GameDAO gameDAO = new MemoryGameDAO();
         UserDAO userDAO = new MemoryUserDAO();
 
-
-        // pass these through where needed ---> just pass everything right now because i made them
-        // data members in the extended class, see if it works this way
-
         // DB - clear
-        Spark.delete("/db", new ClearHandler(authDAO, gameDAO, userDAO)); // needs all 3
+        Spark.delete("/db", new ClearHandler(authDAO, gameDAO, userDAO));
 
-        // SESSION - login and logout
-        Spark.post("/session", new LoginHandler(authDAO, userDAO)); // auth and user
-        Spark.delete("/session", new LogoutHandler(authDAO)); // just auth
+        // SESSION - login and logout (auth and user)
+        Spark.post("/session", new LoginHandler(authDAO, userDAO));
+        Spark.delete("/session", new LogoutHandler(authDAO));
 
-        // USER - register
-        Spark.post("/user", new RegisterHandler(authDAO, userDAO)); // auth and user
+        // USER - register (auth and user)
+        Spark.post("/user", new RegisterHandler(authDAO, userDAO));
 
-        // GAME - list games, create game, join game
-        Spark.get("/game", new ListGamesHandler(authDAO, gameDAO)); // auth and game
-        Spark.post("/game", new CreateGameHandler(authDAO, gameDAO)); // auth and game
-        Spark.put("/game", new JoinGameHandler(authDAO, gameDAO)); // auth and game
+        // GAME - list games, create game, join game (auth and game)
+        Spark.get("/game", new ListGamesHandler(authDAO, gameDAO));
+        Spark.post("/game", new CreateGameHandler(authDAO, gameDAO));
+        Spark.put("/game", new JoinGameHandler(authDAO, gameDAO));
 
 
         // Handle the Exceptions here

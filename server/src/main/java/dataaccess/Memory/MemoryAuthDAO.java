@@ -23,7 +23,8 @@ public class MemoryAuthDAO implements AuthDAO {
 
   @Override
   public void deleteAuthToken(String authToken) throws DataAccessException {
-    authTable.remove(authToken);
+    authTable.remove(authToken); // should do nothing if that auth token isn't in the table??
+    // will return null if there wasn't that key to remove
   }
 
   @Override
@@ -33,7 +34,8 @@ public class MemoryAuthDAO implements AuthDAO {
 
   @Override
   public void clear() throws DataAccessException {
-    authTable.clear();
+    authTable.clear(); // this empties out the whole hashmap, or I could assign it to a new HashMap
+    // but clearing it is easier
   }
 
 }

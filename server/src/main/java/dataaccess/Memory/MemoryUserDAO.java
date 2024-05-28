@@ -19,6 +19,7 @@ public class MemoryUserDAO implements UserDAO {
 
   @Override
   public void createUser(UserData user) throws DataAccessException {
+    // add it to the hash map, all checks are done earlier in the service??
     usersTable.put(user.username(), user);
   }
 
@@ -26,9 +27,7 @@ public class MemoryUserDAO implements UserDAO {
   public UserData getUser(String username) {
     if(usersTable.containsKey(username)) {
       return usersTable.get(username);
-    } else {
-      return null;
-    }
+    } else {return null;}
   }
 
 
