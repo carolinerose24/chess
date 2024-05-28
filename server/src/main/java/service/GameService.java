@@ -27,7 +27,7 @@ public class GameService {
   }
 
 
-  public Integer createGame(CreateGameRequest req) throws BadRequestException, UnauthorizedException, DataAccessException {
+  public CreateGameResponse createGame(CreateGameRequest req) throws BadRequestException, UnauthorizedException, DataAccessException {
 
     // if empty game name, throw bad request exception
     if(req.gameName() == null || req.gameName().isBlank()){
@@ -38,7 +38,7 @@ public class GameService {
     AuthData auth = authDAO.getAuthToken(req.authToken());
     if(auth == null) throw new UnauthorizedException("Error: Invalid Credentials"); // no auth token in table like this
 
-    return gameDAO.createGame(req.gameName());
+    return new CreateGameResponse(gameDAO.createGame(req.gameName()));
   }
 
 

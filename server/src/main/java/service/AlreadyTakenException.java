@@ -1,6 +1,6 @@
 package service;
 
-public class AlreadyTakenException extends ChessGeneralException {
+public class AlreadyTakenException extends Exception {
 
   public AlreadyTakenException(){}
 

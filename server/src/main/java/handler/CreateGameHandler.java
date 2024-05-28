@@ -25,7 +25,7 @@ public class CreateGameHandler extends EventHandler{
     CreateGameRequest createReq = new CreateGameRequest(authToken, gameName);
     JsonObject jsonObject = new JsonObject();
 
-    int gameID = new GameService(authDAO, gameDAO).createGame(createReq);
+    int gameID = new GameService(authDAO, gameDAO).createGame(createReq).gameID();
     response.status(200);
     jsonObject.addProperty("gameID", gameID);
     return jsonObject;

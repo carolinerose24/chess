@@ -42,16 +42,16 @@ public class Server {
         Spark.delete("/db", new ClearHandler(authDAO, gameDAO, userDAO)); // needs all 3
 
         // SESSION - login and logout
-        Spark.post("/session", new LoginHandler(authDAO, userDAO)); // doesn't need GameDAO
+        Spark.post("/session", new LoginHandler(authDAO, userDAO)); // auth and user
         Spark.delete("/session", new LogoutHandler(authDAO)); // just auth
 
         // USER - register
-        Spark.post("/user", new RegisterHandler(authDAO, userDAO)); // doesn't need GameDAO
+        Spark.post("/user", new RegisterHandler(authDAO, userDAO)); // auth and user
 
         // GAME - list games, create game, join game
-        Spark.get("/game", new ListGamesHandler(authDAO, gameDAO, userDAO));
-        Spark.post("/game", new CreateGameHandler(authDAO, gameDAO)); // just auth and game
-        Spark.put("/game", new JoinGameHandler(authDAO, gameDAO)); // just auth and game
+        Spark.get("/game", new ListGamesHandler(authDAO, gameDAO)); // auth and game
+        Spark.post("/game", new CreateGameHandler(authDAO, gameDAO)); // auth and game
+        Spark.put("/game", new JoinGameHandler(authDAO, gameDAO)); // auth and game
 
 
         // Handle the Exceptions here
@@ -74,7 +74,7 @@ public class Server {
             response.status(500); // Data Access Error
             response.body(new Gson().toJson(createJsonError("Error: Couldn't Perform Action")));
         });
-        
+
 
         Spark.awaitInitialization();
         return Spark.port();

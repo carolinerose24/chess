@@ -1,6 +1,6 @@
 package service;
 
-public class UnauthorizedException extends ChessGeneralException {
+public class UnauthorizedException extends Exception {
   public UnauthorizedException(){}
 
   public UnauthorizedException(String message){

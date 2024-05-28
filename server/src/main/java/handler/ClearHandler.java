@@ -1,6 +1,5 @@
 package handler;
 
-import com.google.gson.JsonObject;
 import dataaccess.AuthDAO;
 import dataaccess.DataAccessException;
 import dataaccess.GameDAO;

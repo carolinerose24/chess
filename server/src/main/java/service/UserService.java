@@ -8,6 +8,7 @@ import model.UserData;
 import model.requests.AuthRequest;
 import model.requests.LoginRequest;
 import model.requests.RegisterRequest;
+import model.responses.UserResponse;
 
 public class UserService {
 
@@ -21,7 +22,7 @@ public class UserService {
   }
 
 
-  public AuthData register(RegisterRequest req) throws DataAccessException, BadRequestException, AlreadyTakenException {
+  public UserResponse register(RegisterRequest req) throws DataAccessException, BadRequestException, AlreadyTakenException {
 
     // if any fields are blank --> throw a bad request exception i think???
     if(req.username() == null || req.username().isBlank() || req.password() == null || req.password().isBlank() || req.email() == null || req.email().isBlank()){
@@ -33,15 +34,15 @@ public class UserService {
 
       userDAO.createUser(new UserData(req.username(), req.password(), req.email())); // returns void
       String authToken = authDAO.createAndInsertAuthToken(req.username()); // returns void
-      return new AuthData(authToken, req.username());
+      return new UserResponse(authToken, req.username());
   }
 
-  public AuthData login(LoginRequest req) throws DataAccessException, UnauthorizedException{
+  public UserResponse login(LoginRequest req) throws DataAccessException, UnauthorizedException{
       UserData user = userDAO.getUser(req.username());
       if(user == null) throw new UnauthorizedException("Error: Invalid Credentials"); // misspelled username
       if(!req.password().equals(user.password())) throw new UnauthorizedException("Error: Invalid Credentials");
       String authToken = authDAO.createAndInsertAuthToken(req.username()); // returns void
-      return new AuthData(authToken, req.username());
+      return new UserResponse(authToken, req.username());
   }
 
   public void logout(AuthRequest req) throws DataAccessException, UnauthorizedException{

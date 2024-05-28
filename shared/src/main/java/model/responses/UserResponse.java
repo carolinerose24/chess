@@ -1,4 +1,4 @@
 package model.responses;
 
-public record UserResponse(String username, String authToken, boolean success, String message) {
+public record UserResponse(String authToken, String username) {
 }

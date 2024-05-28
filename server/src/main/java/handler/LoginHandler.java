@@ -5,8 +5,8 @@ import com.google.gson.JsonObject;
 import dataaccess.AuthDAO;
 import dataaccess.DataAccessException;
 import dataaccess.UserDAO;
-import model.AuthData;
 import model.requests.LoginRequest;
+import model.responses.UserResponse;
 import service.UnauthorizedException;
 import service.UserService;
 import spark.Request;
@@ -24,11 +24,10 @@ public class LoginHandler extends EventHandler{
     LoginRequest loginReq = gson.fromJson(request.body(), LoginRequest.class);
     JsonObject jsonObject = new JsonObject();
 
-    AuthData authData = new UserService(authDAO, userDAO).login(loginReq);
+    UserResponse res = new UserService(authDAO, userDAO).login(loginReq);
     response.status(200);
-    jsonObject.addProperty("username", authData.username());
-    jsonObject.addProperty("authToken", authData.authToken());
-
+    jsonObject.addProperty("username", res.username());
+    jsonObject.addProperty("authToken", res.authToken());
     return jsonObject;
   }
 }

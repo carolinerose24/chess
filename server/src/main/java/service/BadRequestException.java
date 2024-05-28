@@ -1,6 +1,6 @@
 package service;
 
-public class BadRequestException extends ChessGeneralException {
+public class BadRequestException extends Exception {
   public BadRequestException(){}
 
   public BadRequestException(String message) {
