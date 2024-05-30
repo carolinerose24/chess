@@ -1,0 +1,19 @@
+
+‡
+java:S1854"?Remove this useless assignment to local variable "startingCol".(ª»Îìúÿÿÿÿ8¾Šªø1J$00172763-c132-438f-9ca7-efbb2d024d16
+‡
+java:S1854"?Remove this useless assignment to local variable "startingRow".(ï€º”úÿÿÿÿ8¾Šªø1J$bd18bcd7-0342-4f69-a06e-bdf7083d2e84
+x
+java:S1481"0Remove this unused "startingRow" local variable.(ï€º”úÿÿÿÿ8ÀŠªø1J$0a9eed5b-6209-4047-86d7-c63ea9608d4e
+x
+java:S1481"0Remove this unused "startingCol" local variable.(ª»Îìúÿÿÿÿ8ÀŠªø1J$6521ae38-713e-426d-99ce-31936ff07dcd
+ƒ
+java:S1854"@Remove this useless assignment to local variable "currentPiece".(Øô ³8ÄŠªø1J$6fd53e01-c75b-4f7f-84de-384fdcafd1c7
+t
+java:S1481"1Remove this unused "currentPiece" local variable.(Øô ³8ÄŠªø1J$99544e60-72fa-46b0-acc6-17e91e7c7392
+ƒ
+java:S1854C"@Remove this useless assignment to local variable "currentPiece".(Øô ³8ÈŠªø1J$f7f619d7-57f6-4f7f-a793-67869d07aee5
+t
+java:S1481C"1Remove this unused "currentPiece" local variable.(Øô ³8ÈŠªø1J$4e0f2314-bbb3-4a24-b272-ade606258fd4
+s
+java:S1128"+Remove this unused import 'java.util.List'.(Õë±Äøÿÿÿÿ8üÎ±ø1J$d3de3c8a-b806-4d32-85dd-32cf8b77cadd

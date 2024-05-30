@@ -1,14 +1,7 @@
 
-k	java:S117A"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Êãµşÿÿÿÿ
-e	java:S117D"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(‡œ„
-e	java:S117G"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(®Ä‰c
-k	java:S117J"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÄŞğÀüÿÿÿÿ
-k	java:S117M"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(€Ğşüÿÿÿÿ
-f	java:S117P"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(—ì¹Å
-V	java:S125S"<This block of commented-out lines of code should be removed.(óÏç‚üÿÿÿÿ
-A
-java:S1168W"+Return an empty collection instead of null.(Ñ™ËÀ
-h
-java:S2975r"SRemove this "clone" implementation; use a copy constructor or copy factory instead.(™”” 
-=
-java:S1185r"(Remove this method to simply inherit it.(™”” 
+n
+java:S1168S"+Return an empty collection instead of null.(¥¹ï8ºÛÙœø1J$d7610160-a917-453b-8268-df03feb89db0
+•
+java:S2975n"SRemove this "clone" implementation; use a copy constructor or copy factory instead.(™”” 8½ÛÙœø1J$27eb5032-407b-4929-989e-8c29e1781cca
+j
+java:S1185n"(Remove this method to simply inherit it.(™”” 8¾ÛÙœø1J$81a19405-f3e9-4533-ad01-c7391c508706

@@ -1,7 +1,7 @@
 
-`	java:S112p"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ
-a	java:S112‚"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ
-h
-java:S2975`"SRemove this "clone" implementation; use a copy constructor or copy factory instead.(­æð
-m
-java:S3776w"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(•»ÌŸûÿÿÿÿ
+†	java:S112p"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚ÒéüÿÿÿÿJ$e700f644-b830-4188-9e36-d1bd1aa735b8
+‡	java:S112‚"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚ÒéüÿÿÿÿJ$b3843d43-0a40-43a0-93f0-212d762c3f24
+Ž
+java:S2975`"SRemove this "clone" implementation; use a copy constructor or copy factory instead.(­æðJ$f1cd2f7d-639e-4c77-9880-24bff0cdca49
+“
+java:S3776w"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(•»ÌŸûÿÿÿÿJ$83841079-3dfe-47bc-af51-4fbdae92460b
