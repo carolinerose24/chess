@@ -66,7 +66,7 @@ public class UserService {
    }
 
    private boolean checkPasswordHash(String reqPassword, String passHash){
-    return  BCrypt.checkpw(reqPassword, passHash); 
+    return  BCrypt.checkpw(reqPassword, passHash);
    }
 
 }

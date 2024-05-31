@@ -2,13 +2,13 @@ package server;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import dataaccess.AuthDAO;
-import dataaccess.DataAccessException;
-import dataaccess.GameDAO;
+import dataaccess.*;
 import dataaccess.memory.MemoryAuthDAO;
 import dataaccess.memory.MemoryGameDAO;
 import dataaccess.memory.MemoryUserDAO;
-import dataaccess.UserDAO;
+import dataaccess.sql.SQLAuthDAO;
+import dataaccess.sql.SQLGameDAO;
+import dataaccess.sql.SQLUserDAO;
 import handler.*;
 import service.AlreadyTakenException;
 import service.BadRequestException;
@@ -30,10 +30,25 @@ public class Server {
         // Register your endpoints and handle exceptions here.
 
         // change these to SQL DAO objects
+//        AuthDAO authDAO = new MemoryAuthDAO();
+//        GameDAO gameDAO = new MemoryGameDAO();
+//        UserDAO userDAO = new MemoryUserDAO();
+
+        AuthDAO authDAO = new SQLAuthDAO();
+        GameDAO gameDAO = new SQLGameDAO();
+        UserDAO userDAO = new SQLUserDAO();
+
         // also call create database/create tables
-        AuthDAO authDAO = new MemoryAuthDAO();
-        GameDAO gameDAO = new MemoryGameDAO();
-        UserDAO userDAO = new MemoryUserDAO();
+        try{
+            DatabaseManager manager = new DatabaseManager();
+            manager.createDatabase();
+        } catch(DataAccessException e){
+            // not sure if i want to catch this here?????
+        }
+
+
+
+
 
         // DB - clear
         Spark.delete("/db", new ClearHandler(authDAO, gameDAO, userDAO));

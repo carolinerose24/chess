@@ -1,0 +1,9 @@
+
+ˆ	java:S112"FDefine and throw a dedicated exception instead of using a generic one.(äª ø8ÁÆÆäü1J$3ecfad25-7c71-4e81-b585-25f68515c833
+	java:S112"FDefine and throw a dedicated exception instead of using a generic one.(ëêßûÿÿÿÿ8ÂÆÆäü1J$b0e15196-15a1-4a08-9b3f-b966fff27d75
+‹
+java:S2095B"HUse try-with-resources or close this "Connection" in a "finally" clause.(ÎÃç–8ÓÆÆäü1J$e29c5212-a696-41e1-8d9f-176b264a4bba
+‚
+java:S1118":Add a private constructor to hide the implicit public one.( ùÓ‹ÿÿÿÿÿ8ÙÆÆäü1J$d09fbe4b-2f5c-4d9c-98b6-046534c15b3b
+™
+java:S1130M"wRemove the declaration of thrown exception 'dataaccess.DataAccessException', as it cannot be thrown from method's body.(­®Òûÿÿÿÿ8ÁÂåäü1
