@@ -28,6 +28,9 @@ public class Server {
         Spark.staticFiles.location("web");
 
         // Register your endpoints and handle exceptions here.
+
+        // change these to SQL DAO objects
+        // also call create database/create tables
         AuthDAO authDAO = new MemoryAuthDAO();
         GameDAO gameDAO = new MemoryGameDAO();
         UserDAO userDAO = new MemoryUserDAO();

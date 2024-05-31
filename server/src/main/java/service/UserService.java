@@ -9,6 +9,7 @@ import model.requests.AuthRequest;
 import model.requests.LoginRequest;
 import model.requests.RegisterRequest;
 import model.responses.UserResponse;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class UserService {
 
@@ -30,15 +31,22 @@ public class UserService {
       throw new BadRequestException("Error: Empty Field");
     }
       if(userDAO.getUser(req.username()) != null) throw new AlreadyTakenException("Error: Username Already Exists");
-      userDAO.createUser(new UserData(req.username(), req.password(), req.email())); // returns void
+      String hashPassword = createHash(req.password());
+      userDAO.createUser(new UserData(req.username(), hashPassword, req.email()));
       String authToken = authDAO.createAndInsertAuthToken(req.username());
       return new UserResponse(authToken, req.username());
   }
 
   public UserResponse login(LoginRequest req) throws DataAccessException, UnauthorizedException{
       UserData user = userDAO.getUser(req.username());
-      if(user == null) throw new UnauthorizedException("Error: Invalid Credentials"); // misspelled username
-      if(!req.password().equals(user.password())) throw new UnauthorizedException("Error: Invalid Credentials");
+      if(user == null) {
+        throw new UnauthorizedException("Error: Invalid Credentials"); // misspelled username
+      }
+
+       if(!checkPasswordHash(req.password(), user.password())) {
+         throw new UnauthorizedException("Error: Invalid Credentials");
+       }
+
       String authToken = authDAO.createAndInsertAuthToken(req.username()); // returns void
       return new UserResponse(authToken, req.username());
   }
@@ -49,5 +57,16 @@ public class UserService {
       if(authData != null) {authDAO.deleteAuthToken(req.authToken());}
       else {throw new UnauthorizedException("Error: Bad Auth Token");}
   }
+
+
+  // create a private helper method to verify the password and create a new hash
+
+   private String createHash(String password){
+     return BCrypt.hashpw(password, BCrypt.gensalt());
+   }
+
+   private boolean checkPasswordHash(String reqPassword, String passHash){
+    return  BCrypt.checkpw(reqPassword, passHash); 
+   }
 
 }
