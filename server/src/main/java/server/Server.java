@@ -23,73 +23,68 @@ public class Server {
 
 
     public int run(int desiredPort) {
-        Spark.port(desiredPort);
+      Spark.port(desiredPort);
 
-        Spark.staticFiles.location("web");
+      Spark.staticFiles.location("web");
 
-        // Register your endpoints and handle exceptions here.
+      // Register your endpoints and handle exceptions here.
 
-        // change these to SQL DAO objects
+      // change these to SQL DAO objects
 //        AuthDAO authDAO = new MemoryAuthDAO();
 //        GameDAO gameDAO = new MemoryGameDAO();
 //        UserDAO userDAO = new MemoryUserDAO();
 
-        AuthDAO authDAO = new SQLAuthDAO();
-        GameDAO gameDAO = new SQLGameDAO();
-        UserDAO userDAO = new SQLUserDAO();
+      try {
+        DatabaseManager.createDatabase();
+      } catch (DataAccessException e) {
+        // not sure if i want to catch this here?????
+      }
 
-        // also call create database/create tables
-        try{
-            DatabaseManager manager = new DatabaseManager();
-            manager.createDatabase();
-        } catch(DataAccessException e){
-            // not sure if i want to catch this here?????
-        }
+        AuthDAO authDAO=new SQLAuthDAO();
+        GameDAO gameDAO=new SQLGameDAO();
+        UserDAO userDAO=new SQLUserDAO();
 
 
+      // DB - clear
+      Spark.delete("/db", new ClearHandler(authDAO, gameDAO, userDAO));
+
+      // SESSION - login and logout (auth and user)
+      Spark.post("/session", new LoginHandler(authDAO, userDAO));
+      Spark.delete("/session", new LogoutHandler(authDAO));
+
+      // USER - register (auth and user)
+      Spark.post("/user", new RegisterHandler(authDAO, userDAO));
+
+      // GAME - list games, create game, join game (auth and game)
+      Spark.get("/game", new ListGamesHandler(authDAO, gameDAO));
+      Spark.post("/game", new CreateGameHandler(authDAO, gameDAO));
+      Spark.put("/game", new JoinGameHandler(authDAO, gameDAO));
 
 
+      // Handle the Exceptions here
+      Spark.exception(BadRequestException.class, (exception, request, response) -> {
+        response.status(400);
+        response.body(new Gson().toJson(createJsonError("Error: Bad Request")));
+      });
 
-        // DB - clear
-        Spark.delete("/db", new ClearHandler(authDAO, gameDAO, userDAO));
+      Spark.exception(UnauthorizedException.class, (exception, request, response) -> {
+        response.status(401); // unauthorized
+        response.body(new Gson().toJson(createJsonError("Error: Unauthorized")));
+      });
 
-        // SESSION - login and logout (auth and user)
-        Spark.post("/session", new LoginHandler(authDAO, userDAO));
-        Spark.delete("/session", new LogoutHandler(authDAO));
+      Spark.exception(AlreadyTakenException.class, (exception, request, response) -> {
+        response.status(403); // already taken
+        response.body(new Gson().toJson(createJsonError("Error: Already Taken")));
+      });
 
-        // USER - register (auth and user)
-        Spark.post("/user", new RegisterHandler(authDAO, userDAO));
-
-        // GAME - list games, create game, join game (auth and game)
-        Spark.get("/game", new ListGamesHandler(authDAO, gameDAO));
-        Spark.post("/game", new CreateGameHandler(authDAO, gameDAO));
-        Spark.put("/game", new JoinGameHandler(authDAO, gameDAO));
-
-
-        // Handle the Exceptions here
-        Spark.exception(BadRequestException.class, (exception, request, response) -> {
-            response.status(400);
-            response.body(new Gson().toJson(createJsonError("Error: Bad Request")));
-        });
-
-        Spark.exception(UnauthorizedException.class, (exception, request, response) -> {
-            response.status(401); // unauthorized
-            response.body(new Gson().toJson(createJsonError("Error: Unauthorized")));
-        });
-
-        Spark.exception(AlreadyTakenException.class, (exception, request, response) -> {
-            response.status(403); // already taken
-            response.body(new Gson().toJson(createJsonError("Error: Already Taken")));
-        });
-
-        Spark.exception(DataAccessException.class, (exception, request, response) -> {
-            response.status(500); // Data Access Error
-            response.body(new Gson().toJson(createJsonError("Error: Couldn't Perform Action")));
-        });
+      Spark.exception(DataAccessException.class, (exception, request, response) -> {
+        response.status(500); // Data Access Error
+        response.body(new Gson().toJson(createJsonError("Error: Couldn't Perform Action")));
+      });
 
 
-        Spark.awaitInitialization();
-        return Spark.port();
+      Spark.awaitInitialization();
+      return Spark.port();
     }
 
     public void stop() {

@@ -8,6 +8,9 @@ public class SQLAuthDAO implements AuthDAO {
 
   @Override
   public String createAndInsertAuthToken(String username) throws DataAccessException {
+
+
+
     return null;
   }
 

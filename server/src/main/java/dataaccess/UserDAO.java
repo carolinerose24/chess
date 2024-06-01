@@ -11,7 +11,7 @@ public interface UserDAO {
   void createUser(UserData user) throws DataAccessException;
 
   // get the UserData from the username
-  UserData getUser(String username);
+  UserData getUser(String username) throws DataAccessException;
 
   // same as the others
   void clear() throws DataAccessException;
