@@ -12,6 +12,29 @@ import java.sql.SQLException;
 
 public class SQLUserDAO implements UserDAO {
 
+
+  private final String createUserTableStatement =
+          """
+          CREATE TABLE IF NOT EXISTS UserData (`username` VARCHAR(256) NOT NULL, `password` VARCHAR(256) NOT NULL, `email` VARCHAR(256) NOT NULL, PRIMARY KEY (`username`), INDEX (`email`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci""";
+
+  public SQLUserDAO() throws DataAccessException{
+    makeTables();
+  }
+
+  private void makeTables() throws DataAccessException{
+    DatabaseManager.createDatabase();
+    try(var conn = DatabaseManager.getConnection();
+        var preparedStatement = conn.prepareStatement(createUserTableStatement.toString())){
+      preparedStatement.executeUpdate();
+    } catch(SQLException e){
+      throw new DataAccessException("Error: Couldn't create the User Table");
+    }
+  }
+
+
+
+
+
   @Override
   public void createUser(UserData user) throws DataAccessException {
 

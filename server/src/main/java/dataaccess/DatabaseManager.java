@@ -11,16 +11,31 @@ public class DatabaseManager {
     private static final String CONNECTION_URL;
 
     private static final String[] createUserTableStatement = {
-            """
+          """
           CREATE TABLE IF NOT EXISTS UserData (
             `username` VARCHAR(256) NOT NULL,
             `password` VARCHAR(256) NOT NULL,
             `email` VARCHAR(256) NOT NULL,
             PRIMARY KEY (`username`),
             INDEX (`email`)
-          );
+          ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
           """
     };
+
+
+//    private static final String[] createUserTableStatement = {
+//        "CREATE TABLE IF NOT EXISTS UserData (",
+//        "`username` VARCHAR(256) NOT NULL,",
+//        "`password` VARCHAR(256) NOT NULL,",
+//        "`email` VARCHAR(256) NOT NULL,",
+//        "PRIMARY KEY (`username`),",
+//        "INDEX (`email`)",
+//        ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+//    };
+
+
+
+
 
     private static final String[] createAuthTableStatement = {
             """
@@ -31,7 +46,7 @@ public class DatabaseManager {
             FOREIGN KEY (`username`) REFERENCES UserData(`username`)
                 ON DELETE CASCADE
                 ON UPDATE CASCADE
-            );
+            )
             """
     };
 
@@ -45,7 +60,7 @@ public class DatabaseManager {
         `gameName` VARCHAR(256) NOT NULL,
         `game` LONGTEXT DEFAULT NULL,
         PRIMARY KEY (`gameID`)
-        );
+        )
         """
     };
 
@@ -81,15 +96,18 @@ public class DatabaseManager {
             var conn = DriverManager.getConnection(CONNECTION_URL, USER, PASSWORD);
             try (var preparedStatement = conn.prepareStatement(statement)) {
                 preparedStatement.executeUpdate();
-                try (var preparedStatementUser = conn.prepareStatement(Arrays.toString(createUserTableStatement))) {
-                    preparedStatementUser.executeQuery();
-                }
-                try (var preparedStatementAuth = conn.prepareStatement(Arrays.toString(createAuthTableStatement))) {
-                    preparedStatementAuth.executeQuery();
-                }
-                try (var preparedStatementGame = conn.prepareStatement(Arrays.toString(createGameTableStatement))) {
-                    preparedStatementGame.executeQuery();
-                }
+
+////                String createUserTableSQL = String.join("\n", createUserTableStatement);
+//                try (var preparedStatementUser = conn.prepareStatement("""
+//                        CREATE TABLE IF NOT EXISTS UserData (`username` VARCHAR(256) NOT NULL, `password` VARCHAR(256) NOT NULL, `email` VARCHAR(256) NOT NULL, PRIMARY KEY (`username`), INDEX (`email`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci""")) {
+//                    preparedStatementUser.executeUpdate();
+//                }
+//                try (var preparedStatementAuth = conn.prepareStatement(Arrays.toString(createAuthTableStatement))) {
+//                    preparedStatementAuth.executeUpdate();
+//                }
+//                try (var preparedStatementGame = conn.prepareStatement(Arrays.toString(createGameTableStatement))) {
+//                    preparedStatementGame.executeUpdate();
+//                }
             }
         } catch (SQLException e) {
             throw new DataAccessException(e.getMessage());

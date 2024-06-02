@@ -5,13 +5,42 @@ import dataaccess.DataAccessException;
 import dataaccess.DatabaseManager;
 import model.AuthData;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.UUID;
 
 public class SQLAuthDAO implements AuthDAO {
+
+
+
+  private final String createAuthTableStatement =
+          """
+            CREATE TABLE IF NOT EXISTS AuthData (
+            `authToken` VARCHAR(256) NOT NULL,
+            `username` VARCHAR(256) DEFAULT NULL,
+            PRIMARY KEY (`authToken`),
+            FOREIGN KEY (`username`) REFERENCES UserData(`username`)
+                ON DELETE CASCADE
+                ON UPDATE CASCADE
+            )
+            """
+  ;
+
+  public SQLAuthDAO() throws DataAccessException{
+    makeTables();
+  }
+
+  private void makeTables() throws DataAccessException{
+    DatabaseManager.createDatabase();
+    try(var conn = DatabaseManager.getConnection();
+        var preparedStatement = conn.prepareStatement(createAuthTableStatement)){
+      preparedStatement.executeUpdate();
+    } catch(SQLException e){
+      throw new DataAccessException("Error: Couldn't create the Auth Table");
+    }
+  }
+
+
+
 
   @Override
   public String createAndInsertAuthToken(String username) throws DataAccessException {

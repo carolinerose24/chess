@@ -3,9 +3,7 @@ package server;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import dataaccess.*;
-import dataaccess.memory.MemoryAuthDAO;
-import dataaccess.memory.MemoryGameDAO;
-import dataaccess.memory.MemoryUserDAO;
+
 import dataaccess.sql.SQLAuthDAO;
 import dataaccess.sql.SQLGameDAO;
 import dataaccess.sql.SQLUserDAO;
@@ -34,15 +32,24 @@ public class Server {
 //        GameDAO gameDAO = new MemoryGameDAO();
 //        UserDAO userDAO = new MemoryUserDAO();
 
+
+      UserDAO userDAO;
+      AuthDAO authDAO;
+      GameDAO gameDAO;
+
       try {
-        DatabaseManager.createDatabase();
+//        DatabaseManager.createDatabase();
+        userDAO=new SQLUserDAO();
+        authDAO=new SQLAuthDAO();
+        gameDAO=new SQLGameDAO();
+
       } catch (DataAccessException e) {
         // not sure if i want to catch this here?????
+//        throw new Exception("SOMETHING IS WRONG");
+        throw new RuntimeException(e);
       }
 
-        AuthDAO authDAO=new SQLAuthDAO();
-        GameDAO gameDAO=new SQLGameDAO();
-        UserDAO userDAO=new SQLUserDAO();
+
 
 
       // DB - clear

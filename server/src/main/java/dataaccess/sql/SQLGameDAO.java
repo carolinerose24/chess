@@ -20,6 +20,38 @@ import java.util.List;
 
 public class SQLGameDAO implements GameDAO {
 
+
+  private static final String createGameTableStatement =
+          """
+        CREATE TABLE IF NOT EXISTS GameData (
+        `gameID` INT NOT NULL AUTO_INCREMENT,
+        `whiteUsername` VARCHAR(256) DEFAULT NULL,
+        `blackUsername` VARCHAR(256) DEFAULT NULL,
+        `gameName` VARCHAR(256) NOT NULL,
+        `game` LONGTEXT DEFAULT NULL,
+        PRIMARY KEY (`gameID`)
+        )
+        """
+  ;
+
+
+  public SQLGameDAO() throws DataAccessException{
+    makeTables();
+  }
+
+  private void makeTables() throws DataAccessException{
+    DatabaseManager.createDatabase();
+    try(var conn = DatabaseManager.getConnection();
+        var preparedStatement = conn.prepareStatement(createGameTableStatement)){
+      preparedStatement.executeUpdate();
+    } catch(SQLException e){
+      throw new DataAccessException("Error: Couldn't create the Game Table");
+    }
+  }
+
+
+
+
   @Override
   public Integer createGame(String gameName) throws DataAccessException {
 
