@@ -40,7 +40,7 @@ public class SQLGameDAO implements GameDAO {
     } catch (SQLException e) {
       throw new DataAccessException("Error: Couldn't add new game");
     }
-    
+
   }
 
   @Override
