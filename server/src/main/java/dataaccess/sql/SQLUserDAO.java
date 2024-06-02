@@ -8,61 +8,17 @@ import model.UserData;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import static java.sql.Statement.RETURN_GENERATED_KEYS;
 
 
 public class SQLUserDAO implements UserDAO {
-
-
-//  private final String[] createUserTableStatement = {
-//          """
-//          CREATE TABLE IF NOT EXISTS UserData (
-//            `username` VARCHAR(256) NOT NULL,
-//            `password` VARCHAR(256) DEFAULT NULL,
-//            `email` VARCHAR(256) DEFAULT NULL,
-//            PRIMARY KEY (`username`),
-//            INDEX (`email`)
-//          );
-//          """
-//  };
-
-
-
-//  public SQLUserDAO() throws DataAccessException{
-//    configureDatabase();
-//  }
-//
-//  private void configureDatabase() throws DataAccessException {
-//    DatabaseManager.createDatabase();
-//    try (var conn = DatabaseManager.getConnection()) {
-//      for (var statement : createUserTableStatement) {
-//        try (var preparedStatement = conn.prepareStatement(statement)) {
-//          preparedStatement.executeUpdate();
-//        }
-//      }
-//    } catch (SQLException e) {
-//      throw new DataAccessException("Error: SQL exception");
-//    }
-//  }
-
-
-//
-//  private Connection conn;
-//
-//  public SQLUserDAO(Connection conn){
-//    DatabaseManager.getConnection();
-//  }
-//
-
-
-
 
   @Override
   public void createUser(UserData user) throws DataAccessException {
 
     var statement = "INSERT INTO UserData (username, password, email) VALUES(?, ?, ?)";
     // like the createPet method in PetShop
-    try (var preparedStatement = DatabaseManager.getConnection().prepareStatement(statement)) {
+    try (Connection conn = DatabaseManager.getConnection();
+         var preparedStatement = conn.prepareStatement(statement)) {
       preparedStatement.setString(1, user.username());
       preparedStatement.setString(2, user.password());
       preparedStatement.setString(2, user.email());
@@ -75,7 +31,8 @@ public class SQLUserDAO implements UserDAO {
 
   @Override
   public UserData getUser(String username) throws DataAccessException{
-    try (var preparedStatement = DatabaseManager.getConnection().prepareStatement("SELECT username, password, email FROM UserData WHERE username=?")) {
+    try (Connection conn = DatabaseManager.getConnection();
+         var preparedStatement = conn.prepareStatement("SELECT username, password, email FROM UserData WHERE username=?")) {
       preparedStatement.setString(1, username);
       try (var rs = preparedStatement.executeQuery()) {
         if (rs.next()) {
@@ -98,6 +55,11 @@ public class SQLUserDAO implements UserDAO {
 
   @Override
   public void clear() throws DataAccessException {
-
+    try (Connection conn = DatabaseManager.getConnection();
+         var preparedStatement = conn.prepareStatement("DELETE FROM UserData")) {
+         preparedStatement.executeUpdate();
+    } catch (SQLException e) {
+      throw new DataAccessException("Error: Couldn't clear user data");
+    }
   }
 }
