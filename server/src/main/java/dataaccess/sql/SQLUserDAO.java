@@ -15,24 +15,27 @@ public class SQLUserDAO implements UserDAO {
 
   private final String createUserTableStatement =
           """
-          CREATE TABLE IF NOT EXISTS UserData (`username` VARCHAR(256) NOT NULL, `password` VARCHAR(256) NOT NULL, `email` VARCHAR(256) NOT NULL, PRIMARY KEY (`username`), INDEX (`email`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci""";
+          CREATE TABLE IF NOT EXISTS UserData (
+          `username` VARCHAR(256) NOT NULL, 
+          `password` VARCHAR(256) NOT NULL, 
+          `email` VARCHAR(256) NOT NULL, 
+          PRIMARY KEY (`username`), INDEX (`email`)) 
+          ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+          """;
 
   public SQLUserDAO() throws DataAccessException{
     makeTables();
   }
 
+
   private void makeTables() throws DataAccessException{
-    DatabaseManager.createDatabase();
     try(var conn = DatabaseManager.getConnection();
-        var preparedStatement = conn.prepareStatement(createUserTableStatement.toString())){
+        var preparedStatement = conn.prepareStatement(createUserTableStatement)){
       preparedStatement.executeUpdate();
     } catch(SQLException e){
       throw new DataAccessException("Error: Couldn't create the User Table");
     }
   }
-
-
-
 
 
   @Override
@@ -44,7 +47,7 @@ public class SQLUserDAO implements UserDAO {
          var preparedStatement = conn.prepareStatement(statement)) {
       preparedStatement.setString(1, user.username());
       preparedStatement.setString(2, user.password());
-      preparedStatement.setString(2, user.email());
+      preparedStatement.setString(3, user.email());
       preparedStatement.executeUpdate();
     } catch(SQLException e){
       throw new DataAccessException("Error: Couldn't Add User");
@@ -79,7 +82,7 @@ public class SQLUserDAO implements UserDAO {
   @Override
   public void clear() throws DataAccessException {
     try (Connection conn = DatabaseManager.getConnection();
-         var preparedStatement = conn.prepareStatement("DELETE FROM UserData")) {
+         var preparedStatement = conn.prepareStatement("TRUNCATE TABLE UserData")) {
          preparedStatement.executeUpdate();
     } catch (SQLException e) {
       throw new DataAccessException("Error: Couldn't clear user data");

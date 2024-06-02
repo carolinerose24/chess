@@ -30,7 +30,6 @@ public class SQLAuthDAO implements AuthDAO {
   }
 
   private void makeTables() throws DataAccessException{
-    DatabaseManager.createDatabase();
     try(var conn = DatabaseManager.getConnection();
         var preparedStatement = conn.prepareStatement(createAuthTableStatement)){
       preparedStatement.executeUpdate();
@@ -45,18 +44,16 @@ public class SQLAuthDAO implements AuthDAO {
   @Override
   public String createAndInsertAuthToken(String username) throws DataAccessException {
     String authToken = UUID.randomUUID().toString();
-
     try (Connection conn = DatabaseManager.getConnection();
          var preparedStatement = conn.prepareStatement("INSERT INTO AuthData (authToken, username) VALUES (?, ?)")) {
 
       preparedStatement.setString(1, authToken);
       preparedStatement.setString(2, username);
       preparedStatement.executeUpdate();
+      return authToken;
     } catch (SQLException e) {
       throw new DataAccessException("Error: Couldn't add new auth data");
     }
-
-    return null; // shouldn't get here I think
   }
 
   @Override
@@ -92,7 +89,7 @@ public class SQLAuthDAO implements AuthDAO {
   @Override
   public void clear() throws DataAccessException {
     try (Connection conn = DatabaseManager.getConnection();
-         var preparedStatement = conn.prepareStatement("DELETE * FROM AuthData")) {
+         var preparedStatement = conn.prepareStatement("TRUNCATE TABLE AuthData")) {
       preparedStatement.executeUpdate();
     } catch (SQLException e) {
       throw new DataAccessException("Error: Couldn't clear auth data");

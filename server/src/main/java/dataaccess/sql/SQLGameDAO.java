@@ -21,7 +21,7 @@ import java.util.List;
 public class SQLGameDAO implements GameDAO {
 
 
-  private static final String createGameTableStatement =
+  private final String createGameTableStatement =
           """
         CREATE TABLE IF NOT EXISTS GameData (
         `gameID` INT NOT NULL AUTO_INCREMENT,
@@ -40,7 +40,6 @@ public class SQLGameDAO implements GameDAO {
   }
 
   private void makeTables() throws DataAccessException{
-    DatabaseManager.createDatabase();
     try(var conn = DatabaseManager.getConnection();
         var preparedStatement = conn.prepareStatement(createGameTableStatement)){
       preparedStatement.executeUpdate();
@@ -48,8 +47,6 @@ public class SQLGameDAO implements GameDAO {
       throw new DataAccessException("Error: Couldn't create the Game Table");
     }
   }
-
-
 
 
   @Override
@@ -62,8 +59,7 @@ public class SQLGameDAO implements GameDAO {
 
       try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
         if (generatedKeys.next()) {
-          int generatedGameID = generatedKeys.getInt(1);
-          return generatedGameID;
+          return generatedKeys.getInt(1);
         } else {
           throw new SQLException("Creating game failed, no ID obtained.");
         }
@@ -88,7 +84,7 @@ public class SQLGameDAO implements GameDAO {
           String blackUsername = resultSet.getString("blackUsername");
           String gameName = resultSet.getString("gameName");
           ChessGame game = deserialize(resultSet.getString("game"));
-          return new GameData(gameID, blackUsername, whiteUsername, gameName, game);
+          return new GameData(gameID, whiteUsername, blackUsername, gameName, game);
         } else {
           return null; // No game with this ID, so return null
         }
@@ -107,12 +103,12 @@ public class SQLGameDAO implements GameDAO {
 
       while (resultSet.next()) {
         int gameID = resultSet.getInt("gameID");
-        String blackUsername = resultSet.getString("blackUsername");
         String whiteUsername = resultSet.getString("whiteUsername");
+        String blackUsername = resultSet.getString("blackUsername");
         String gameName = resultSet.getString("gameName");
         ChessGame game = deserialize(resultSet.getString("game"));
 
-        GameData gameData = new GameData(gameID, blackUsername, whiteUsername, gameName, game);
+        GameData gameData = new GameData(gameID, whiteUsername, blackUsername, gameName, game);
         gameList.add(gameData);
       }
     } catch (SQLException e) {
@@ -123,44 +119,33 @@ public class SQLGameDAO implements GameDAO {
 
   @Override
   public void updateGame(GameData game) throws DataAccessException {
-
-    String deleteSql = "DELETE FROM GameData WHERE gameID = ?";
-    String insertSql = "INSERT INTO GameData (gameID, whiteUsername, blackUsername, gameName, game) VALUES (?, ?, ?, ?, ?)";
+    String replaceSql = """
+    REPLACE INTO GameData (gameID, whiteUsername, blackUsername, gameName, game) 
+    VALUES (?, ?, ?, ?, ?)
+    """;
 
     try (Connection conn = DatabaseManager.getConnection();
-         var deleteStatement = conn.prepareStatement(deleteSql);
-         var insertStatement = conn.prepareStatement(insertSql)) {
-
-      conn.setAutoCommit(false);
-
-      // Delete existing data for the specified gameID
-      deleteStatement.setInt(1, game.gameID());
-      deleteStatement.executeUpdate();
-
-      // Insert new data
-      insertStatement.setInt(1, game.gameID());
-      insertStatement.setString(2, game.whiteUsername());
-      insertStatement.setString(3, game.blackUsername());
-      insertStatement.setString(4, game.gameName());
-      insertStatement.setString(5, serialize(game.game()));
-      insertStatement.executeUpdate();
-      conn.commit();
-
+         var replaceStatement = conn.prepareStatement(replaceSql)) {
+      replaceStatement.setInt(1, game.gameID());
+      replaceStatement.setString(2, game.whiteUsername());
+      replaceStatement.setString(3, game.blackUsername());
+      replaceStatement.setString(4, game.gameName());
+      replaceStatement.setString(5, serialize(game.game()));
+      replaceStatement.executeUpdate();
     } catch (SQLException e) {
-      throw new DataAccessException("Error: Couldn't add game data");
+      throw new DataAccessException("Error: Couldn't add or update game data");
     }
   }
 
   @Override
   public void clear() throws DataAccessException {
     try (Connection conn = DatabaseManager.getConnection();
-         var preparedStatement = conn.prepareStatement("DELETE FROM GameData")) {
+         var preparedStatement = conn.prepareStatement("TRUNCATE TABLE GameData")) {
       preparedStatement.executeUpdate();
     } catch (SQLException e) {
       throw new DataAccessException("Error: Couldn't clear game data");
     }
   }
-
 
 
   // code for JSON to object - Deserialize

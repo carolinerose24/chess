@@ -1,7 +1,6 @@
 package dataaccess;
 
 import java.sql.*;
-import java.util.Arrays;
 import java.util.Properties;
 
 public class DatabaseManager {
@@ -9,61 +8,6 @@ public class DatabaseManager {
     private static final String USER;
     private static final String PASSWORD;
     private static final String CONNECTION_URL;
-
-    private static final String[] createUserTableStatement = {
-          """
-          CREATE TABLE IF NOT EXISTS UserData (
-            `username` VARCHAR(256) NOT NULL,
-            `password` VARCHAR(256) NOT NULL,
-            `email` VARCHAR(256) NOT NULL,
-            PRIMARY KEY (`username`),
-            INDEX (`email`)
-          ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
-          """
-    };
-
-
-//    private static final String[] createUserTableStatement = {
-//        "CREATE TABLE IF NOT EXISTS UserData (",
-//        "`username` VARCHAR(256) NOT NULL,",
-//        "`password` VARCHAR(256) NOT NULL,",
-//        "`email` VARCHAR(256) NOT NULL,",
-//        "PRIMARY KEY (`username`),",
-//        "INDEX (`email`)",
-//        ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
-//    };
-
-
-
-
-
-    private static final String[] createAuthTableStatement = {
-            """
-            CREATE TABLE IF NOT EXISTS AuthData (
-            `authToken` VARCHAR(256) NOT NULL,
-            `username` VARCHAR(256) DEFAULT NULL,
-            PRIMARY KEY (`authToken`),
-            FOREIGN KEY (`username`) REFERENCES UserData(`username`)
-                ON DELETE CASCADE
-                ON UPDATE CASCADE
-            )
-            """
-    };
-
-
-    private static final String[] createGameTableStatement = {
-        """
-        CREATE TABLE IF NOT EXISTS GameData (
-        `gameID` INT NOT NULL AUTO_INCREMENT,
-        `whiteUsername` VARCHAR(256) DEFAULT NULL,
-        `blackUsername` VARCHAR(256) DEFAULT NULL,
-        `gameName` VARCHAR(256) NOT NULL,
-        `game` LONGTEXT DEFAULT NULL,
-        PRIMARY KEY (`gameID`)
-        )
-        """
-    };
-
 
     /*
      * Load the database information for the db.properties file.
@@ -96,18 +40,6 @@ public class DatabaseManager {
             var conn = DriverManager.getConnection(CONNECTION_URL, USER, PASSWORD);
             try (var preparedStatement = conn.prepareStatement(statement)) {
                 preparedStatement.executeUpdate();
-
-////                String createUserTableSQL = String.join("\n", createUserTableStatement);
-//                try (var preparedStatementUser = conn.prepareStatement("""
-//                        CREATE TABLE IF NOT EXISTS UserData (`username` VARCHAR(256) NOT NULL, `password` VARCHAR(256) NOT NULL, `email` VARCHAR(256) NOT NULL, PRIMARY KEY (`username`), INDEX (`email`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci""")) {
-//                    preparedStatementUser.executeUpdate();
-//                }
-//                try (var preparedStatementAuth = conn.prepareStatement(Arrays.toString(createAuthTableStatement))) {
-//                    preparedStatementAuth.executeUpdate();
-//                }
-//                try (var preparedStatementGame = conn.prepareStatement(Arrays.toString(createGameTableStatement))) {
-//                    preparedStatementGame.executeUpdate();
-//                }
             }
         } catch (SQLException e) {
             throw new DataAccessException(e.getMessage());
@@ -135,25 +67,4 @@ public class DatabaseManager {
             throw new DataAccessException(e.getMessage());
         }
     }
-
-
-
-//
-//    private static void createTables() throws DataAccessException{
-//        // method for creating all the tables and types in mySQL
-//        // I think this could be a good place for it, but does it need to return something? just throw exc?
-//        try (var conn = DatabaseManager.getConnection()) {
-//            try (var preparedStatement = conn.prepareStatement(Arrays.toString(createUserTableStatement))) {
-//                preparedStatement.executeQuery();
-//            }
-//            try (var preparedStatement = conn.prepareStatement(Arrays.toString(createAuthTableStatement))) {
-//                preparedStatement.executeQuery();
-//            }
-//            try (var preparedStatement = conn.prepareStatement(Arrays.toString(createGameTableStatement))) {
-//                preparedStatement.executeQuery();
-//            }
-//        } catch (SQLException e) {
-//          throw new DataAccessException("Error: Couldn't Create the SQL Tables");
-//        }
-//    }
 }

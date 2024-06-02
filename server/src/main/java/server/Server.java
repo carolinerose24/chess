@@ -26,31 +26,18 @@ public class Server {
       Spark.staticFiles.location("web");
 
       // Register your endpoints and handle exceptions here.
-
-      // change these to SQL DAO objects
-//        AuthDAO authDAO = new MemoryAuthDAO();
-//        GameDAO gameDAO = new MemoryGameDAO();
-//        UserDAO userDAO = new MemoryUserDAO();
-
-
       UserDAO userDAO;
       AuthDAO authDAO;
       GameDAO gameDAO;
 
       try {
-//        DatabaseManager.createDatabase();
+        DatabaseManager.createDatabase();
         userDAO=new SQLUserDAO();
         authDAO=new SQLAuthDAO();
         gameDAO=new SQLGameDAO();
-
       } catch (DataAccessException e) {
-        // not sure if i want to catch this here?????
-//        throw new Exception("SOMETHING IS WRONG");
         throw new RuntimeException(e);
       }
-
-
-
 
       // DB - clear
       Spark.delete("/db", new ClearHandler(authDAO, gameDAO, userDAO));
