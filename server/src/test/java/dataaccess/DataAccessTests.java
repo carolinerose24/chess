@@ -7,12 +7,8 @@ import dataaccess.sql.SQLUserDAO;
 import model.AuthData;
 import model.GameData;
 import model.UserData;
-import model.requests.RegisterRequest;
 import org.junit.jupiter.api.*;
 import service.ClearService;
-import service.UserService;
-
-import java.util.ArrayList;
 import java.util.Collection;
 
 public class DataAccessTests {
@@ -20,9 +16,8 @@ public class DataAccessTests {
   UserDAO userDAO;
   AuthDAO authDAO;
   GameDAO gameDAO;
-
-  String authToken;
-  UserData existingUser = new UserData("username1", "password1", "email1@a.com");
+//  String authToken;
+//  UserData existingUser = new UserData("username1", "password1", "email1@a.com");
 
   public DataAccessTests(){
     try{
@@ -39,9 +34,9 @@ public class DataAccessTests {
     ClearService clearService = new ClearService(authDAO, gameDAO, userDAO);
     clearService.clear();
 
-    UserService userService = new UserService(authDAO, userDAO);
-    authToken = userService.register(new RegisterRequest(existingUser.username(),
-            existingUser.password(), existingUser.email())).authToken();
+//    UserService userService = new UserService(authDAO, userDAO);
+//    authToken = userService.register(new RegisterRequest(existingUser.username(),
+//            existingUser.password(), existingUser.email())).authToken();
   }
 
 
@@ -267,16 +262,19 @@ public class DataAccessTests {
     userDAO.createUser(new UserData("u2", "p1", "e1@a.com"));
     userDAO.createUser(new UserData("u3", "p1", "e1@a.com"));
     userDAO.createUser(new UserData("u4", "p1", "e1@a.com"));
+    userDAO.createUser(new UserData("u5", "p1", "e1@a.com"));
 
     gameDAO.createGame("Clear Test Game 1");
     gameDAO.createGame("Clear Test Game 2");
     gameDAO.createGame("Clear Test Game 3");
     gameDAO.createGame("Clear Test Game 4");
+    gameDAO.createGame("Clear Test Game 5");
 
     authDAO.createAndInsertAuthToken("u1");
     authDAO.createAndInsertAuthToken("u2");
     authDAO.createAndInsertAuthToken("u3");
     authDAO.createAndInsertAuthToken("u4");
+    authDAO.createAndInsertAuthToken("u5");
 
     ClearService clearService = new ClearService(authDAO, gameDAO, userDAO);
     Assertions.assertDoesNotThrow(clearService::clear, "DataAccessException was thrown by Clear");
