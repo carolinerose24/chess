@@ -1,14 +1,19 @@
 package dataaccess;
 
+import chess.ChessGame;
 import dataaccess.sql.SQLAuthDAO;
 import dataaccess.sql.SQLGameDAO;
 import dataaccess.sql.SQLUserDAO;
 import model.AuthData;
+import model.GameData;
 import model.UserData;
 import model.requests.RegisterRequest;
 import org.junit.jupiter.api.*;
 import service.ClearService;
 import service.UserService;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class DataAccessTests {
 
@@ -177,48 +182,105 @@ public class DataAccessTests {
   //clear
 
 
-  
+  @Test
+  @Order(14)
+  @DisplayName("Create Game - WORKS")
+  public void createGameWorks() throws Exception{
+    Assertions.assertDoesNotThrow(() -> gameDAO.createGame("New Game String"),
+            "Couldn't create a valid game");
+  }
+
+  @Test
+  @Order(15)
+  @DisplayName("Create Game - FAILS")
+  public void createGameFails() throws Exception{
+    Assertions.assertThrows(DataAccessException.class, () -> gameDAO.createGame(null),
+            "DataAccessException should be thrown when making a null game");
+  }
+
+
+
+  @Test
+  @Order(16)
+  @DisplayName("Get Game - WORKS")
+  public void getGameWorks() throws Exception{
+    int gameID = gameDAO.createGame("new game");
+    Assertions.assertNotNull(gameDAO.getGame(gameID), "GameID should return a valid game");
+  }
+
+  @Test
+  @Order(17)
+  @DisplayName("Get Game - FAILS")
+  public void getGameFails() throws Exception{
+    Assertions.assertNull(gameDAO.getGame(123456), "Fake GameID should return null");
+  }
+
+
+  @Test
+  @Order(18)
+  @DisplayName("List Games - WORKS")
+  public void listGamesWorks() throws Exception{
+    gameDAO.createGame("new game");
+    gameDAO.createGame("new game2");
+    gameDAO.createGame("new game3");
+    gameDAO.createGame("new game4");
+
+    Assertions.assertNotNull(gameDAO.listGames(), "Should return the current games");
+  }
+
+  @Test
+  @Order(19)
+  @DisplayName("List Games - FAILS")
+  public void listGamesFails() throws Exception{
+    gameDAO.clear();
+    Collection<GameData> list = gameDAO.listGames();
+    Assertions.assertTrue(list.isEmpty(), "The game list should be empty");
+  }
+
+
+  @Test
+  @Order(20)
+  @DisplayName("Update Game - WORKS")
+  public void updateGameWorks() throws Exception{
+    int gameID = gameDAO.createGame("new game");
+    Assertions.assertDoesNotThrow(() -> gameDAO.updateGame(new GameData(gameID, "whiteUser", null, "new game", new ChessGame())),
+            "Couldn't update the white username");
+  }
+
+  @Test
+  @Order(21)
+  @DisplayName("Update Game - FAILS")
+  public void updateGameFails() throws Exception{
+    int gameID = gameDAO.createGame("new game");
+    Assertions.assertThrows(DataAccessException.class, () -> gameDAO.updateGame(new GameData(gameID, "whiteUser", null, null, new ChessGame())),
+            "DataAccessException should be thrown when game name is set to null");
+  }
 
 
 
 
+  @Test
+  @Order(22)
+  @DisplayName("Clear Works - ALL")
+  public void clearWorksALL() throws Exception {
+    userDAO.createUser(new UserData("u1", "p1", "e1@a.com"));
+    userDAO.createUser(new UserData("u2", "p1", "e1@a.com"));
+    userDAO.createUser(new UserData("u3", "p1", "e1@a.com"));
+    userDAO.createUser(new UserData("u4", "p1", "e1@a.com"));
 
+    gameDAO.createGame("Clear Test Game 1");
+    gameDAO.createGame("Clear Test Game 2");
+    gameDAO.createGame("Clear Test Game 3");
+    gameDAO.createGame("Clear Test Game 4");
 
+    authDAO.createAndInsertAuthToken("u1");
+    authDAO.createAndInsertAuthToken("u2");
+    authDAO.createAndInsertAuthToken("u3");
+    authDAO.createAndInsertAuthToken("u4");
 
-
-
-
-
-
-
-
-
-
-
-
-
-//  @Test
-//  @Order(1)
-//  @DisplayName("Clear Works - ALL")
-//  public void clearWorksALL() throws Exception {
-//    userDAO.createUser(new UserData("u1", "p1", "e1@a.com"));
-//    userDAO.createUser(new UserData("u2", "p1", "e1@a.com"));
-//    userDAO.createUser(new UserData("u3", "p1", "e1@a.com"));
-//    userDAO.createUser(new UserData("u4", "p1", "e1@a.com"));
-//
-//    gameDAO.createGame("Clear Test Game 1");
-//    gameDAO.createGame("Clear Test Game 2");
-//    gameDAO.createGame("Clear Test Game 3");
-//    gameDAO.createGame("Clear Test Game 4");
-//
-//    authDAO.createAndInsertAuthToken("u1");
-//    authDAO.createAndInsertAuthToken("u2");
-//    authDAO.createAndInsertAuthToken("u3");
-//    authDAO.createAndInsertAuthToken("u4");
-//
-//    ClearService clearService = new ClearService(authDAO, gameDAO, userDAO);
-//    Assertions.assertDoesNotThrow(clearService::clear, "DataAccessException was thrown by Clear");
-//  }
+    ClearService clearService = new ClearService(authDAO, gameDAO, userDAO);
+    Assertions.assertDoesNotThrow(clearService::clear, "DataAccessException was thrown by Clear");
+  }
 
 }
 

@@ -65,8 +65,10 @@ public class GameService {
       gameDAO.updateGame(new GameData(game.gameID(), game.whiteUsername(), username, game.gameName(), game.game()));
 
     } else { // if it is null or not B/W
-      throw new BadRequestException("Error: Invalid Color");
+      throw new BadRequestException("Error: Invalid Color"); // change this for observing the game??
     }
+
+    // WILL THIS BE DIFFERENT FOR WHEN WE ARE JUST UPDATING THE GAME? AND NOT JOINING IT?
 
   }
 
