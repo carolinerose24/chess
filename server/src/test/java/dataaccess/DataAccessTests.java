@@ -221,7 +221,7 @@ public class DataAccessTests {
     Assertions.assertThrows(DataAccessException.class, () -> gameDAO.updateGame(new GameData(gameID, "whiteUser", null, null, new ChessGame())),
             "DataAccessException should be thrown when game name is set to null");
   }
-  
+
   @Test
   @Order(22)
   @DisplayName("Clear Works - ALL")
