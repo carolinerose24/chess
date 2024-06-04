@@ -16,8 +16,6 @@ public class DataAccessTests {
   UserDAO userDAO;
   AuthDAO authDAO;
   GameDAO gameDAO;
-//  String authToken;
-//  UserData existingUser = new UserData("username1", "password1", "email1@a.com");
 
   public DataAccessTests(){
     try{
@@ -33,12 +31,9 @@ public class DataAccessTests {
   public void setup() throws Exception {
     ClearService clearService = new ClearService(authDAO, gameDAO, userDAO);
     clearService.clear();
-
-//    UserService userService = new UserService(authDAO, userDAO);
-//    authToken = userService.register(new RegisterRequest(existingUser.username(),
-//            existingUser.password(), existingUser.email())).authToken();
   }
 
+  // Clear Tests ------------------------
 
   @Test
   @Order(1)
@@ -66,13 +61,7 @@ public class DataAccessTests {
     Assertions.assertDoesNotThrow(() -> authDAO.clear(), "DataAccessException was thrown by Clear");
   }
 
-
-
-  // USER DAO -
-  //createUser
-  //getUser
-  //clear
-
+  // USER DAO ----------------------------
 
   @Test
   @Order(4)
@@ -107,12 +96,7 @@ public class DataAccessTests {
     Assertions.assertNull(userDAO.getUser("    "), "Didn't return null for invalid user");
   }
 
-
-  // AUTH DAO -
-  //createAndInsertAuthToken
-  //deleteAuthToken
-  //getAuthToken
-  //clear
+  // AUTH DAO -----------------------
 
   @Test
   @Order(8)
@@ -139,7 +123,6 @@ public class DataAccessTests {
     String auth = authDAO.createAndInsertAuthToken("user1");
     Assertions.assertDoesNotThrow(() -> authDAO.deleteAuthToken(auth),
             "DataAccessException thrown when username is empty");
-
   }
 
   @Test
@@ -167,15 +150,7 @@ public class DataAccessTests {
     Assertions.assertNull(authDAO.getAuthToken("fake auth"), "Should return null when fake auth");
   }
 
-
-
-  // GAME DAO -
-  //createGame
-  //getGame
-  //listGames
-  //updateGame
-  //clear
-
+  // GAME DAO -------------------------------------
 
   @Test
   @Order(14)
@@ -193,8 +168,6 @@ public class DataAccessTests {
             "DataAccessException should be thrown when making a null game");
   }
 
-
-
   @Test
   @Order(16)
   @DisplayName("Get Game - WORKS")
@@ -209,7 +182,6 @@ public class DataAccessTests {
   public void getGameFails() throws Exception{
     Assertions.assertNull(gameDAO.getGame(123456), "Fake GameID should return null");
   }
-
 
   @Test
   @Order(18)
@@ -232,7 +204,6 @@ public class DataAccessTests {
     Assertions.assertTrue(list.isEmpty(), "The game list should be empty");
   }
 
-
   @Test
   @Order(20)
   @DisplayName("Update Game - WORKS")
@@ -250,10 +221,7 @@ public class DataAccessTests {
     Assertions.assertThrows(DataAccessException.class, () -> gameDAO.updateGame(new GameData(gameID, "whiteUser", null, null, new ChessGame())),
             "DataAccessException should be thrown when game name is set to null");
   }
-
-
-
-
+  
   @Test
   @Order(22)
   @DisplayName("Clear Works - ALL")
