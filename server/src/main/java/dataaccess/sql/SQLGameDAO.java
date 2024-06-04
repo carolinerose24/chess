@@ -140,7 +140,7 @@ public class SQLGameDAO implements GameDAO {
   @Override
   public void clear() throws DataAccessException {
     try (Connection conn = DatabaseManager.getConnection();
-         var preparedStatement = conn.prepareStatement("TRUNCATE TABLE GameData")) {
+         var preparedStatement = conn.prepareStatement("DELETE FROM GameData")) {
       preparedStatement.executeUpdate();
     } catch (SQLException e) {
       throw new DataAccessException("Error: Couldn't clear game data");

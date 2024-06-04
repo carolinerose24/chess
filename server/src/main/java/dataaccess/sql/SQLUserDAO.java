@@ -82,7 +82,7 @@ public class SQLUserDAO implements UserDAO {
   @Override
   public void clear() throws DataAccessException {
     try (Connection conn = DatabaseManager.getConnection();
-         var preparedStatement = conn.prepareStatement("TRUNCATE TABLE UserData")) {
+         var preparedStatement = conn.prepareStatement("DELETE FROM UserData")) {
          preparedStatement.executeUpdate();
     } catch (SQLException e) {
       throw new DataAccessException("Error: Couldn't clear user data");
