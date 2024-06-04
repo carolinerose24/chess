@@ -16,7 +16,7 @@ public class SQLAuthDAO implements AuthDAO {
           """
             CREATE TABLE IF NOT EXISTS AuthData (
             `authToken` VARCHAR(256) NOT NULL,
-            `username` VARCHAR(256) DEFAULT NULL,
+            `username` VARCHAR(256) NOT NULL,
             PRIMARY KEY (`authToken`),
             FOREIGN KEY (`username`) REFERENCES UserData(`username`)
                 ON DELETE CASCADE
@@ -48,7 +48,7 @@ public class SQLAuthDAO implements AuthDAO {
          var preparedStatement = conn.prepareStatement("INSERT INTO AuthData (authToken, username) VALUES (?, ?)")) {
 
       preparedStatement.setString(1, authToken);
-      preparedStatement.setString(2, username);
+      preparedStatement.setString(2, username); //this can't be null
       preparedStatement.executeUpdate();
     } catch (SQLException e) {
       throw new DataAccessException("Error: Couldn't add new auth data");
@@ -58,6 +58,8 @@ public class SQLAuthDAO implements AuthDAO {
 
   @Override
   public void deleteAuthToken(String authToken) throws DataAccessException {
+    if(authToken.isBlank()) throw new DataAccessException("Empty Auth Token");
+
     try (Connection conn = DatabaseManager.getConnection();
          var preparedStatement = conn.prepareStatement("DELETE FROM AuthData WHERE authToken = ?")) {
       preparedStatement.setString(1, authToken);

@@ -2,6 +2,9 @@ package service;
 
 import dataaccess.*;
 import dataaccess.memory.*;
+import dataaccess.sql.SQLAuthDAO;
+import dataaccess.sql.SQLGameDAO;
+import dataaccess.sql.SQLUserDAO;
 import model.UserData;
 import model.requests.*;
 import org.junit.jupiter.api.*;
@@ -30,6 +33,7 @@ public class ServiceTests {
   @DisplayName("Register Works")
   public void registerWorks() throws Exception {
 
+    new ClearService(authDAO, gameDAO, userDAO).clear();
     UserService userService = new UserService(authDAO, userDAO);
     Assertions.assertDoesNotThrow(() -> userService.register(new RegisterRequest("a", "b", "c")),
             "Exception was thrown when adding first User");
@@ -47,6 +51,7 @@ public class ServiceTests {
   @DisplayName("Register Fails")
   public void registerFails() throws Exception {
 
+    new ClearService(authDAO, gameDAO, userDAO).clear();
     userDAO.createUser(new UserData("username1", "password1", "email1@a.com"));
     UserService userService = new UserService(authDAO, userDAO);
     Assertions.assertThrows(AlreadyTakenException.class, () -> userService.register(new RegisterRequest("username1", "a", "bb")),
@@ -61,8 +66,9 @@ public class ServiceTests {
   @Order(4)
   @DisplayName("Login Works")
   public void loginWorks() throws Exception {
-    userDAO.createUser(new UserData("username1", "password1", "email1@a.com"));
+    new ClearService(authDAO, gameDAO, userDAO).clear();
     UserService userService = new UserService(authDAO, userDAO);
+    userService.register(new RegisterRequest("username1", "password1", "email1@a.com"));
     Assertions.assertDoesNotThrow(() -> userService.login(new LoginRequest("username1", "password1")),
             "Exception was thrown when logging in with valid user");
   }
@@ -72,15 +78,13 @@ public class ServiceTests {
   @Order(5)
   @DisplayName("Login Fails")
   public void loginFails() throws Exception{
-    userDAO.createUser(new UserData("username1", "password1", "email1@a.com"));
+    new ClearService(authDAO, gameDAO, userDAO).clear();
     UserService userService = new UserService(authDAO, userDAO);
-
+    userService.register(new RegisterRequest("username1", "password1", "email1@a.com"));
     Assertions.assertThrows(UnauthorizedException.class, () -> userService.login(new LoginRequest("username1", "a")),
             "Bad Password, should throw Unauthorized Exception");
-
     Assertions.assertThrows(UnauthorizedException.class, () -> userService.login(new LoginRequest("user", "a")),
             "Bad username and password, should throw Unauthorized Exception");
-
   }
 
 
@@ -88,6 +92,7 @@ public class ServiceTests {
   @Order(6)
   @DisplayName("Logout Works")
   public void logoutWorks() throws Exception{
+    new ClearService(authDAO, gameDAO, userDAO).clear();
     userDAO.createUser(new UserData("username1", "password1", "email1@a.com"));
     String authToken = authDAO.createAndInsertAuthToken("username1");
     UserService userService = new UserService(authDAO, userDAO);
@@ -101,6 +106,7 @@ public class ServiceTests {
   @Order(7)
   @DisplayName("Logout Fails")
   public void logoutFails() throws Exception{
+    new ClearService(authDAO, gameDAO, userDAO).clear();
     userDAO.createUser(new UserData("username1", "password1", "email1@a.com"));
     authDAO.createAndInsertAuthToken("username1");
     UserService userService = new UserService(authDAO, userDAO);
@@ -114,6 +120,7 @@ public class ServiceTests {
   @DisplayName("Create Game Works")
   public void createGameWorks() throws Exception{
 
+    new ClearService(authDAO, gameDAO, userDAO).clear();
     userDAO.createUser(new UserData("username1", "password1", "email1@a.com"));
     String authToken = authDAO.createAndInsertAuthToken("username1");
     GameService gameService = new GameService(authDAO, gameDAO);
@@ -127,6 +134,7 @@ public class ServiceTests {
   @Order(9)
   @DisplayName("Create Game Fails")
   public void createGameFails() throws Exception{
+    new ClearService(authDAO, gameDAO, userDAO).clear();
     userDAO.createUser(new UserData("username1", "password1", "email1@a.com"));
     String authToken = authDAO.createAndInsertAuthToken("username1");
     GameService gameService = new GameService(authDAO, gameDAO);
@@ -143,6 +151,7 @@ public class ServiceTests {
   @DisplayName("Join Game Works")
   public void joinGameWorks() throws Exception{
 
+    new ClearService(authDAO, gameDAO, userDAO).clear();
     userDAO.createUser(new UserData("username1", "password1", "email1@a.com"));
     String authToken = authDAO.createAndInsertAuthToken("username1");
     int gameID1 = gameDAO.createGame("Game 100");
@@ -162,6 +171,8 @@ public class ServiceTests {
   @Order(11)
   @DisplayName("Join Game Fails")
   public void joinGameFails() throws Exception{
+
+    new ClearService(authDAO, gameDAO, userDAO).clear();
 
     userDAO.createUser(new UserData("username1", "password1", "email1@a.com"));
     String authToken = authDAO.createAndInsertAuthToken("username1");
@@ -193,6 +204,8 @@ public class ServiceTests {
   @DisplayName("List Game Works")
   public void listGameWorks() throws Exception{
 
+    new ClearService(authDAO, gameDAO, userDAO).clear();
+
     userDAO.createUser(new UserData("username1", "password1", "email1@a.com"));
     String authToken = authDAO.createAndInsertAuthToken("username1");
     gameDAO.createGame("Game 100");
@@ -208,6 +221,8 @@ public class ServiceTests {
   @Order(13)
   @DisplayName("List Game Fails")
   public void listGameFails() throws Exception{
+
+    new ClearService(authDAO, gameDAO, userDAO).clear();
 
     userDAO.createUser(new UserData("username1", "password1", "email1@a.com"));
     String authToken = authDAO.createAndInsertAuthToken("username1");
