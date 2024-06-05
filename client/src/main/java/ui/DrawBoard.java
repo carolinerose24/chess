@@ -169,4 +169,46 @@ public class DrawBoard {
   }
 
 
+  private void printSquare(PrintStream out, String squareColor, String pieceType, String pieceColor){
+
+    if(squareColor.equalsIgnoreCase("WHITE")){
+      out.print(SET_BG_COLOR_LIGHT);
+    } else if(squareColor.equalsIgnoreCase("BLACK")) {
+      out.print(SET_BG_COLOR_DARK);
+    }
+
+    if(pieceType != null && pieceColor != null){
+      if(pieceColor.equalsIgnoreCase("WHITE")){
+        out.print(SET_TEXT_COLOR_DARK_BLUE);
+        out.print(SET_TEXT_ITALIC);
+        out.print(EMPTY + pieceType + EMPTY);
+        out.print(RESET_TEXT_ITALIC);
+      } else if(pieceColor.equalsIgnoreCase("BLACK")) {
+        out.print(SET_TEXT_COLOR_BLACK);
+        out.print(SET_TEXT_BOLD);
+        out.print(EMPTY + pieceType + EMPTY);
+        out.print(RESET_TEXT_BOLD_FAINT);
+      }
+    } else {
+      out.print("   "); //print an empty block
+    }
+  }
+
+  private static void printOneBlackSquare(PrintStream out){
+    out.print(SET_BG_COLOR_BLACK);
+    out.print("   ");
+  }
+
+
+  private static void setBlack(PrintStream out) {
+    out.print(SET_BG_COLOR_BLACK);
+    out.print(SET_TEXT_COLOR_BLACK);
+  }
+
+  private static void setGrey(PrintStream out) {
+    out.print(SET_BG_COLOR_LIGHT_GREY);
+    out.print(SET_TEXT_COLOR_BLACK);
+  }
+
+
 }
