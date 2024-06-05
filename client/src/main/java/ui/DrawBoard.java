@@ -7,9 +7,7 @@ import static ui.EscapeSequences.*;
 
 public class DrawBoard {
 
-  private static final int BOARD_SIZE_IN_SQUARES = 8;
-  private static final int SQUARE_SIZE_IN_CHARS = 3;
-  private static final int LINE_WIDTH_IN_CHARS = 1;
+
 
   // and use a lot of ones form escape sequence
 
@@ -21,20 +19,12 @@ public class DrawBoard {
 
   public DrawBoard(){ // no parameters, set squares equal to a default board
 
-    // call all the methods in here @@@
-    var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
-//    out.print(ERASE_SCREEN); // decide if i want this after all
-    drawHeaders(out);
 
-    drawTicTacToeBoard(out);
-
-    out.print(SET_BG_COLOR_BLACK);
-    out.print(SET_TEXT_COLOR_WHITE);
 
 
   }
 
-  
+
 
 
 }

@@ -33,7 +33,14 @@ public class EscapeSequences {
     public static final String SET_TEXT_COLOR_BLUE = SET_TEXT_COLOR + "12m";
     public static final String SET_TEXT_COLOR_MAGENTA = SET_TEXT_COLOR + "5m";
     public static final String SET_TEXT_COLOR_WHITE = SET_TEXT_COLOR + "15m";
-    public static final String RESET_TEXT_COLOR = UNICODE_ESCAPE + "[39m";
+    public static final String RESET_TEXT_COLOR = SET_TEXT_COLOR + "0m";
+
+    // new ones
+    public static final String SET_TEXT_COLOR_TAN = SET_TEXT_COLOR + "180m";
+    public static final String SET_TEXT_COLOR_LIGHT_GREEN = SET_TEXT_COLOR + "120m";
+    public static final String SET_TEXT_COLOR_DARK_GREEN = SET_TEXT_COLOR + "28m";
+    public static final String SET_TEXT_COLOR_DARK_BLUE = SET_TEXT_COLOR + "20m";
+
 
     public static final String SET_BG_COLOR_BLACK = SET_BG_COLOR + "0m";
     public static final String SET_BG_COLOR_LIGHT_GREY = SET_BG_COLOR + "242m";
@@ -45,21 +52,21 @@ public class EscapeSequences {
     public static final String SET_BG_COLOR_BLUE = SET_BG_COLOR + "12m";
     public static final String SET_BG_COLOR_MAGENTA = SET_BG_COLOR + "5m";
     public static final String SET_BG_COLOR_WHITE = SET_BG_COLOR + "15m";
-    public static final String RESET_BG_COLOR = UNICODE_ESCAPE + "[49m";
+    public static final String RESET_BG_COLOR = SET_BG_COLOR + "0m";
 
-//    public static final String WHITE_KING = " ♔ ";
-//    public static final String WHITE_QUEEN = " ♕ ";
-//    public static final String WHITE_BISHOP = " ♗ ";
-//    public static final String WHITE_KNIGHT = " ♘ ";
-//    public static final String WHITE_ROOK = " ♖ ";
-//    public static final String WHITE_PAWN = " ♙ ";
-//    public static final String BLACK_KING = " ♚ ";
-//    public static final String BLACK_QUEEN = " ♛ ";
-//    public static final String BLACK_BISHOP = " ♝ ";
-//    public static final String BLACK_KNIGHT = " ♞ ";
-//    public static final String BLACK_ROOK = " ♜ ";
-//    public static final String BLACK_PAWN = " ♟ ";
-//    public static final String EMPTY = " \u2003 ";
+    //new ones I defined
+    public static final String SET_BG_COLOR_TAN = SET_BG_COLOR + "180m";
+    public static final String SET_BG_COLOR_LIGHT_GREEN = SET_BG_COLOR + "120m";
+//    public static final String SET_BG_COLOR_DARK_GREEN = SET_BG_COLOR + "28m";
+
+    private static String setBackgroundColor(int r, int g, int b) {
+        return UNICODE_ESCAPE + "[48;2;" + r + ";" + g + ";" + b + "m";
+    }
+
+    // Define background colors using RGB values
+    public static final String SET_BG_COLOR_DARK = setBackgroundColor(111, 143, 114);
+    public static final String SET_BG_COLOR_LIGHT = setBackgroundColor(173, 189, 143);
+
 
     public static final String WHITE_KING = " K ";
     public static final String WHITE_QUEEN = " Q ";
@@ -67,15 +74,26 @@ public class EscapeSequences {
     public static final String WHITE_KNIGHT = " N ";
     public static final String WHITE_ROOK = " R ";
     public static final String WHITE_PAWN = " P ";
-    public static final String BLACK_KING = " k ";
-    public static final String BLACK_QUEEN = " q ";
-    public static final String BLACK_BISHOP = " b ";
-    public static final String BLACK_KNIGHT = " n ";
-    public static final String BLACK_ROOK = " r ";
-    public static final String BLACK_PAWN = " p ";
-    public static final String EMPTY = " \u2003 ";
+    public static final String BLACK_KING = " K ";
+    public static final String BLACK_QUEEN = " Q ";
+    public static final String BLACK_BISHOP = " B ";
+    public static final String BLACK_KNIGHT = " N ";
+    public static final String BLACK_ROOK = " R ";
+    public static final String BLACK_PAWN = " P ";
+    public static final String EMPTY = "   ";
 
-    // just have the black ones be lower case for now
+//    public static final String WHITE_KING = " ♔ "; //" \u2654 ";
+//    public static final String WHITE_QUEEN = " ♕ "; //" \u2655 ";
+//    public static final String WHITE_BISHOP = " ♗ "; //" \u2656 ";
+//    public static final String WHITE_KNIGHT = " ♘ "; //" \u2657 ";
+//    public static final String WHITE_ROOK = " ♖ "; //" \u2658 ";
+//    public static final String WHITE_PAWN = " ♙ "; //" \u2659 ";
+//    public static final String BLACK_KING = " ♚ "; //" \u265A ";
+//    public static final String BLACK_QUEEN = " ♛ "; //" \u265B ";
+//    public static final String BLACK_BISHOP = " ♝ "; //" \u265C ";
+//    public static final String BLACK_KNIGHT = " ♞ "; //" \u265D ";
+//    public static final String BLACK_ROOK = " ♜ "; //" \u265E ";
+//    public static final String BLACK_PAWN = " ♟ "; //" \u265F ";
+//    public static final String EMPTY = " \u2003 ";
 
-    public static String moveCursorToLocation(int x, int y) { return UNICODE_ESCAPE + "[" + y + ";" + x + "H"; }
 }
