@@ -23,35 +23,34 @@ public class DrawBoard {
     draw();
   }
 
-
   private void draw(){
     var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
-
     out.print(ERASE_SCREEN);
-
-    // for WHITE perspective
     out.print(SET_BG_COLOR_BLACK);
     out.print(SET_TEXT_COLOR_LIGHT_GREY);
-    out.println("          WHITE PERSPECTIVE");
 
+    drawWhitePerspective(out);
+    drawBlackPerspective(out);
+
+    out.print(RESET_TEXT_COLOR);
+    out.print(RESET_BG_COLOR);
+  }
+
+  private void drawWhitePerspective(PrintStream out){
+    out.println("          WHITE PERSPECTIVE");
     drawHeaders(out);
     drawChessBoard(out);
     drawHeaders(out);
     out.print(SET_BG_COLOR_BLACK);
-    out.print(SET_TEXT_COLOR_WHITE);
-
-    out.println(); //empty line between the 2 boards
-
-    // for BLACK perspective ...
-    out.print(SET_TEXT_COLOR_LIGHT_GREY);
+    out.println();
+  }
+  private void drawBlackPerspective(PrintStream out){
     out.println("          BLACK PERSPECTIVE");
     drawHeadersBack(out);
     drawChessBoardBack(out);
     drawHeadersBack(out);
-
+    out.print(SET_BG_COLOR_BLACK);
     out.println();
-    out.print(RESET_TEXT_COLOR);
-    out.print(RESET_BG_COLOR);
   }
 
   private void drawHeaders(PrintStream out) {
@@ -83,8 +82,6 @@ public class DrawBoard {
     out.println();
   }
 
-
-
   private void drawChessBoard(PrintStream out) {
     for (int boardRow = 0; boardRow < 8; ++boardRow) {
       drawRowOfSquares(out, boardRow, (boardRow % 2 == 0)); //will pass if white is first or not
@@ -95,7 +92,6 @@ public class DrawBoard {
       drawRowOfSquaresBack(out, boardRow, (boardRow % 2 == 1)); //will pass if white is first or not
     }
   }
-
 
   private void drawRowOfSquares(PrintStream out, int row, boolean whiteFirst){
 
@@ -168,7 +164,6 @@ public class DrawBoard {
     out.println();
   }
 
-
   private void printSquare(PrintStream out, String squareColor, String pieceType, String pieceColor){
 
     if(squareColor.equalsIgnoreCase("WHITE")){
@@ -193,18 +188,15 @@ public class DrawBoard {
       out.print("   "); //print an empty block
     }
   }
-
   private static void printOneBlackSquare(PrintStream out){
     out.print(SET_BG_COLOR_BLACK);
     out.print("   ");
   }
 
-
   private static void setBlack(PrintStream out) {
     out.print(SET_BG_COLOR_BLACK);
     out.print(SET_TEXT_COLOR_BLACK);
   }
-
   private static void setGrey(PrintStream out) {
     out.print(SET_BG_COLOR_LIGHT_GREY);
     out.print(SET_TEXT_COLOR_BLACK);
