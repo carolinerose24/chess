@@ -83,4 +83,90 @@ public class DrawBoard {
     out.println();
   }
 
+
+
+  private void drawChessBoard(PrintStream out) {
+    for (int boardRow = 0; boardRow < 8; ++boardRow) {
+      drawRowOfSquares(out, boardRow, (boardRow % 2 == 0)); //will pass if white is first or not
+    }
+  }
+  private void drawChessBoardBack(PrintStream out) {
+    for (int boardRow = 7; boardRow >= 0; boardRow = boardRow-1) {
+      drawRowOfSquaresBack(out, boardRow, (boardRow % 2 == 1)); //will pass if white is first or not
+    }
+  }
+
+
+  private void drawRowOfSquares(PrintStream out, int row, boolean whiteFirst){
+
+    printOneBlackSquare(out);
+    int displayedRow = 8 - row;
+    setGrey(out);
+    out.print(EMPTY + displayedRow + EMPTY);
+
+    // print the squares in between
+    for(int i = 0; i < 8; i++){
+      String piece = board.get(row).get(i);
+      String pieceColor = null;
+      String pieceType = null;
+
+      if(piece != null && !piece.equals("EMPTY")){ //not null and not empty
+        String[] parts = piece.split(" ");
+        pieceColor = parts[0];
+        pieceType = parts[1];
+      }
+
+      if(whiteFirst){
+        printSquare(out, "WHITE", pieceType, pieceColor);
+        whiteFirst = false;
+      } else {
+        printSquare(out, "BLACK", pieceType, pieceColor);
+        whiteFirst = true;
+      }
+
+    }
+
+    // print last grey block with row number:
+    setGrey(out);
+    out.print(EMPTY + displayedRow + EMPTY);
+    setBlack(out);
+    out.println();
+  }
+  private void drawRowOfSquaresBack(PrintStream out, int row, boolean whiteFirst){
+
+    printOneBlackSquare(out);
+    int displayedRow = 8 - row;
+    setGrey(out);
+    out.print(EMPTY + displayedRow + EMPTY);
+
+    // print the squares in between
+    for(int i = 0; i < 8; i++){
+      String piece = board.get(row).get(7-i);
+      String pieceColor = null;
+      String pieceType = null;
+
+      if(piece != null && !piece.equals("EMPTY")){ //not null and not empty
+        String[] parts = piece.split(" ");
+        pieceColor = parts[0];
+        pieceType = parts[1];
+      }
+
+      if(whiteFirst){
+        printSquare(out, "WHITE", pieceType, pieceColor);
+        whiteFirst = false;
+      } else {
+        printSquare(out, "BLACK", pieceType, pieceColor);
+        whiteFirst = true;
+      }
+
+    }
+
+    // print last grey block with row number:
+    setGrey(out);
+    out.print(EMPTY + displayedRow + EMPTY);
+    setBlack(out);
+    out.println();
+  }
+
+
 }
