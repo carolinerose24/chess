@@ -210,5 +210,41 @@ public class DrawBoard {
     out.print(SET_TEXT_COLOR_BLACK);
   }
 
+  private void setDefaultBoard(){
+
+    for (int i = 0; i < 8; ++i) {
+      ArrayList<String> row = new ArrayList<>(Arrays.asList(new String[8]));
+      for (int j = 0; j < 8; ++j) {
+        row.set(j, "EMPTY");
+      }
+      board.add(row);
+    }
+
+    // White pieces
+    board.get(7).set(0, "WHITE R");
+    board.get(7).set(1, "WHITE N");
+    board.get(7).set(2, "WHITE B");
+    board.get(7).set(3, "WHITE Q");
+    board.get(7).set(4, "WHITE K");
+    board.get(7).set(5, "WHITE B");
+    board.get(7).set(6, "WHITE N");
+    board.get(7).set(7, "WHITE R");
+    for (int i = 0; i < 8; ++i) {
+      board.get(6).set(i, "WHITE P");
+    }
+
+    // Black pieces
+    board.get(0).set(0, "BLACK R");
+    board.get(0).set(1, "BLACK N");
+    board.get(0).set(2, "BLACK B");
+    board.get(0).set(3, "BLACK Q");
+    board.get(0).set(4, "BLACK K");
+    board.get(0).set(5, "BLACK B");
+    board.get(0).set(6, "BLACK N");
+    board.get(0).set(7, "BLACK R");
+    for (int i = 0; i < 8; ++i) {
+      board.get(1).set(i, "BLACK P");
+    }
+  }
 
 }
