@@ -13,6 +13,16 @@ public class DrawBoard {
   private ArrayList<ArrayList<String>> board = new ArrayList<>(8);
 
 
+
+  // I think I could also have it pass in a ChessBoard or ChessGame???
+  // chess game AND which perspective
+
+  // Pass in a new ChessGame(ChessGame, teamColor - enum)
+  // do this in phase 6
+
+
+
+
   public DrawBoard(ArrayList<ArrayList<String>> board){ // with parameters, pass in the 2D array, do this more later??
     this.board = board;
     draw();
