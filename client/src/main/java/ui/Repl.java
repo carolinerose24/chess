@@ -28,8 +28,9 @@ public class Repl {
       while(loggedIn){
 
         // call second menu HERE
+        secondMenu(scanner);
 
-
+        // can enter gameplay mode from here, but don't write this code out yet...
 
       }
       // check that they didn't type quit, if so then set quit = true
@@ -57,7 +58,7 @@ public class Repl {
           //it wasn't able to register the user
           System.out.println("Wasn't able to register a new user, please try again.");
         } else {
-          System.out.println("Created user successfully, now logging in:");
+          System.out.println("Created user successfully, now logging in as: " + loggedInUsername);
           loggedIn = true;
         }
         break;
@@ -65,20 +66,12 @@ public class Repl {
         if(!loginExistingUser(scanner)){
           System.out.println("Wasn't able to login this user, please try again.");
         } else {
-          System.out.println("Logged in successfully.");
+          System.out.println("Logged in successfully as " + loggedInUsername);
           loggedIn = true;
         }
-        // prompt for username and password
-        // will need to check if valid credentials
-
         break;
       case "3":
-        // just display some stuff?
-        System.out.println("Displaying Help Text:");
-        System.out.println("To access the chess server, you must first login or register.");
-        System.out.println("To register a new user, you will be asked for a username, password, and email.");
-        System.out.println("To login, you must provide your username and password.");
-        System.out.println("If you wish to end the program, choose the quit option.");
+        displayHelpTextMenuOne();
         break;
       case "4":
         System.out.println("Thanks for playing, quitting the program now.");
@@ -88,8 +81,6 @@ public class Repl {
         System.out.println("Invalid option. Please try again.");
     }
   }
-
-
 
   private boolean registerNewUser(Scanner scanner){
 
@@ -172,15 +163,120 @@ public class Repl {
     return true;
   }
 
-
+  private void displayHelpTextMenuOne(){
+    System.out.println("Displaying Help Text:");
+    System.out.println("To access the chess server, you must first login or register.");
+    System.out.println("To register a new user, you will be asked for a username, password, and email.");
+    System.out.println("To login, you must provide your username and password.");
+    System.out.println("If you wish to end the program, choose the quit option.");
+  }
 
 
   // method for 2nd menu
 
+  private void secondMenu(Scanner scanner){
+
+    // print the 4 options, read in the response
+    System.out.println();
+    System.out.println("Type in the number corresponding to the desired option");
+    System.out.println("1 - Create a new chess game");
+    System.out.println("2 - List all current games");
+    System.out.println("3 - Join a game");
+    System.out.println("4 - Observe a game");
+    System.out.println("5 - Logout as user: " + loggedInUsername);
+    System.out.println("6 - Display help text");
+
+
+    String input = scanner.nextLine();
+
+    switch (input) {
+      case "1":
+        createNewGame();
+
+        // I guess all of these have a change of returning a 500 error, how should I account for that??
+        // like should they all return a boolean then????
+        break;
+      case "2":
+        listCurrentGames();
+        break;
+      case "3":
+        joinGame();
+        break;
+      case "4":
+        observeGame();
+        break;
+      case "5":
+        System.out.println("Logging out user: " + loggedInUsername);
+        loggedIn = false;
+        break;
+      case "6":
+        displayHelpTextMenuTwo();
+        break;
+      default:
+        System.out.println("Invalid option. Please try again.");
+    }
+
+  }
+
+
+
+  private boolean createNewGame(Scanner scanner){
+
+
+  }
+
+  private void listCurrentGames(){
+
+    // how to handle if there are NO current games???
+
+    // we need to create a numbering system
+    // and show the game NAME + the players usernames
+
+
+    // call server facade, if nothing is returned, then print that:
+    System.out.println("No current games to show.");
+
+  }
+
+  private boolean joinGame(Scanner scanner){
+
+  }
+
+  private void observeGame(){
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+  private void displayHelpTextMenuTwo(){
+    System.out.println("Displaying Help Text");
+    System.out.println("You are currently logged in as: " + loggedInUsername);
+    System.out.println("To create a new chess game, you will be asked to name it.");
+    System.out.println("To see all current games, choose list games.");
+    System.out.println("To join or play a game, you must specify which game and which color.");
+    System.out.println("To observer a game, type in the game number.");
+    System.out.println("To return to the previous menu, choose logout.");
+  }
+
+
+
+
+
+
+
+
+
+
   // method for 3rd menu (won't be fully fleshed out yet)
-
-
-
-
 
 }
