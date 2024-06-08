@@ -1,5 +1,14 @@
 package ui;
 
+import facade.ServerFacade;
+import model.requests.CreateGameRequest;
+import model.requests.LoginRequest;
+import model.requests.RegisterRequest;
+import model.responses.CreateGameResponse;
+import model.responses.UserResponse;
+
+
+
 import java.util.Scanner;
 
 public class Repl {
@@ -7,11 +16,20 @@ public class Repl {
   boolean quit = false;
   boolean loggedIn = false;
 
+  ServerFacade facade;
+
   // do i need to keep data members for things like current username?? to keep track of the current user???
   String loggedInUsername;
+  String currentAuthToken;
+
+  public Repl(){
+    facade = new ServerFacade("http://localhost:8080");
+  }
 
 
   // write a main method inside of this class??
+  // or call this method from the main class?
+
   public void runMenus() {
 
     Scanner scanner = new Scanner(System.in);
@@ -54,21 +72,10 @@ public class Repl {
     String input = scanner.nextLine();
     switch (input) {
       case "1":
-        if(!registerNewUser(scanner)){
-          //it wasn't able to register the user
-          System.out.println("Wasn't able to register a new user, please try again.");
-        } else {
-          System.out.println("Created user successfully, now logging in as: " + loggedInUsername);
-          loggedIn = true;
-        }
+        registerNewUser(scanner);
         break;
       case "2":
-        if(!loginExistingUser(scanner)){
-          System.out.println("Wasn't able to login this user, please try again.");
-        } else {
-          System.out.println("Logged in successfully as " + loggedInUsername);
-          loggedIn = true;
-        }
+        loginExistingUser(scanner);
         break;
       case "3":
         displayHelpTextMenuOne();
@@ -82,7 +89,7 @@ public class Repl {
     }
   }
 
-  private boolean registerNewUser(Scanner scanner){
+  private void registerNewUser(Scanner scanner){
 
     boolean validUsername = false;
     boolean validPassword = false;
@@ -100,7 +107,7 @@ public class Repl {
         // is valid
         validUsername = true;
       } else {
-        System.out.println("Invalid Username, it cannot be blank or white spaces only");
+        System.out.println("Invalid Username, it cannot be blank or white space only");
         System.out.println();
         System.out.print("Reenter username: ");
       }
@@ -112,7 +119,7 @@ public class Repl {
       if(password != null && !password.isBlank()){
         validPassword = true;
       } else {
-        System.out.println("Invalid Password, it cannot be blank or white spaces only");
+        System.out.println("Invalid Password, it cannot be blank or white space only");
         System.out.println();
         System.out.print("Reenter password: ");
       }
@@ -124,27 +131,29 @@ public class Repl {
       if(email != null && !email.isBlank()){
         validEmail = true;
       } else {
-        System.out.println("Invalid Email, it cannot be blank or white spaces only");
+        System.out.println("Invalid Email, it cannot be blank or white space only");
         System.out.println();
         System.out.print("Reenter email: ");
       }
     }
 
+    RegisterRequest req = new RegisterRequest(username, password, email);
+    UserResponse res = facade.registerUser(req);
 
+    // won't have an auth token to return if it fails????
 
-    // call server facade, try and have it add this new user
-    // if it returns a username already taken error, then we need to tell the user that name is take
-    if(ServerFacade.registerUser(username, password, email) == false){
-      System.out.println("This username is already taken.");
-      return false;
-    } // OR COOULD RETURN A 500 message..., would need to handle that and say the SERVER couldn't do it....
-
-    // if it doesn't return false, the operation worked
-    loggedInUsername = username;
-    return true;
+    if(res == null){
+      System.out.println("Wasn't able to register a new user, please try again.");
+      // will need to change this later....?
+    } else {
+      loggedIn = true;
+      loggedInUsername = username;
+      currentAuthToken = res.authToken();
+      System.out.println("Created user successfully, now logging in as: " + loggedInUsername);
+    }
   }
 
-  private boolean loginExistingUser(Scanner scanner){
+  private void loginExistingUser(Scanner scanner){
 
     System.out.print("Enter existing username: ");
     String username = scanner.nextLine();
@@ -152,15 +161,20 @@ public class Repl {
     System.out.print("Enter existing password: ");
     String password = scanner.nextLine();
 
-    // call server facade . login user
-    if(ServerFacade.loginUser(username, password) == false){
-      System.out.println("Invalid Login Credentials");
-      return false;
-      // this could mean the username was wrong OR the password was bad
-    }
+    UserResponse res = facade.loginUser(new LoginRequest(username, password));
 
-    loggedInUsername = username;
-    return true;
+    if(res.authToken().isBlank()){
+      // if the operation fails
+      System.out.println("This username or password was incorrect.");
+      System.out.println("Wasn't able to login this user, please try again.");
+      // will need to change this later....??
+
+    } else {
+      loggedIn = true;
+      loggedInUsername = username;
+      currentAuthToken = res.authToken();
+      System.out.println("Logged in successfully as " + loggedInUsername);
+    }
   }
 
   private void displayHelpTextMenuOne(){
@@ -191,7 +205,7 @@ public class Repl {
 
     switch (input) {
       case "1":
-        createNewGame();
+        createNewGame(scanner);
 
         // I guess all of these have a change of returning a 500 error, how should I account for that??
         // like should they all return a boolean then????
@@ -200,10 +214,10 @@ public class Repl {
         listCurrentGames();
         break;
       case "3":
-        joinGame();
+        joinGame(scanner);
         break;
       case "4":
-        observeGame();
+        observeGame(scanner);
         break;
       case "5":
         System.out.println("Logging out user: " + loggedInUsername);
@@ -220,7 +234,14 @@ public class Repl {
 
 
 
-  private boolean createNewGame(Scanner scanner){
+  private void createNewGame(Scanner scanner){
+
+    System.out.println("Type in a name for your new chess game: ");
+    String newGameName = scanner.nextLine();
+
+//    CreateGameResponse res = facade.createGame(new CreateGameRequest(currentAuthToken, newGameName));
+//
+//    if(res.gameID())
 
 
   }
@@ -238,24 +259,13 @@ public class Repl {
 
   }
 
-  private boolean joinGame(Scanner scanner){
+  private void joinGame(Scanner scanner){
 
   }
 
-  private void observeGame(){
+  private void observeGame(Scanner scanner){
 
   }
-
-
-
-
-
-
-
-
-
-
-
 
 
   private void displayHelpTextMenuTwo(){

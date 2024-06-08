@@ -1,11 +1,9 @@
 package facade;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import model.requests.RegisterRequest;
-import model.responses.UserResponse;
+import model.requests.*;
+import model.responses.*;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -19,12 +17,8 @@ public class ClientCommunicator {
   // post, put, get, delete
 
   public UserResponse postRegister(String urlString, RegisterRequest req) throws Exception{
-//    URL url = new URL(urlString);
-//    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
     URI uri = new URI(urlString + "/user");
     HttpURLConnection connection = (HttpURLConnection) uri.toURL().openConnection();
-
     connection.setReadTimeout(5000);
     connection.setRequestMethod("POST");
     connection.setDoOutput(true);
@@ -35,8 +29,50 @@ public class ClientCommunicator {
     jsonObject.addProperty("password", req.password());
     jsonObject.addProperty("email", req.email());
 
-//    System.out.println("Just made the body, it was: ");
-//    System.out.println(jsonObject.toString());
+    String requestBodyString = jsonObject.toString();
+    try (OutputStream os = connection.getOutputStream();
+         PrintWriter writer = new PrintWriter(new OutputStreamWriter(os, "UTF-8"))) {
+      writer.print(requestBodyString);
+      writer.flush();
+    }
+//    catch(IOException e){
+//      e.printStackTrace();
+//    }
+    connection.connect();
+    if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+
+      StringBuilder response = new StringBuilder();
+      try (InputStream responseBody = connection.getInputStream();
+           BufferedReader reader = new BufferedReader(new InputStreamReader(responseBody, StandardCharsets.UTF_8))) {
+        String line;
+        while ((line = reader.readLine()) != null) {
+          response.append(line);
+        }
+      }
+
+      Gson gson = new Gson();
+      return gson.fromJson(response.toString(), UserResponse.class);
+    }
+    else {
+      // SERVER RETURNED AN HTTP ERROR - maybe change this??? IDK
+      InputStream responseBody = connection.getErrorStream();
+      throw new Exception(responseBody.toString());
+    }
+  }
+
+
+
+  public UserResponse postLogin(String urlString, LoginRequest req) throws Exception{
+    URI uri = new URI(urlString + "/session");
+    HttpURLConnection connection = (HttpURLConnection) uri.toURL().openConnection();
+    connection.setReadTimeout(5000);
+    connection.setRequestMethod("POST");
+    connection.setDoOutput(true);
+
+    // no request headers for register, just a body
+    JsonObject jsonObject = new JsonObject();
+    jsonObject.addProperty("username", req.username());
+    jsonObject.addProperty("password", req.password());
 
     String requestBodyString = jsonObject.toString();
     try (OutputStream os = connection.getOutputStream();
@@ -47,46 +83,56 @@ public class ClientCommunicator {
 //    catch(IOException e){
 //      e.printStackTrace();
 //    }
-
-//    System.out.println("Set the response body successfully");
-
-
     connection.connect();
-
-
     if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-
-      // Read the response body
-
-//      try(InputStream responseBody = connection.getInputStream()){
-//        System.out.println(responseBody.toString());
-//      }
-
 
       StringBuilder response = new StringBuilder();
       try (InputStream responseBody = connection.getInputStream();
            BufferedReader reader = new BufferedReader(new InputStreamReader(responseBody, StandardCharsets.UTF_8))) {
-
         String line;
         while ((line = reader.readLine()) != null) {
           response.append(line);
         }
       }
 
-      // Print the raw response
-//      System.out.println("Raw response: " + response.toString());
       Gson gson = new Gson();
       return gson.fromJson(response.toString(), UserResponse.class);
     }
     else {
-      // SERVER RETURNED AN HTTP ERROR
+      // SERVER RETURNED AN HTTP ERROR - maybe change this??? IDK
       InputStream responseBody = connection.getErrorStream();
-//      System.out.println("Returned an http error, didn't work");
-//      System.out.println(responseBody.toString());
       throw new Exception(responseBody.toString());
-      // Read and process error response body from InputStream ...
     }
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

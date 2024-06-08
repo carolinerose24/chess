@@ -2,6 +2,7 @@ package facade;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import model.requests.AuthRequest;
 import model.requests.LoginRequest;
 import model.requests.RegisterRequest;
 import model.responses.UserResponse;
@@ -21,23 +22,27 @@ public class ServerFacade {
     com = new ClientCommunicator();
   }
 
+  //      e.printStackTrace();
+
   public UserResponse registerUser(RegisterRequest req){
     try{
       return com.postRegister(urlString, req);
-    } catch(Exception e){
-
-//      e.printStackTrace();
-
-//      System.out.println("Threw an exception, returning null");
-      return null;
-      // set the response to null??? it if is null, then it didn't work??????
-    }
+    } catch(Exception e){return null;}
   }
 
   public UserResponse loginUser(LoginRequest req){
-
-    return null;
+    try{
+      return com.postLogin(urlString, req);
+    } catch(Exception e){return null;}
   }
+
+//  public UserResponse logoutUser(AuthRequest req){
+//    try{
+//      return com.deleteLogout(urlString, req);
+//    } catch(Exception e){return null;}
+//  }
+
+
 
 
 
