@@ -27,7 +27,10 @@ public class ServerFacade {
   public UserResponse registerUser(RegisterRequest req){
     try{
       return com.postRegister(urlString, req);
-    } catch(Exception e){return null;}
+    } catch(Exception e){
+      System.out.println(e.getMessage());
+      return null;
+    }
   }
 
   public UserResponse loginUser(LoginRequest req){
@@ -36,11 +39,11 @@ public class ServerFacade {
     } catch(Exception e){return null;}
   }
 
-//  public UserResponse logoutUser(AuthRequest req){
-//    try{
-//      return com.deleteLogout(urlString, req);
-//    } catch(Exception e){return null;}
-//  }
+  public boolean logoutUser(AuthRequest req){
+    try{
+      return com.deleteLogout(urlString, req);
+    } catch(Exception e){return false;}
+  }
 
 
 

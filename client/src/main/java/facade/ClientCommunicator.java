@@ -39,8 +39,10 @@ public class ClientCommunicator {
 //      e.printStackTrace();
 //    }
     connection.connect();
-    if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 
+
+
+    if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
       StringBuilder response = new StringBuilder();
       try (InputStream responseBody = connection.getInputStream();
            BufferedReader reader = new BufferedReader(new InputStreamReader(responseBody, StandardCharsets.UTF_8))) {
@@ -49,15 +51,47 @@ public class ClientCommunicator {
           response.append(line);
         }
       }
-
       Gson gson = new Gson();
       return gson.fromJson(response.toString(), UserResponse.class);
+    } else if(connection.getResponseCode() == 400){
+      throw new Exception("There was a bad request. Make sure there are no empty fields.");
+    } else if(connection.getResponseCode() == 403){
+      throw new Exception("That username is already taken.");
+    } else if(connection.getResponseCode() == 500){
+      throw new Exception("There was a problem with the server.");
+    } else {
+      throw new Exception("Unknown Error");
     }
-    else {
-      // SERVER RETURNED AN HTTP ERROR - maybe change this??? IDK
-      InputStream responseBody = connection.getErrorStream();
-      throw new Exception(responseBody.toString());
-    }
+
+
+
+
+
+
+//    else {
+//
+//      System.out.println("GOT TO HERE");
+//      // SERVER RETURNED AN HTTP ERROR - maybe change this??? IDK
+////      InputStream responseBody = connection.getErrorStream();
+////      System.out.println(responseBody.toString());
+//
+//      StringBuilder response = new StringBuilder();
+//      try (InputStream responseBody = connection.getErrorStream();
+//           BufferedReader reader = new BufferedReader(new InputStreamReader(responseBody, StandardCharsets.UTF_8))) {
+//        String line;
+//        while ((line = reader.readLine()) != null) {
+//          response.append(line);
+//        }
+//
+//        Gson gson = new Gson();
+//        String message = gson.fromJson(response.toString(), ErrorResponse.class).message();
+//        System.out.println(message);
+//        throw new Exception(responseBody.toString());
+//      }
+//    }
+
+
+
   }
 
 
@@ -80,12 +114,9 @@ public class ClientCommunicator {
       writer.print(requestBodyString);
       writer.flush();
     }
-//    catch(IOException e){
-//      e.printStackTrace();
-//    }
     connection.connect();
-    if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 
+    if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
       StringBuilder response = new StringBuilder();
       try (InputStream responseBody = connection.getInputStream();
            BufferedReader reader = new BufferedReader(new InputStreamReader(responseBody, StandardCharsets.UTF_8))) {
@@ -94,7 +125,6 @@ public class ClientCommunicator {
           response.append(line);
         }
       }
-
       Gson gson = new Gson();
       return gson.fromJson(response.toString(), UserResponse.class);
     }
@@ -104,6 +134,45 @@ public class ClientCommunicator {
       throw new Exception(responseBody.toString());
     }
   }
+
+
+  public boolean deleteLogout(String urlString, AuthRequest req) throws Exception{
+    URI uri = new URI(urlString + "/session");
+    HttpURLConnection connection = (HttpURLConnection) uri.toURL().openConnection();
+    connection.setReadTimeout(5000);
+    connection.setRequestMethod("DELETE");
+    connection.setRequestProperty("Authorization", req.authToken()); // Add Authorization header
+    connection.setDoOutput(false); // No request body for DELETE
+
+    connection.connect();
+
+    if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+      return true;
+
+
+//      StringBuilder response = new StringBuilder();
+//      try (InputStream responseBody = connection.getInputStream();
+//           BufferedReader reader = new BufferedReader(new InputStreamReader(responseBody, StandardCharsets.UTF_8))) {
+//        String line;
+//        while ((line = reader.readLine()) != null) {
+//          response.append(line);
+//        }
+//      }
+//      Gson gson = new Gson();
+//      return gson.fromJson(response.toString(), UserResponse.class);
+
+
+    } else {
+      // SERVER RETURNED AN HTTP ERROR - maybe change this??? IDK
+      InputStream responseBody = connection.getErrorStream();
+      throw new Exception(responseBody.toString());
+    }
+  }
+
+
+
+
+
 
 
 

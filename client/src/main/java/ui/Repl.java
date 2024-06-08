@@ -1,6 +1,7 @@
 package ui;
 
 import facade.ServerFacade;
+import model.requests.AuthRequest;
 import model.requests.CreateGameRequest;
 import model.requests.LoginRequest;
 import model.requests.RegisterRequest;
@@ -89,69 +90,99 @@ public class Repl {
     }
   }
 
+
   private void registerNewUser(Scanner scanner){
 
-    boolean validUsername = false;
-    boolean validPassword = false;
-    boolean validEmail = false;
-
-    String username = null;
-    String password = null;
-    String email = null;
-
-
     System.out.print("Enter a new username: ");
-    while(!validUsername){
-      username = scanner.nextLine();
-      if(username != null && !username.isBlank()){
-        // is valid
-        validUsername = true;
-      } else {
-        System.out.println("Invalid Username, it cannot be blank or white space only");
-        System.out.println();
-        System.out.print("Reenter username: ");
-      }
-    }
+    String username = scanner.nextLine();
 
-    System.out.print("Enter a new password: ");
-    while(!validPassword){
-      password = scanner.nextLine();
-      if(password != null && !password.isBlank()){
-        validPassword = true;
-      } else {
-        System.out.println("Invalid Password, it cannot be blank or white space only");
-        System.out.println();
-        System.out.print("Reenter password: ");
-      }
-    }
+    System.out.print("Enter a password: ");
+    String password = scanner.nextLine();
 
-    System.out.print("Enter a new email: ");
-    while(!validEmail){
-      email = scanner.nextLine();
-      if(email != null && !email.isBlank()){
-        validEmail = true;
-      } else {
-        System.out.println("Invalid Email, it cannot be blank or white space only");
-        System.out.println();
-        System.out.print("Reenter email: ");
-      }
-    }
+    System.out.print("Enter your email: ");
+    String email = scanner.nextLine();
 
     RegisterRequest req = new RegisterRequest(username, password, email);
     UserResponse res = facade.registerUser(req);
 
-    // won't have an auth token to return if it fails????
-
     if(res == null){
       System.out.println("Wasn't able to register a new user, please try again.");
-      // will need to change this later....?
     } else {
       loggedIn = true;
       loggedInUsername = username;
       currentAuthToken = res.authToken();
       System.out.println("Created user successfully, now logging in as: " + loggedInUsername);
     }
+
+
+
   }
+
+
+
+//
+//  private void registerNewUser(Scanner scanner){
+//
+//    boolean validUsername = false;
+//    boolean validPassword = false;
+//    boolean validEmail = false;
+//
+//    String username = null;
+//    String password = null;
+//    String email = null;
+//
+//
+//    System.out.print("Enter a new username: ");
+//    while(!validUsername){
+//      username = scanner.nextLine();
+//      if(username != null && !username.isBlank()){
+//        // is valid
+//        validUsername = true;
+//      } else {
+//        System.out.println("Invalid Username, it cannot be blank or white space only");
+//        System.out.println();
+//        System.out.print("Reenter username: ");
+//      }
+//    }
+//
+//    System.out.print("Enter a new password: ");
+//    while(!validPassword){
+//      password = scanner.nextLine();
+//      if(password != null && !password.isBlank()){
+//        validPassword = true;
+//      } else {
+//        System.out.println("Invalid Password, it cannot be blank or white space only");
+//        System.out.println();
+//        System.out.print("Reenter password: ");
+//      }
+//    }
+//
+//    System.out.print("Enter a new email: ");
+//    while(!validEmail){
+//      email = scanner.nextLine();
+//      if(email != null && !email.isBlank()){
+//        validEmail = true;
+//      } else {
+//        System.out.println("Invalid Email, it cannot be blank or white space only");
+//        System.out.println();
+//        System.out.print("Reenter email: ");
+//      }
+//    }
+//
+//    RegisterRequest req = new RegisterRequest(username, password, email);
+//    UserResponse res = facade.registerUser(req);
+//
+//    // won't have an auth token to return if it fails????
+//
+//    if(res == null){
+//      System.out.println("Wasn't able to register a new user, please try again.");
+//    } else {
+//      loggedIn = true;
+//      loggedInUsername = username;
+//      currentAuthToken = res.authToken();
+//      System.out.println("Created user successfully, now logging in as: " + loggedInUsername);
+//    }
+//  }
 
   private void loginExistingUser(Scanner scanner){
 
@@ -220,8 +251,15 @@ public class Repl {
         observeGame(scanner);
         break;
       case "5":
-        System.out.println("Logging out user: " + loggedInUsername);
-        loggedIn = false;
+
+        if(facade.logoutUser(new AuthRequest(currentAuthToken))){
+          System.out.println("Logged out user: " + loggedInUsername);
+          loggedIn = false;
+        } else {
+          System.out.println("Unable to logout at this time.");
+        }
+
+
         break;
       case "6":
         displayHelpTextMenuTwo();
