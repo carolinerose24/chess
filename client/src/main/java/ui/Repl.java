@@ -113,76 +113,7 @@ public class Repl {
       currentAuthToken = res.authToken();
       System.out.println("Created user successfully, now logging in as: " + loggedInUsername);
     }
-
-
-
   }
-
-
-
-//
-//  private void registerNewUser(Scanner scanner){
-//
-//    boolean validUsername = false;
-//    boolean validPassword = false;
-//    boolean validEmail = false;
-//
-//    String username = null;
-//    String password = null;
-//    String email = null;
-//
-//
-//    System.out.print("Enter a new username: ");
-//    while(!validUsername){
-//      username = scanner.nextLine();
-//      if(username != null && !username.isBlank()){
-//        // is valid
-//        validUsername = true;
-//      } else {
-//        System.out.println("Invalid Username, it cannot be blank or white space only");
-//        System.out.println();
-//        System.out.print("Reenter username: ");
-//      }
-//    }
-//
-//    System.out.print("Enter a new password: ");
-//    while(!validPassword){
-//      password = scanner.nextLine();
-//      if(password != null && !password.isBlank()){
-//        validPassword = true;
-//      } else {
-//        System.out.println("Invalid Password, it cannot be blank or white space only");
-//        System.out.println();
-//        System.out.print("Reenter password: ");
-//      }
-//    }
-//
-//    System.out.print("Enter a new email: ");
-//    while(!validEmail){
-//      email = scanner.nextLine();
-//      if(email != null && !email.isBlank()){
-//        validEmail = true;
-//      } else {
-//        System.out.println("Invalid Email, it cannot be blank or white space only");
-//        System.out.println();
-//        System.out.print("Reenter email: ");
-//      }
-//    }
-//
-//    RegisterRequest req = new RegisterRequest(username, password, email);
-//    UserResponse res = facade.registerUser(req);
-//
-//    // won't have an auth token to return if it fails????
-//
-//    if(res == null){
-//      System.out.println("Wasn't able to register a new user, please try again.");
-//    } else {
-//      loggedIn = true;
-//      loggedInUsername = username;
-//      currentAuthToken = res.authToken();
-//      System.out.println("Created user successfully, now logging in as: " + loggedInUsername);
-//    }
-//  }
 
   private void loginExistingUser(Scanner scanner){
 
@@ -194,17 +125,13 @@ public class Repl {
 
     UserResponse res = facade.loginUser(new LoginRequest(username, password));
 
-    if(res.authToken().isBlank()){
-      // if the operation fails
-      System.out.println("This username or password was incorrect.");
-      System.out.println("Wasn't able to login this user, please try again.");
-      // will need to change this later....??
-
+    if(res == null){
+      System.out.println("Wasn't able to login with this username, please try again.");
     } else {
       loggedIn = true;
       loggedInUsername = username;
       currentAuthToken = res.authToken();
-      System.out.println("Logged in successfully as " + loggedInUsername);
+      System.out.println("Logged in successfully as: " + loggedInUsername);
     }
   }
 
@@ -251,15 +178,12 @@ public class Repl {
         observeGame(scanner);
         break;
       case "5":
-
         if(facade.logoutUser(new AuthRequest(currentAuthToken))){
           System.out.println("Logged out user: " + loggedInUsername);
           loggedIn = false;
         } else {
           System.out.println("Unable to logout at this time.");
         }
-
-
         break;
       case "6":
         displayHelpTextMenuTwo();
@@ -276,12 +200,15 @@ public class Repl {
 
     System.out.println("Type in a name for your new chess game: ");
     String newGameName = scanner.nextLine();
-
-//    CreateGameResponse res = facade.createGame(new CreateGameRequest(currentAuthToken, newGameName));
-//
-//    if(res.gameID())
-
-
+    CreateGameResponse resp = facade.createGame(new CreateGameRequest(currentAuthToken, newGameName));
+    if(resp == null){
+      //there was some error
+      System.out.println("Unable to create a new game at this time.");
+    } else {
+      System.out.println("Successfully created the game with the following info: ");
+      System.out.println("Game Name: " + newGameName);
+      System.out.println("Game ID: " + resp.gameID());
+    }
   }
 
   private void listCurrentGames(){

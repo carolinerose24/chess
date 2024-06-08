@@ -3,8 +3,10 @@ package facade;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.requests.AuthRequest;
+import model.requests.CreateGameRequest;
 import model.requests.LoginRequest;
 import model.requests.RegisterRequest;
+import model.responses.CreateGameResponse;
 import model.responses.UserResponse;
 
 import java.io.IOException;
@@ -36,13 +38,29 @@ public class ServerFacade {
   public UserResponse loginUser(LoginRequest req){
     try{
       return com.postLogin(urlString, req);
-    } catch(Exception e){return null;}
+    } catch(Exception e){
+      System.out.println(e.getMessage());
+      return null;
+    }
   }
 
   public boolean logoutUser(AuthRequest req){
     try{
       return com.deleteLogout(urlString, req);
-    } catch(Exception e){return false;}
+    } catch(Exception e){
+      System.out.println(e.getMessage());
+      return false;
+    }
+  }
+
+
+  public CreateGameResponse createGame(CreateGameRequest req){
+    try{
+      return com.postCreateGame(urlString, req);
+    } catch(Exception e){
+      System.out.println(e.getMessage());
+      return null;
+    }
   }
 
 

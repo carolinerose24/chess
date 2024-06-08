@@ -35,12 +35,7 @@ public class ClientCommunicator {
       writer.print(requestBodyString);
       writer.flush();
     }
-//    catch(IOException e){
-//      e.printStackTrace();
-//    }
     connection.connect();
-
-
 
     if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
       StringBuilder response = new StringBuilder();
@@ -62,36 +57,6 @@ public class ClientCommunicator {
     } else {
       throw new Exception("Unknown Error");
     }
-
-
-
-
-
-
-//    else {
-//
-//      System.out.println("GOT TO HERE");
-//      // SERVER RETURNED AN HTTP ERROR - maybe change this??? IDK
-////      InputStream responseBody = connection.getErrorStream();
-////      System.out.println(responseBody.toString());
-//
-//      StringBuilder response = new StringBuilder();
-//      try (InputStream responseBody = connection.getErrorStream();
-//           BufferedReader reader = new BufferedReader(new InputStreamReader(responseBody, StandardCharsets.UTF_8))) {
-//        String line;
-//        while ((line = reader.readLine()) != null) {
-//          response.append(line);
-//        }
-//
-//        Gson gson = new Gson();
-//        String message = gson.fromJson(response.toString(), ErrorResponse.class).message();
-//        System.out.println(message);
-//        throw new Exception(responseBody.toString());
-//      }
-//    }
-
-
-
   }
 
 
@@ -127,11 +92,12 @@ public class ClientCommunicator {
       }
       Gson gson = new Gson();
       return gson.fromJson(response.toString(), UserResponse.class);
-    }
-    else {
-      // SERVER RETURNED AN HTTP ERROR - maybe change this??? IDK
-      InputStream responseBody = connection.getErrorStream();
-      throw new Exception(responseBody.toString());
+    } else if(connection.getResponseCode() == 401){
+      throw new Exception("There are no users that match these credentials.");
+    } else if(connection.getResponseCode() == 500){
+      throw new Exception("There was a problem with the server.");
+    } else {
+      throw new Exception("Unknown Error");
     }
   }
 
@@ -143,25 +109,10 @@ public class ClientCommunicator {
     connection.setRequestMethod("DELETE");
     connection.setRequestProperty("Authorization", req.authToken()); // Add Authorization header
     connection.setDoOutput(false); // No request body for DELETE
-
     connection.connect();
 
     if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
       return true;
-
-
-//      StringBuilder response = new StringBuilder();
-//      try (InputStream responseBody = connection.getInputStream();
-//           BufferedReader reader = new BufferedReader(new InputStreamReader(responseBody, StandardCharsets.UTF_8))) {
-//        String line;
-//        while ((line = reader.readLine()) != null) {
-//          response.append(line);
-//        }
-//      }
-//      Gson gson = new Gson();
-//      return gson.fromJson(response.toString(), UserResponse.class);
-
-
     } else {
       // SERVER RETURNED AN HTTP ERROR - maybe change this??? IDK
       InputStream responseBody = connection.getErrorStream();
@@ -171,6 +122,46 @@ public class ClientCommunicator {
 
 
 
+  public CreateGameResponse postCreateGame(String urlString, CreateGameRequest req) throws Exception{
+    URI uri = new URI(urlString + "/game");
+    HttpURLConnection connection = (HttpURLConnection) uri.toURL().openConnection();
+    connection.setReadTimeout(5000);
+    connection.setRequestMethod("POST");
+    connection.setRequestProperty("Authorization", req.authToken());
+    connection.setDoOutput(true);
+
+    JsonObject jsonObject = new JsonObject();
+    jsonObject.addProperty("gameName", req.gameName());
+    String requestBodyString = jsonObject.toString();
+
+    try (OutputStream os = connection.getOutputStream();
+         PrintWriter writer = new PrintWriter(new OutputStreamWriter(os, "UTF-8"))) {
+      writer.print(requestBodyString);
+      writer.flush();
+    }
+    connection.connect();
+
+    if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+      StringBuilder response = new StringBuilder();
+      try (InputStream responseBody = connection.getInputStream();
+           BufferedReader reader = new BufferedReader(new InputStreamReader(responseBody, StandardCharsets.UTF_8))) {
+        String line;
+        while ((line = reader.readLine()) != null) {
+          response.append(line);
+        }
+      }
+      Gson gson = new Gson();
+      return gson.fromJson(response.toString(), CreateGameResponse.class);
+    } else if(connection.getResponseCode() == 400){
+      throw new Exception("There was a bad request. Make sure there are no empty fields.");
+    } else if(connection.getResponseCode() == 401){
+      throw new Exception("This action was unauthorized.");
+    } else if(connection.getResponseCode() == 500){
+      throw new Exception("There was a problem with the server.");
+    } else {
+      throw new Exception("Unknown Error");
+    }
+  }
 
 
 
