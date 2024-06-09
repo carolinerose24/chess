@@ -11,17 +11,11 @@ public class DrawBoard {
 
   private final String EMPTY = " ";
   private ArrayList<ArrayList<String>> board = new ArrayList<>(8);
-
-
-
   // I think I could also have it pass in a ChessBoard or ChessGame???
   // chess game AND which perspective
 
   // Pass in a new ChessGame(ChessGame, teamColor - enum)
   // do this in phase 6
-
-
-
 
   public DrawBoard(ArrayList<ArrayList<String>> board){ // with parameters, pass in the 2D array, do this more later??
     this.board = board;
@@ -35,15 +29,26 @@ public class DrawBoard {
 
   private void draw(){
     var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
-    out.print(ERASE_SCREEN);
+//    out.print(ERASE_SCREEN);
     out.print(SET_BG_COLOR_BLACK);
     out.print(SET_TEXT_COLOR_LIGHT_GREY);
 
     drawWhitePerspective(out);
+
+    out.print(SET_TEXT_COLOR_LIGHT_GREY);
     drawBlackPerspective(out);
 
-    out.print(RESET_TEXT_COLOR);
-    out.print(RESET_BG_COLOR);
+
+
+//    out.print(SET_BG_COLOR_DARK_GREY);
+//    out.print(SET_TEXT_COLOR_WHITE);
+//
+//    out.print(RESET_TEXT_COLOR);
+//    out.print(RESET_BG_COLOR);
+
+
+    out.print(SET_TEXT_COLOR_RESET_WHITE);
+    out.print(SET_BG_COLOR_RESET_GREY);
   }
 
   private void drawWhitePerspective(PrintStream out){

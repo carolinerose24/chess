@@ -35,6 +35,10 @@ public class EscapeSequences {
     public static final String SET_TEXT_COLOR_WHITE = SET_TEXT_COLOR + "15m";
     public static final String RESET_TEXT_COLOR = SET_TEXT_COLOR + "0m";
 
+    public static final String SET_TEXT_COLOR_RESET_WHITE = SET_TEXT_COLOR + "250m";
+    public static final String SET_BG_COLOR_RESET_GREY = SET_BG_COLOR + "236m"; // Closest match for #3c3f41
+
+
     // new ones
     public static final String SET_TEXT_COLOR_TAN = SET_TEXT_COLOR + "180m";
     public static final String SET_TEXT_COLOR_LIGHT_GREEN = SET_TEXT_COLOR + "120m";

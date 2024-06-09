@@ -2,10 +2,7 @@ package facade;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import model.requests.AuthRequest;
-import model.requests.CreateGameRequest;
-import model.requests.LoginRequest;
-import model.requests.RegisterRequest;
+import model.requests.*;
 import model.responses.CreateGameResponse;
 import model.responses.ListGamesResponse;
 import model.responses.UserResponse;
@@ -70,6 +67,17 @@ public class ServerFacade {
     } catch(Exception e){
       System.out.println(e.getMessage());
       return null;
+    }
+  }
+
+
+
+  public boolean joinGame(JoinGameRequest req){
+    try{
+      return com.putJoinGame(urlString, req);
+    } catch(Exception e){
+      System.out.println(e.getMessage());
+      return false;
     }
   }
 

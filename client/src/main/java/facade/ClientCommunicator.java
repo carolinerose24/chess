@@ -64,8 +64,6 @@ public class ClientCommunicator {
     }
   }
 
-
-
   public UserResponse postLogin(String urlString, LoginRequest req) throws Exception{
     URI uri = new URI(urlString + "/session");
     HttpURLConnection connection = (HttpURLConnection) uri.toURL().openConnection();
@@ -203,6 +201,53 @@ public class ClientCommunicator {
 
 
 
+  public boolean putJoinGame(String urlString, JoinGameRequest req) throws Exception{
+
+    URI uri = new URI(urlString + "/game");
+    HttpURLConnection connection = (HttpURLConnection) uri.toURL().openConnection();
+    connection.setReadTimeout(5000);
+    connection.setRequestMethod("PUT");
+    connection.setRequestProperty("Authorization", req.authToken());
+    connection.setDoOutput(true);
+
+
+    String playerColor;
+    if(req.playerColor().equalsIgnoreCase("white")){
+      playerColor = "WHITE";
+    } else if(req.playerColor().equalsIgnoreCase("black")){
+      playerColor = "BLACK";
+    } else {
+      playerColor = "BAD REQUEST";
+    }
+
+    // no request headers for register, just a body
+    JsonObject jsonObject = new JsonObject();
+    jsonObject.addProperty("playerColor", playerColor);
+    jsonObject.addProperty("gameID", req.gameID());
+    String requestBodyString = jsonObject.toString();
+    try (OutputStream os = connection.getOutputStream();
+         PrintWriter writer = new PrintWriter(new OutputStreamWriter(os, "UTF-8"))) {
+      writer.print(requestBodyString);
+      writer.flush();
+    }
+    connection.connect();
+
+    // no response body, just check for errors
+    if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+      return true;
+    } else if(connection.getResponseCode() == 400){
+      throw new Exception("There was a bad request.");
+    } else if(connection.getResponseCode() == 401){
+      throw new Exception("You are unauthorized to request this action.");
+    } else if(connection.getResponseCode() == 403){
+      throw new Exception("This color is already taken.");
+    } else if(connection.getResponseCode() == 500){
+      throw new Exception("There was a problem with the server.");
+    } else {
+      throw new Exception("Unknown Error");
+    }
+  }
+
 
 
 
@@ -326,6 +371,7 @@ public class ClientCommunicator {
   public void doPut(String urlString) throws IOException{
 
   }
+
 
 
 }

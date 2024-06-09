@@ -2,10 +2,7 @@ package ui;
 
 import facade.ServerFacade;
 import model.GameData;
-import model.requests.AuthRequest;
-import model.requests.CreateGameRequest;
-import model.requests.LoginRequest;
-import model.requests.RegisterRequest;
+import model.requests.*;
 import model.responses.CreateGameResponse;
 import model.responses.ListGamesResponse;
 import model.responses.UserResponse;
@@ -19,6 +16,7 @@ public class Repl {
 
   private boolean quit = false;
   private boolean loggedIn = false;
+  private boolean inPlayMode = false;
 
   private ServerFacade facade;
 
@@ -27,7 +25,7 @@ public class Repl {
   private String currentAuthToken;
 
   private boolean hasListedGames = false;
-  private HashMap<Integer, String> gamesMap;
+  private HashMap<Integer, GameData> gamesMap;
 
   public Repl(){
     facade = new ServerFacade("http://localhost:8080");
@@ -56,14 +54,19 @@ public class Repl {
         secondMenu(scanner);
 
         // can enter gameplay mode from here, but don't write this code out yet...
+        if(inPlayMode){
+          // this is where we will do stuff in phase 6
+          // for now, just print out the chess board
+          DrawBoard board = new DrawBoard();
+          inPlayMode = false;
+        }
 
       }
+
       // check that they didn't type quit, if so then set quit = true
     }
     scanner.close();
   }
-
-
 
   // method for 1st menu
   private void firstMenu(Scanner scanner){
@@ -95,7 +98,6 @@ public class Repl {
         System.out.println("Invalid option. Please try again.");
     }
   }
-
 
   private void registerNewUser(Scanner scanner){
 
@@ -150,15 +152,13 @@ public class Repl {
   }
 
 
-  // method for 2nd menu
-
   private void secondMenu(Scanner scanner){
 
     // print the 4 options, read in the response
     System.out.println();
     System.out.println("Type in the number corresponding to the desired option");
     System.out.println("1 - Create a new chess game");
-    System.out.println("2 - List all current game");
+    System.out.println("2 - List all current games");
     System.out.println("3 - Join a game");
     System.out.println("4 - Observe a game");
     System.out.println("5 - Logout as user: " + loggedInUsername);
@@ -176,35 +176,18 @@ public class Repl {
         hasListedGames = true;
         break;
       case "3":
-
-        // first check if there are any game to be joined, if not then tell them they need to create a game
-
-        // if there are game, then print all the game names and a number by it??
-
-        // then have them choose a game number
-        // then say if they want to join as black or white
-        // if that position is already taken, then
-
-
-        // Type the number corresponding with the game you would like to join?
-
-
-        // also need to print the chess board here @@@@
-
-
-        printGamesList(); // this will print all current game
-
-
-
-        if(!hasListedGames){ // REVISIT THIS LATER @@
+        if(!hasListedGames){
           System.out.println("You need to print the list of game before you can join or observe one.");
         } else {
-          joinGame(scanner);
+          if(joinGame(scanner)){
+            inPlayMode = true;
+          } //if it returns false, we do NOT enter gameplay mode
         }
         break;
       case "4":
-        observeGame(scanner);
-        // also need to print the chess board here @@@@
+        if(observeGame(scanner)){
+          inPlayMode = true;
+        }
         break;
       case "5":
         if(facade.logoutUser(new AuthRequest(currentAuthToken))){
@@ -223,8 +206,6 @@ public class Repl {
 
   }
 
-
-
   private void createNewGame(Scanner scanner){
 
     System.out.println("Type in a name for your new chess game: ");
@@ -234,9 +215,7 @@ public class Repl {
       //there was some error
       System.out.println("Unable to create a new game at this time.");
     } else {
-      System.out.println("Successfully created the game with the following info: ");
-      System.out.println("Game Name: " + newGameName);
-      System.out.println("Game ID: " + resp.gameID());
+      System.out.println("Successfully created the game: " + newGameName);
     }
   }
 
@@ -247,59 +226,107 @@ public class Repl {
     if(resp == null){
       System.out.println("Couldn't print the game at this time.");
     } else {
-
-//      System.out.println("It wasn't an error, it got to this point");
-
-//      System.out.println(resp.game());
-
       if(resp.game() == null || resp.game().isEmpty()){
-        System.out.println("No current game to show.");
+        System.out.println("No current games to show.");
       } else {
-
-        // it is not empty, need to print everything here
-
-        // have a global variable that is a map or list of game ID (that we just created??)
-
         int counter = 1;
         gamesMap = new HashMap<>();
-
         for (GameData gameData : resp.game()) {
-
-          System.out.println("Game " + counter + ": ");
-          System.out.println("Name: " + gameData.gameName());
+          System.out.println(counter + ". " + gameData.gameName());
           System.out.println("White Player: " + gameData.whiteUsername());
           System.out.println("Black Player: " + gameData.blackUsername());
           System.out.println();
-
-          gamesMap.put(counter, gameData.gameName());
+          gamesMap.put(counter, gameData);
           counter = counter + 1;
-
-          // Display other parts of the object as needed
         }
 
       }
     }
-
-
-
 
     // we need to create a numbering system
     // and show the game NAME + the players usernames
 
   }
 
-  private void joinGame(Scanner scanner){
+  private boolean joinGame(Scanner scanner){
 
-    System.out.println("What game would you like to join? Type in a number: ");
-    String gameToJoin = scanner.nextLine();
+    if(printGamesList()){
+
+      int gameToJoin;
+      while (true) {
+        System.out.println("Type the number of the game you want to join: ");
+        String input = scanner.nextLine();
+
+        try {
+          gameToJoin = Integer.parseInt(input);
+          if (gamesMap.containsKey(gameToJoin)) {
+            break;
+          } else {
+            System.out.println("Invalid game number. Please try again.");
+          }
+        } catch (NumberFormatException e) {
+          System.out.println("Invalid input. Please enter a valid number.");
+        }
+      }
 
 
+//      String playerColor;
+//      while (true) {
+//        System.out.println("What color would you like to join this game as?");
+//        System.out.println("Type B for BLACK or W for WHITE:");
+//        playerColor = scanner.nextLine().trim();  // Trim to remove any leading/trailing whitespace
+//
+//        if (playerColor.equalsIgnoreCase("b") || playerColor.equalsIgnoreCase("w")) {
+//          break;
+//        } else {
+//          System.out.println("Invalid input. Please type 'B' for BLACK or 'W' for WHITE.");
+//        }
+//      }
 
+      System.out.println("What color would you like to join this game as?");
+      System.out.println("Type BLACK or WHITE:");
+      String playerColor = scanner.nextLine().trim();
 
+      System.out.println("Attempting to join game " + gameToJoin + ": " + gamesMap.get(gameToJoin).gameName() + " as " + playerColor);
+      System.out.println("...");
+
+      boolean joinedGame = facade.joinGame(new JoinGameRequest(currentAuthToken, playerColor, gamesMap.get(gameToJoin).gameID()));
+      if(joinedGame){
+        System.out.println("Successfully joined " + gamesMap.get(gameToJoin).gameName()+ " as " + playerColor);
+        return true;
+      } else {
+        System.out.println("Unable to join the game, please try again.");
+        return false;
+      }
+    }
+    // if it returns false, there are NO games
+    return false;
   }
 
-  private void observeGame(Scanner scanner){
+  private boolean observeGame(Scanner scanner){
 
+    if(printGamesList()){
+      int gameToJoin;
+      while (true) {
+        System.out.println("Type the number of the game you want to observe: ");
+        String input = scanner.nextLine();
+
+        try {
+          gameToJoin = Integer.parseInt(input);
+          if (gamesMap.containsKey(gameToJoin)) {
+            break;
+          } else {
+            System.out.println("Invalid game number. Please try again.");
+          }
+        } catch (NumberFormatException e) {
+          System.out.println("Invalid input. Please enter a valid number.");
+        }
+      }
+    } // else there are no games to observe
+
+    // will add functionality in phase 6???
+
+    return true;
   }
 
 
@@ -321,18 +348,18 @@ public class Repl {
 
 
 
-  private void printGamesList(){
+  private boolean printGamesList(){
     if(gamesMap == null){
-      System.out.println("There are no current game to join or observe.");
+      System.out.println("There are no current games to join or observe.");
+      return false;
     } else {
-      for (Map.Entry<Integer, String> entry : gamesMap.entrySet()) {
-        System.out.println(entry.getKey() + ", Name: " + entry.getValue());
+      System.out.println("Here is a list of the current games:");
+      for (Map.Entry<Integer, GameData> entry : gamesMap.entrySet()) {
+        System.out.println(entry.getKey() + ". " + entry.getValue().gameName());
       }
+      return true;
     }
   }
-
-
-
 
   // method for 3rd menu (won't be fully fleshed out yet)
 
