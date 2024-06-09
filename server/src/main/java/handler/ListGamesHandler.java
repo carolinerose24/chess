@@ -24,7 +24,7 @@ public class ListGamesHandler extends EventHandler{
     response.status(200);
 
     JsonObject jsonObject = new JsonObject();
-    jsonObject.add("games", new Gson().toJsonTree(listResponse.game()));
+    jsonObject.add("game", new Gson().toJsonTree(listResponse.game()));
     return new Gson().toJson(jsonObject);
   }
 }

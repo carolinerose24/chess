@@ -1,15 +1,20 @@
 package facade;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
+import model.GameData;
 import model.requests.*;
 import model.responses.*;
 
 import java.io.*;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 
 
 public class ClientCommunicator {
@@ -113,13 +118,14 @@ public class ClientCommunicator {
 
     if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
       return true;
+    } else if(connection.getResponseCode() == 401){
+      throw new Exception("This was an unauthorized logout");
+    } else if(connection.getResponseCode() == 500){
+      throw new Exception("There was a problem with the server.");
     } else {
-      // SERVER RETURNED AN HTTP ERROR - maybe change this??? IDK
-      InputStream responseBody = connection.getErrorStream();
-      throw new Exception(responseBody.toString());
+      throw new Exception("Unknown Error");
     }
   }
-
 
 
   public CreateGameResponse postCreateGame(String urlString, CreateGameRequest req) throws Exception{
@@ -163,6 +169,37 @@ public class ClientCommunicator {
     }
   }
 
+
+
+  public ListGamesResponse getListGames(String urlString, AuthRequest req) throws Exception{
+
+    URI uri = new URI(urlString + "/game");
+    HttpURLConnection connection = (HttpURLConnection) uri.toURL().openConnection();
+    connection.setReadTimeout(5000);
+    connection.setRequestMethod("GET");
+    connection.setRequestProperty("Authorization", req.authToken());
+    connection.setDoOutput(false);  // I think i need this, not sure though
+    connection.connect();
+
+    if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+      StringBuilder response = new StringBuilder();
+      try (InputStream responseBody = connection.getInputStream();
+           BufferedReader reader = new BufferedReader(new InputStreamReader(responseBody, StandardCharsets.UTF_8))) {
+        String line;
+        while ((line = reader.readLine()) != null) {
+          response.append(line);
+        }
+      }
+      Gson gson = new Gson();
+      return gson.fromJson(response.toString(), ListGamesResponse.class);
+    } else if(connection.getResponseCode() == 401){
+      throw new Exception("You are unauthorized to request this action.");
+    } else if(connection.getResponseCode() == 500){
+      throw new Exception("There was a problem with the server.");
+    } else {
+      throw new Exception("Unknown Error");
+    }
+  }
 
 
 

@@ -7,6 +7,7 @@ import model.requests.CreateGameRequest;
 import model.requests.LoginRequest;
 import model.requests.RegisterRequest;
 import model.responses.CreateGameResponse;
+import model.responses.ListGamesResponse;
 import model.responses.UserResponse;
 
 import java.io.IOException;
@@ -57,6 +58,15 @@ public class ServerFacade {
   public CreateGameResponse createGame(CreateGameRequest req){
     try{
       return com.postCreateGame(urlString, req);
+    } catch(Exception e){
+      System.out.println(e.getMessage());
+      return null;
+    }
+  }
+
+  public ListGamesResponse listGames(AuthRequest req){
+    try{
+      return com.getListGames(urlString, req);
     } catch(Exception e){
       System.out.println(e.getMessage());
       return null;

@@ -1,27 +1,33 @@
 package ui;
 
 import facade.ServerFacade;
+import model.GameData;
 import model.requests.AuthRequest;
 import model.requests.CreateGameRequest;
 import model.requests.LoginRequest;
 import model.requests.RegisterRequest;
 import model.responses.CreateGameResponse;
+import model.responses.ListGamesResponse;
 import model.responses.UserResponse;
 
 
-
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Repl {
 
-  boolean quit = false;
-  boolean loggedIn = false;
+  private boolean quit = false;
+  private boolean loggedIn = false;
 
-  ServerFacade facade;
+  private ServerFacade facade;
 
   // do i need to keep data members for things like current username?? to keep track of the current user???
-  String loggedInUsername;
-  String currentAuthToken;
+  private String loggedInUsername;
+  private String currentAuthToken;
+
+  private boolean hasListedGames = false;
+  private HashMap<Integer, String> gamesMap;
 
   public Repl(){
     facade = new ServerFacade("http://localhost:8080");
@@ -152,7 +158,7 @@ public class Repl {
     System.out.println();
     System.out.println("Type in the number corresponding to the desired option");
     System.out.println("1 - Create a new chess game");
-    System.out.println("2 - List all current games");
+    System.out.println("2 - List all current game");
     System.out.println("3 - Join a game");
     System.out.println("4 - Observe a game");
     System.out.println("5 - Logout as user: " + loggedInUsername);
@@ -164,18 +170,41 @@ public class Repl {
     switch (input) {
       case "1":
         createNewGame(scanner);
-
-        // I guess all of these have a change of returning a 500 error, how should I account for that??
-        // like should they all return a boolean then????
         break;
       case "2":
         listCurrentGames();
+        hasListedGames = true;
         break;
       case "3":
-        joinGame(scanner);
+
+        // first check if there are any game to be joined, if not then tell them they need to create a game
+
+        // if there are game, then print all the game names and a number by it??
+
+        // then have them choose a game number
+        // then say if they want to join as black or white
+        // if that position is already taken, then
+
+
+        // Type the number corresponding with the game you would like to join?
+
+
+        // also need to print the chess board here @@@@
+
+
+        printGamesList(); // this will print all current game
+
+
+
+        if(!hasListedGames){ // REVISIT THIS LATER @@
+          System.out.println("You need to print the list of game before you can join or observe one.");
+        } else {
+          joinGame(scanner);
+        }
         break;
       case "4":
         observeGame(scanner);
+        // also need to print the chess board here @@@@
         break;
       case "5":
         if(facade.logoutUser(new AuthRequest(currentAuthToken))){
@@ -213,18 +242,59 @@ public class Repl {
 
   private void listCurrentGames(){
 
-    // how to handle if there are NO current games???
+    ListGamesResponse resp = facade.listGames(new AuthRequest(currentAuthToken));
+
+    if(resp == null){
+      System.out.println("Couldn't print the game at this time.");
+    } else {
+
+//      System.out.println("It wasn't an error, it got to this point");
+
+//      System.out.println(resp.game());
+
+      if(resp.game() == null || resp.game().isEmpty()){
+        System.out.println("No current game to show.");
+      } else {
+
+        // it is not empty, need to print everything here
+
+        // have a global variable that is a map or list of game ID (that we just created??)
+
+        int counter = 1;
+        gamesMap = new HashMap<>();
+
+        for (GameData gameData : resp.game()) {
+
+          System.out.println("Game " + counter + ": ");
+          System.out.println("Name: " + gameData.gameName());
+          System.out.println("White Player: " + gameData.whiteUsername());
+          System.out.println("Black Player: " + gameData.blackUsername());
+          System.out.println();
+
+          gamesMap.put(counter, gameData.gameName());
+          counter = counter + 1;
+
+          // Display other parts of the object as needed
+        }
+
+      }
+    }
+
+
+
 
     // we need to create a numbering system
     // and show the game NAME + the players usernames
 
-
-    // call server facade, if nothing is returned, then print that:
-    System.out.println("No current games to show.");
-
   }
 
   private void joinGame(Scanner scanner){
+
+    System.out.println("What game would you like to join? Type in a number: ");
+    String gameToJoin = scanner.nextLine();
+
+
+
 
   }
 
@@ -237,7 +307,7 @@ public class Repl {
     System.out.println("Displaying Help Text");
     System.out.println("You are currently logged in as: " + loggedInUsername);
     System.out.println("To create a new chess game, you will be asked to name it.");
-    System.out.println("To see all current games, choose list games.");
+    System.out.println("To see all current game, choose list game.");
     System.out.println("To join or play a game, you must specify which game and which color.");
     System.out.println("To observer a game, type in the game number.");
     System.out.println("To return to the previous menu, choose logout.");
@@ -248,6 +318,18 @@ public class Repl {
 
 
 
+
+
+
+  private void printGamesList(){
+    if(gamesMap == null){
+      System.out.println("There are no current game to join or observe.");
+    } else {
+      for (Map.Entry<Integer, String> entry : gamesMap.entrySet()) {
+        System.out.println(entry.getKey() + ", Name: " + entry.getValue());
+      }
+    }
+  }
 
 
 
