@@ -9,7 +9,7 @@ import static ui.EscapeSequences.*;
 
 public class DrawBoard {
 
-  private static String EMPTY = " ";
+  private final static String EMPTY = " ";
   private ArrayList<ArrayList<String>> board = new ArrayList<>(8);
   // I think I could also have it pass in a ChessBoard or ChessGame???
   // chess game AND which perspective

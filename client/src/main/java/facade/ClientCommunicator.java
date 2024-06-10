@@ -90,6 +90,7 @@ public class ClientCommunicator {
         String line;
         while ((line = reader.readLine()) != null) {
           response.append(line);
+          
         }
       }
       Gson gson = new Gson();

@@ -180,6 +180,6 @@ public class ServerFacadeTests {
         Assertions.assertFalse(facade.joinGame(new JoinGameRequest("FAKE AUTH","BLACK", resp.gameID())),
                 "Fake auth token, should throw exception because unauthorized");
     }
-    
+
 
 }
