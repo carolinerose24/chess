@@ -67,10 +67,12 @@ public class ClientCommunicator {
   }
 
   public UserResponse postLogin(String urlString, LoginRequest req) throws Exception{
+
     URI uri = new URI(urlString + "/session");
     HttpURLConnection connection = (HttpURLConnection) uri.toURL().openConnection();
-    connection.setReadTimeout(5000);
     connection.setRequestMethod("POST");
+    connection.setReadTimeout(5000);
+    // need this for post again
     connection.setDoOutput(true);
 
     // no request headers for register, just a body
@@ -80,22 +82,22 @@ public class ClientCommunicator {
 
     String requestBodyString = jsonObject.toString();
     try (OutputStream os = connection.getOutputStream();
-         PrintWriter writer = new PrintWriter(new OutputStreamWriter(os, "UTF-8"))) {
+         PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(os, "UTF-8"))) {
 
-      writer.print(requestBodyString);
-      writer.flush();
+      printWriter.print(requestBodyString);
+      printWriter.flush();
     }
 
     connection.connect();
 
-    if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+    if (connection.getResponseCode() == 200) {
       // if there is a good response
       StringBuilder response = new StringBuilder();
       try (InputStream responseBody = connection.getInputStream();
-           BufferedReader reader = new BufferedReader(new InputStreamReader(responseBody, StandardCharsets.UTF_8))) {
-        String line;
-        while ((line = reader.readLine()) != null) {
-          response.append(line);
+           BufferedReader buffReader = new BufferedReader(new InputStreamReader(responseBody))) {
+        String eachline;
+        while ((eachline = buffReader.readLine()) != null) {
+          response.append(eachline);
           // reach in the whole response body with this try block
         }
       }
