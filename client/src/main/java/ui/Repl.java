@@ -340,14 +340,6 @@ public class Repl {
     System.out.println("To return to the previous menu, choose logout.");
   }
 
-
-
-
-
-
-
-
-
   private boolean printGamesList(){
     if(gamesMap == null){
       System.out.println("There are no current games to join or observe.");

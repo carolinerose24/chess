@@ -200,7 +200,6 @@ public class ClientCommunicator {
   }
 
 
-
   public boolean putJoinGame(String urlString, JoinGameRequest req) throws Exception{
 
     URI uri = new URI(urlString + "/game");
@@ -219,6 +218,9 @@ public class ClientCommunicator {
     } else {
       playerColor = "BAD REQUEST";
     }
+
+    // IF IT IS AN EMPTY STRING, DOES THAT MEAN WE WANTED IT TO OBSERVE THE GAME??
+    // I CAN JUST FIX THIS LATER THOUGH
 
     // no request headers for register, just a body
     JsonObject jsonObject = new JsonObject();
@@ -249,129 +251,20 @@ public class ClientCommunicator {
   }
 
 
+  public boolean deleteClear(String urlString) throws Exception{
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  public void doPost(String urlString) throws IOException {
-    URL url = new URL(urlString);
-
-    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
+    URI uri = new URI(urlString + "/db");
+    HttpURLConnection connection = (HttpURLConnection) uri.toURL().openConnection();
     connection.setReadTimeout(5000);
-    connection.setRequestMethod("POST");
-    connection.setDoOutput(true);
-
-    // Set HTTP request headers, if necessary
-    // connection.addRequestProperty("Accept", "text/html");
-
+    connection.setRequestMethod("DELETE");
+    connection.setDoOutput(false); // No request body for DELETE
     connection.connect();
 
-    try(OutputStream requestBody = connection.getOutputStream();) {
-      // Write request body to OutputStream ...
-    }
-
-    if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-      // Get HTTP response headers, if necessary
-      // Map<String, List<String>> headers = connection.getHeaderFields();
-
-      // OR
-
-      //connection.getHeaderField("Content-Length");
-
-      InputStream responseBody = connection.getInputStream();
-      // Read response body from InputStream ...
-    }
-    else {
-      // SERVER RETURNED AN HTTP ERROR
-
-      InputStream responseBody = connection.getErrorStream();
-      // Read and process error response body from InputStream ...
-    }
-  }
-
-  public void doGet(String urlString) throws IOException {
-    URL url = new URL(urlString);
-
-    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-    connection.setReadTimeout(5000);
-    connection.setRequestMethod("GET");
-
-    // Set HTTP request headers, if necessary
-    // connection.addRequestProperty("Accept", "text/html");
-    // connection.addRequestProperty("Authorization", "fjaklc8sdfjklakl");
-
-    connection.connect();
-
-    if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-      // Get HTTP response headers, if necessary
-      // Map<String, List<String>> headers = connection.getHeaderFields();
-
-      // OR
-
-      //connection.getHeaderField("Content-Length");
-
-      InputStream responseBody = connection.getInputStream();
-      // Read and process response body from InputStream ...
+    if(connection.getResponseCode() == HttpURLConnection.HTTP_OK){
+      return true;
     } else {
-      // SERVER RETURNED AN HTTP ERROR
-
-      InputStream responseBody = connection.getErrorStream();
-      // Read and process error response body from InputStream ...
+      throw new Exception("Unable to clear the database at this time.");
     }
   }
-
-  public void doDelete(String urlString) throws IOException{
-
-
-  }
-
-  public void doPut(String urlString) throws IOException{
-
-  }
-
-
 
 }

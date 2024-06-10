@@ -1,16 +1,11 @@
 package facade;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+
 import model.requests.*;
 import model.responses.CreateGameResponse;
 import model.responses.ListGamesResponse;
 import model.responses.UserResponse;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URI;
-import java.net.URL;
 
 public class ServerFacade {
 
@@ -21,8 +16,6 @@ public class ServerFacade {
     urlString = url;
     com = new ClientCommunicator();
   }
-
-  //      e.printStackTrace();
 
   public UserResponse registerUser(RegisterRequest req){
     try{
@@ -82,11 +75,12 @@ public class ServerFacade {
   }
 
 
-
-
-
-
-
-
+  public void clearServer(){
+    try{
+      com.deleteClear(urlString);
+    } catch(Exception e){
+      System.out.println(e.getMessage());
+    }
+  }
 
 }
