@@ -5,6 +5,5 @@ import model.GameData;
 
 import java.util.Collection;
 
-public record ListGamesResponse(Collection<GameData> game) {
+public record ListGamesResponse(@SerializedName("games")Collection<GameData> game) {
 }
-// @SerializedName("games")
