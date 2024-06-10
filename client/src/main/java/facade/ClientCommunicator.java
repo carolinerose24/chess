@@ -38,10 +38,11 @@ public class ClientCommunicator {
     connection.connect();
 
     if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+      // If there was a good response, we now need to read in the response body (which is json)
       StringBuilder response = new StringBuilder();
       try (InputStream responseBody = connection.getInputStream();
            BufferedReader reader = new BufferedReader(new InputStreamReader(responseBody, StandardCharsets.UTF_8))) {
-
+        // use a try with resources to auto close the input stream and the buffered reader
         String line;
         while ((line = reader.readLine()) != null) {
           response.append(line);
@@ -51,12 +52,16 @@ public class ClientCommunicator {
       Gson gson = new Gson();
       return gson.fromJson(response.toString(), UserResponse.class);
     } else if(connection.getResponseCode() == 400){
+      // Bad Request Error
       throw new Exception("There was a bad request. Make sure there are no empty fields.");
     } else if(connection.getResponseCode() == 403){
+      // Already Taken Error
       throw new Exception("That username is already taken.");
     } else if(connection.getResponseCode() == 500){
+      // Data Access Exception
       throw new Exception("There was a problem with the server.");
     } else {
+      // Shouldn't reach here ...
       throw new Exception("Unknown Error");
     }
   }
@@ -80,17 +85,18 @@ public class ClientCommunicator {
       writer.print(requestBodyString);
       writer.flush();
     }
+
     connection.connect();
 
     if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-
+      // if there is a good response
       StringBuilder response = new StringBuilder();
       try (InputStream responseBody = connection.getInputStream();
            BufferedReader reader = new BufferedReader(new InputStreamReader(responseBody, StandardCharsets.UTF_8))) {
         String line;
         while ((line = reader.readLine()) != null) {
           response.append(line);
-          
+          // reach in the whole response body with this try block
         }
       }
       Gson gson = new Gson();
@@ -102,7 +108,7 @@ public class ClientCommunicator {
       throw new Exception("There was a problem with the server.");
 
     } else {
-      throw new Exception("Unknown Error");
+      throw new Exception("Unknown Error"); // shouldn't ever get here i think...
     }
   }
 
