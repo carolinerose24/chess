@@ -180,34 +180,6 @@ public class ServerFacadeTests {
         Assertions.assertFalse(facade.joinGame(new JoinGameRequest("FAKE AUTH","BLACK", resp.gameID())),
                 "Fake auth token, should throw exception because unauthorized");
     }
-
-
-//
-//    @Test
-//    @DisplayName("Clear Works")
-//    public void clearWorks() throws Exception {
-//
-//        facade.createGame(new CreateGameRequest(existingAuth, "First"));
-//        facade.createGame(new CreateGameRequest(existingAuth, "Second"));
-//        facade.createGame(new CreateGameRequest(existingAuth, "Third"));
-//
-//        facade.registerUser(new RegisterRequest("user1", "pass", "email"));
-//        facade.registerUser(new RegisterRequest("user2", "pass", "email"));
-//        facade.registerUser(new RegisterRequest("user3", "pass", "email"));
-//
-//        Assertions.assertDoesNotThrow(() -> facade.clearServer(), "Should be able to clear without issue");
-//
-//    }
-
-
-
-
-
-
-
-
-
-
-
+    
 
 }

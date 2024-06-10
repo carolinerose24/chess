@@ -61,7 +61,6 @@ public class EscapeSequences {
     //new ones I defined
     public static final String SET_BG_COLOR_TAN = SET_BG_COLOR + "180m";
     public static final String SET_BG_COLOR_LIGHT_GREEN = SET_BG_COLOR + "120m";
-//    public static final String SET_BG_COLOR_DARK_GREEN = SET_BG_COLOR + "28m";
 
     private static String setBackgroundColor(int r, int g, int b) {
         return UNICODE_ESCAPE + "[48;2;" + r + ";" + g + ";" + b + "m";
@@ -86,18 +85,18 @@ public class EscapeSequences {
     public static final String BLACK_PAWN = " P ";
     public static final String EMPTY = "   ";
 
-//    public static final String WHITE_KING = " ♔ "; //" \u2654 ";
-//    public static final String WHITE_QUEEN = " ♕ "; //" \u2655 ";
-//    public static final String WHITE_BISHOP = " ♗ "; //" \u2656 ";
-//    public static final String WHITE_KNIGHT = " ♘ "; //" \u2657 ";
-//    public static final String WHITE_ROOK = " ♖ "; //" \u2658 ";
-//    public static final String WHITE_PAWN = " ♙ "; //" \u2659 ";
-//    public static final String BLACK_KING = " ♚ "; //" \u265A ";
-//    public static final String BLACK_QUEEN = " ♛ "; //" \u265B ";
-//    public static final String BLACK_BISHOP = " ♝ "; //" \u265C ";
-//    public static final String BLACK_KNIGHT = " ♞ "; //" \u265D ";
-//    public static final String BLACK_ROOK = " ♜ "; //" \u265E ";
-//    public static final String BLACK_PAWN = " ♟ "; //" \u265F ";
-//    public static final String EMPTY = " \u2003 ";
+    public static final String WHITE_KING_ICON = " ♔ "; //" \u2654 ";
+    public static final String WHITE_QUEEN_ICON = " ♕ "; //" \u2655 ";
+    public static final String WHITE_BISHOP_ICON = " ♗ "; //" \u2656 ";
+    public static final String WHITE_KNIGHT_ICON = " ♘ "; //" \u2657 ";
+    public static final String WHITE_ROOK_ICON = " ♖ "; //" \u2658 ";
+    public static final String WHITE_PAWN_ICON = " ♙ "; //" \u2659 ";
+    public static final String BLACK_KING_ICON = " ♚ "; //" \u265A ";
+    public static final String BLACK_QUEEN_ICON = " ♛ "; //" \u265B ";
+    public static final String BLACK_BISHOP_ICON = " ♝ "; //" \u265C ";
+    public static final String BLACK_KNIGHT_ICON = " ♞ "; //" \u265D ";
+    public static final String BLACK_ROOK_ICON = " ♜ "; //" \u265E ";
+    public static final String BLACK_PAWN_ICON = " ♟ "; //" \u265F ";
+    public static final String EMPTY_ICON = " \u2003 ";
 
 }

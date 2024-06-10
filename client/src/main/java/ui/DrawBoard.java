@@ -9,7 +9,7 @@ import static ui.EscapeSequences.*;
 
 public class DrawBoard {
 
-  private final String EMPTY = " ";
+  private static String EMPTY = " ";
   private ArrayList<ArrayList<String>> board = new ArrayList<>(8);
   // I think I could also have it pass in a ChessBoard or ChessGame???
   // chess game AND which perspective
@@ -37,15 +37,6 @@ public class DrawBoard {
 
     out.print(SET_TEXT_COLOR_LIGHT_GREY);
     drawBlackPerspective(out);
-
-
-
-//    out.print(SET_BG_COLOR_DARK_GREY);
-//    out.print(SET_TEXT_COLOR_WHITE);
-//
-//    out.print(RESET_TEXT_COLOR);
-//    out.print(RESET_BG_COLOR);
-
 
     out.print(SET_TEXT_COLOR_RESET_WHITE);
     out.print(SET_BG_COLOR_RESET_GREY);
@@ -130,6 +121,7 @@ public class DrawBoard {
       if(whiteFirst){
         printSquare(out, "WHITE", pieceType, pieceColor);
         whiteFirst = false;
+
       } else {
         printSquare(out, "BLACK", pieceType, pieceColor);
         whiteFirst = true;

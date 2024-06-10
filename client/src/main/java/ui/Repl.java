@@ -270,19 +270,6 @@ public class Repl {
       }
 
 
-//      String playerColor;
-//      while (true) {
-//        System.out.println("What color would you like to join this game as?");
-//        System.out.println("Type B for BLACK or W for WHITE:");
-//        playerColor = scanner.nextLine().trim();  // Trim to remove any leading/trailing whitespace
-//
-//        if (playerColor.equalsIgnoreCase("b") || playerColor.equalsIgnoreCase("w")) {
-//          break;
-//        } else {
-//          System.out.println("Invalid input. Please type 'B' for BLACK or 'W' for WHITE.");
-//        }
-//      }
-
       System.out.println("What color would you like to join this game as?");
       System.out.println("Type BLACK or WHITE:");
       String playerColor = scanner.nextLine().trim();

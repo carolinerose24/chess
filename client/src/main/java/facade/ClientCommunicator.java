@@ -1,20 +1,14 @@
 package facade;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
-import model.GameData;
 import model.requests.*;
 import model.responses.*;
 
 import java.io.*;
-import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URI;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
 
 
 public class ClientCommunicator {
@@ -40,17 +34,20 @@ public class ClientCommunicator {
       writer.print(requestBodyString);
       writer.flush();
     }
+
     connection.connect();
 
     if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
       StringBuilder response = new StringBuilder();
       try (InputStream responseBody = connection.getInputStream();
            BufferedReader reader = new BufferedReader(new InputStreamReader(responseBody, StandardCharsets.UTF_8))) {
+
         String line;
         while ((line = reader.readLine()) != null) {
           response.append(line);
         }
       }
+
       Gson gson = new Gson();
       return gson.fromJson(response.toString(), UserResponse.class);
     } else if(connection.getResponseCode() == 400){
@@ -79,12 +76,14 @@ public class ClientCommunicator {
     String requestBodyString = jsonObject.toString();
     try (OutputStream os = connection.getOutputStream();
          PrintWriter writer = new PrintWriter(new OutputStreamWriter(os, "UTF-8"))) {
+
       writer.print(requestBodyString);
       writer.flush();
     }
     connection.connect();
 
     if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+
       StringBuilder response = new StringBuilder();
       try (InputStream responseBody = connection.getInputStream();
            BufferedReader reader = new BufferedReader(new InputStreamReader(responseBody, StandardCharsets.UTF_8))) {
@@ -97,8 +96,10 @@ public class ClientCommunicator {
       return gson.fromJson(response.toString(), UserResponse.class);
     } else if(connection.getResponseCode() == 401){
       throw new Exception("There are no users that match these credentials.");
+
     } else if(connection.getResponseCode() == 500){
       throw new Exception("There was a problem with the server.");
+
     } else {
       throw new Exception("Unknown Error");
     }
@@ -110,6 +111,7 @@ public class ClientCommunicator {
     HttpURLConnection connection = (HttpURLConnection) uri.toURL().openConnection();
     connection.setReadTimeout(5000);
     connection.setRequestMethod("DELETE");
+
     connection.setRequestProperty("Authorization", req.authToken()); // Add Authorization header
     connection.setDoOutput(false); // No request body for DELETE
     connection.connect();
@@ -118,6 +120,7 @@ public class ClientCommunicator {
       return true;
     } else if(connection.getResponseCode() == 401){
       throw new Exception("This was an unauthorized logout");
+
     } else if(connection.getResponseCode() == 500){
       throw new Exception("There was a problem with the server.");
     } else {
@@ -145,15 +148,19 @@ public class ClientCommunicator {
     }
     connection.connect();
 
+
     if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
       StringBuilder response = new StringBuilder();
       try (InputStream responseBody = connection.getInputStream();
            BufferedReader reader = new BufferedReader(new InputStreamReader(responseBody, StandardCharsets.UTF_8))) {
+
         String line;
         while ((line = reader.readLine()) != null) {
           response.append(line);
+
         }
       }
+
       Gson gson = new Gson();
       return gson.fromJson(response.toString(), CreateGameResponse.class);
     } else if(connection.getResponseCode() == 400){
@@ -174,12 +181,14 @@ public class ClientCommunicator {
     URI uri = new URI(urlString + "/game");
     HttpURLConnection connection = (HttpURLConnection) uri.toURL().openConnection();
     connection.setReadTimeout(5000);
+
     connection.setRequestMethod("GET");
     connection.setRequestProperty("Authorization", req.authToken());
     connection.setDoOutput(false);  // I think i need this, not sure though
     connection.connect();
 
     if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+
       StringBuilder response = new StringBuilder();
       try (InputStream responseBody = connection.getInputStream();
            BufferedReader reader = new BufferedReader(new InputStreamReader(responseBody, StandardCharsets.UTF_8))) {
@@ -187,15 +196,18 @@ public class ClientCommunicator {
         while ((line = reader.readLine()) != null) {
           response.append(line);
         }
+
       }
       Gson gson = new Gson();
       return gson.fromJson(response.toString(), ListGamesResponse.class);
     } else if(connection.getResponseCode() == 401){
       throw new Exception("You are unauthorized to request this action.");
+
     } else if(connection.getResponseCode() == 500){
       throw new Exception("There was a problem with the server.");
     } else {
       throw new Exception("Unknown Error");
+
     }
   }
 
@@ -206,6 +218,7 @@ public class ClientCommunicator {
     HttpURLConnection connection = (HttpURLConnection) uri.toURL().openConnection();
     connection.setReadTimeout(5000);
     connection.setRequestMethod("PUT");
+
     connection.setRequestProperty("Authorization", req.authToken());
     connection.setDoOutput(true);
 
@@ -227,6 +240,7 @@ public class ClientCommunicator {
     jsonObject.addProperty("playerColor", playerColor);
     jsonObject.addProperty("gameID", req.gameID());
     String requestBodyString = jsonObject.toString();
+
     try (OutputStream os = connection.getOutputStream();
          PrintWriter writer = new PrintWriter(new OutputStreamWriter(os, "UTF-8"))) {
       writer.print(requestBodyString);
@@ -234,11 +248,13 @@ public class ClientCommunicator {
     }
     connection.connect();
 
+
     // no response body, just check for errors
     if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
       return true;
     } else if(connection.getResponseCode() == 400){
       throw new Exception("There was a bad request.");
+
     } else if(connection.getResponseCode() == 401){
       throw new Exception("You are unauthorized to request this action.");
     } else if(connection.getResponseCode() == 403){
