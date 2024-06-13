@@ -39,6 +39,7 @@ public class ServerFacadeTests {
     @AfterAll
     static void stopServer() {
         server.stop();
+        facade.clearServer();
     }
 
 

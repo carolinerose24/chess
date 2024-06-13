@@ -44,7 +44,6 @@ public class ServerFacade {
     }
   }
 
-
   public CreateGameResponse createGame(CreateGameRequest req){
     try{
       return com.postCreateGame(urlString, req);
@@ -63,8 +62,6 @@ public class ServerFacade {
     }
   }
 
-
-
   public boolean joinGame(JoinGameRequest req){
     try{
       return com.putJoinGame(urlString, req);
@@ -73,7 +70,6 @@ public class ServerFacade {
       return false;
     }
   }
-
 
   public void clearServer(){
     try{

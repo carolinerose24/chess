@@ -13,8 +13,6 @@ import java.nio.charset.StandardCharsets;
 
 public class ClientCommunicator {
 
-  // post, put, get, delete
-
   public UserResponse postRegister(String urlString, RegisterRequest req) throws Exception{
     URI uri = new URI(urlString + "/user");
     HttpURLConnection connection = (HttpURLConnection) uri.toURL().openConnection();
@@ -114,7 +112,6 @@ public class ClientCommunicator {
     }
   }
 
-
   public boolean deleteLogout(String urlString, AuthRequest req) throws Exception{
     URI uri = new URI(urlString + "/session");
     HttpURLConnection connection = (HttpURLConnection) uri.toURL().openConnection();
@@ -136,7 +133,6 @@ public class ClientCommunicator {
       throw new Exception("Unknown Error");
     }
   }
-
 
   public CreateGameResponse postCreateGame(String urlString, CreateGameRequest req) throws Exception{
     URI uri = new URI(urlString + "/game");
@@ -183,8 +179,6 @@ public class ClientCommunicator {
     }
   }
 
-
-
   public ListGamesResponse getListGames(String urlString, AuthRequest req) throws Exception{
 
     URI uri = new URI(urlString + "/game");
@@ -219,7 +213,6 @@ public class ClientCommunicator {
 
     }
   }
-
 
   public boolean putJoinGame(String urlString, JoinGameRequest req) throws Exception{
 
@@ -275,7 +268,6 @@ public class ClientCommunicator {
     }
   }
 
-
   public boolean deleteClear(String urlString) throws Exception{
 
     URI uri = new URI(urlString + "/db");
@@ -291,5 +283,4 @@ public class ClientCommunicator {
       throw new Exception("Unable to clear the database at this time.");
     }
   }
-
 }

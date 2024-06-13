@@ -1,6 +1,6 @@
 import ui.Repl;
 
-public class Main {
+public class ClientMain {
     public static void main(String[] args) {
 
         System.out.println("Welcome to the Chess Server:");
