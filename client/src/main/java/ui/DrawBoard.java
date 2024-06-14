@@ -1,5 +1,7 @@
 package ui;
 
+import chess.ChessGame;
+
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -21,6 +23,15 @@ public class DrawBoard {
     this.board = board;
     draw();
   }
+
+  public DrawBoard(ChessGame chessGame){
+    //set the booard = this new game, the team color
+    // call draw from a certain perspective
+  }
+
+
+
+  // need anoother method for highlihgting possible moves
 
   public DrawBoard(){ // no parameters, set squares equal to a default board
     setDefaultBoard();
